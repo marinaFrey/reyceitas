@@ -1,0 +1,42 @@
+/*
+** Splash Screen
+** -----------------------------------------------------------------------------
+*/
+
+#splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 42;
+  }
+  
+  /*
+  ** Website Logo
+  ** -----------------------------------------------------------------------------
+  */
+  
+  #logo {
+    width: 100%;
+    min-height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url("../../assets/images/kitchen-banner.jpg");
+  }
+  #logo img {
+    height: 100px;
+    width: auto;
+    margin-top: 24px;
+  }
+  #logo h1 {
+    font-family: 'Quirlycues';
+    font-size: 72px;
+    font-weight: normal;
+    padding-top: 24px;
+    color: #f9f9f9;
+  }

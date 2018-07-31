@@ -1,0 +1,43 @@
+/*
+** Fonts
+** -----------------------------------------------------------------------------
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Dancing+Script');
+@font-face {
+   font-family: 'Quirlycues';
+   src: url(../../assets/fonts/Quirlycues.ttf);
+}
+
+/*
+** Website Footer
+** -----------------------------------------------------------------------------
+*/
+
+footer {
+    background-color: #487bce;
+    color: #f9f9f9;
+    margin-bottom: 24px;
+    margin-top: 24px;
+    
+  }
+  .footer-about {
+    margin-bottom: 24px;
+    font-style: italic;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .footer-author {
+    margin-top: 48px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    font-family: 'Montserrat', sans-serif;
+    transform: translate(-50%, -50%)
+  }
+  .footer-author a {
+    color: #f9f9f9;
+    font-weight: bold;
+  }
+  

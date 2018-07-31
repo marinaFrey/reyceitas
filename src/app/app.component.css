@@ -1,0 +1,47 @@
+/*
+** Fonts
+** -----------------------------------------------------------------------------
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Dancing+Script');
+@font-face {
+   font-family: 'Quirlycues';
+   src: url(../assets/fonts/Quirlycues.ttf);
+}
+
+/*
+** Base html
+** -----------------------------------------------------------------------------
+*/
+
+body {
+  background-color: #a44c9f;
+  color: #666;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  line-height: 1.50;
+  overflow-x: hidden;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
