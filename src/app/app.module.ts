@@ -8,6 +8,11 @@ import { RecipesComponent } from './recipes/recipes.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { RecipeThumbnailComponent } from './recipes/recipe-thumbnail/recipe-thumbnail.component';
+import { RecipeDetailsComponent } from './recipes/recipe-details/recipe-details.component';
+import { RecipeService } from './recipe.service';
+import { AppRoutingModule } from './/app-routing.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -15,15 +20,19 @@ import { RecipeThumbnailComponent } from './recipes/recipe-thumbnail/recipe-thum
     RecipesComponent,
     HeaderComponent,
     FooterComponent,
-    RecipeThumbnailComponent
+    RecipeThumbnailComponent,
+    RecipeDetailsComponent,
+    DashboardComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    AppRoutingModule
   ],
   
-  providers: [],
+  providers: [RecipeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

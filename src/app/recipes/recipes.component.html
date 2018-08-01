@@ -1,27 +1,9 @@
-<h2>{{recipe.name | uppercase}} Details</h2>
-<div><span>id: </span>{{recipe.id}}</div>
-<div>
-  <label>name:
-    <input [(ngModel)]="recipe.name" placeholder="name">
-  </label>
-</div>
 <h2>My Recipes</h2>
+
 <ul class="recipes">
-  <li *ngFor="let recipe of recipes"
-    [class.selected]="recipe === selectedRecipe"
-    (click)="onSelect(recipe)">
+  <li *ngFor="let recipe of recipes">
+    <a routerLink="/details/{{recipe.id}}">
     <span class="badge">{{recipe.id}}</span> {{recipe.name}}
+    </a>
   </li>
 </ul>
- 
-<div *ngIf="selectedRecipe">
- 
-  <h2>{{selectedRecipe.name | uppercase}} Details</h2>
-  <div><span>id: </span>{{selectedRecipe.id}}</div>
-  <div>
-    <label>name:
-      <input [(ngModel)]="selectedRecipe.name" placeholder="name">
-    </label>
-  </div>
- 
-</div>
