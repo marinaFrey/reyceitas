@@ -1,9 +1,23 @@
-<h2>My Recipes</h2>
+<section id="items">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Receitas</h2>
+        </div>
+      </div>
+      <div class="row">
 
-<ul class="recipes">
-  <li *ngFor="let recipe of recipes">
-    <a routerLink="/details/{{recipe.id}}">
-    <span class="badge">{{recipe.id}}</span> {{recipe.name}}
-    </a>
-  </li>
-</ul>
+        <!-- First recipe item -->
+        <div *ngFor="let recipe of recipes" class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+          <div class="recipe-item text-center">
+              <a routerLink="/details/{{recipe.id}}">
+              <img src="../../../assets/images/bbq-pork-ribs.jpg" alt="bbq-pork-ribs" />
+            </a>
+            <br />
+            <h3>{{recipe.name}}</h3>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
