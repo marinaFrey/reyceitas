@@ -14,6 +14,7 @@ export class RecipeDetailsComponent implements OnInit
 {
 
   @Input() recipe: Recipe;
+  numberOfDifficultyStars: number[];
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -23,6 +24,7 @@ export class RecipeDetailsComponent implements OnInit
   ngOnInit() 
   {
     this.getRecipe();
+    this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
   }
 
   getRecipe(): void

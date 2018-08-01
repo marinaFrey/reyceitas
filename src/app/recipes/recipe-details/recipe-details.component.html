@@ -1,13 +1,111 @@
-<div *ngIf="recipe">
- 
+<!--<div *ngIf="recipe">
+
   <h2>{{recipe.name | uppercase}} Details</h2>
-  <div><span>id: </span>{{recipe.id}}</div>
+  <div>
+    <span>id: </span>{{recipe.id}}</div>
   <div>
     <label>name:
       <input [(ngModel)]="recipe.name" placeholder="name">
     </label>
   </div>
- 
-</div>
 
-<button (click)="goBack()">go back</button>
+</div> -->
+
+<!-- Recipe Section
+  =================== -->
+<section id="recipe">
+  <div class="container">
+    <div class="row">
+      <!-- Title -->
+      <div class="col-12">
+        <h2>{{recipe.name}}</h2>
+      </div>
+    </div>
+    <div class="row vertical-align">
+      <div class="col-12">
+
+        <!-- Picture -->
+        <div class="col-md-8 pull-left wow swing">
+          <img src="../../../assets/images/bbq-pork-ribs.jpg" alt="bbq-pork-ribs" class="recipe-picture" />
+        </div>
+
+        <!-- Info -->
+        <div class="col-md-4 pull-right wow lightSpeedIn">
+          <div class="recipe-info">
+            <h3>Informações</h3>
+
+            <!-- Time -->
+            <div class="row">
+              <div class="col-2 text-center">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+              </div>
+              <div class="col-6">Time</div>
+              <div class="col-4">{{recipe.duration}}</div>
+            </div>
+
+            <!-- Difficulty -->
+            <div class="row">
+              <div class="col-2 text-center">
+                <i class="fa fa-area-chart" aria-hidden="true"></i>
+              </div>
+              <div class="col-6">Difficulty</div>
+              <div class="col-4">  
+                  <i *ngFor="let stars of numberOfDifficultyStars" class="fa fa-star" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <!-- Serves -->
+            <div class="row">
+              <div class="col-2 text-center">
+                <i class="fa fa-users" aria-hidden="true"></i>
+              </div>
+              <div class="col-6">Serve</div>
+              <div class="col-4">{{recipe.servings}}</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ingredients -->
+    <div class="row wow slideInUp">
+      <div class="col-12">
+        <div class="recipe-ingredients">
+            <h3>Ingredientes</h3>
+            <dl class="ingredients-list">
+              <div *ngFor="let ingredient of recipe.ingredients">
+                  <dt>{{ingredient.amount}}</dt>
+                  <dd>{{ingredient.unit}} de {{ingredient.name}}</dd>
+              </div>
+            </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Directions -->
+    <div class="row wow slideInUp">
+      <div class="col-12">
+        <div class="recipe-directions">
+          <h3>Modo de Preparo</h3>
+          <ol>
+            <li *ngFor="let steps of recipe.preparation">
+                {{steps}}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to recipes -->
+    <div class="row wow rollIn">
+      <div class="col-12 text-center">
+        <button (click)="goBack()">
+          <i class="fa fa-backward" aria-hidden="true"></i>
+          Voltar para receitas
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
