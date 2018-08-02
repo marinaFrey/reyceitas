@@ -13,6 +13,7 @@ import { RecipeService } from './recipe.service';
 import { AppRoutingModule } from './/app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MessagesComponent } from './messages/messages.component';
+import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MessagesComponent } from './messages/messages.component';
     RecipeThumbnailComponent,
     RecipeDetailsComponent,
     DashboardComponent,
-    MessagesComponent
+    MessagesComponent,
+    NavigationBarComponent
   ],
   imports: [
     BrowserModule,

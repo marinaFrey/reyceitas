@@ -21,46 +21,49 @@
         <h2>{{recipe.name}}</h2>
       </div>
     </div>
+
     <div class="row vertical-align">
-      <div class="col-12">
+      <div class="col">
 
         <!-- Picture -->
-        <div class="col-md-8 pull-left wow swing">
+        <div class="col-md-8 wow swing">
           <img src="../../../assets/images/bbq-pork-ribs.jpg" alt="bbq-pork-ribs" class="recipe-picture" />
         </div>
 
+        <div class="col-md-1 wow lightSpeedIn"></div>
+
         <!-- Info -->
-        <div class="col-md-4 pull-right wow lightSpeedIn">
+        <div class="col-md-3 wow lightSpeedIn">
           <div class="recipe-info">
             <h3>Informações</h3>
 
             <!-- Time -->
             <div class="row">
-              <div class="col-2 text-center">
+              <div class="col-md-2 text-center">
                 <i class="fa fa-clock-o" aria-hidden="true"></i>
               </div>
-              <div class="col-6">Time</div>
-              <div class="col-4">{{recipe.duration}}</div>
+              <div class="col-md-6 text-center">Tempo</div>
+              <div class="col-md-4 text-center">{{recipe.duration}}</div>
             </div>
 
             <!-- Difficulty -->
             <div class="row">
-              <div class="col-2 text-center">
+              <div class="col-md-2 text-center">
                 <i class="fa fa-area-chart" aria-hidden="true"></i>
               </div>
-              <div class="col-6">Difficulty</div>
-              <div class="col-4">  
+              <div class="col-md-6 text-center" >Difficuldade</div>
+              <div class="col-md-4 text-center">  
                   <i *ngFor="let stars of numberOfDifficultyStars" class="fa fa-star" aria-hidden="true"></i>
               </div>
             </div>
 
             <!-- Serves -->
             <div class="row">
-              <div class="col-2 text-center">
+              <div class="col-md-2 text-center">
                 <i class="fa fa-users" aria-hidden="true"></i>
               </div>
-              <div class="col-6">Serve</div>
-              <div class="col-4">{{recipe.servings}}</div>
+              <div class="col-md-6 text-center">Serve</div>
+              <div class="col-md-4 text-center">{{recipe.servings}}</div>
             </div>
 
           </div>
@@ -72,7 +75,7 @@
     <div class="row wow slideInUp">
       <div class="col-12">
         <div class="recipe-ingredients">
-            <h3>Ingredientes</h3>
+            <h3 style="background-color: #f1f1f1;">Ingredientes</h3>
             <dl class="ingredients-list">
               <div *ngFor="let ingredient of recipe.ingredients">
                   <dt>{{ingredient.amount}}</dt>
