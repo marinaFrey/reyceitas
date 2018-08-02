@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { AlertModule } from '../../node_modules/ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 import { RecipesComponent } from './recipes/recipes.component';
@@ -28,6 +29,7 @@ import { NavigationBarComponent } from './navigation-bar/navigation-bar.componen
     NavigationBarComponent
   ],
   imports: [
+    AlertModule.forRoot(),
     BrowserModule,
     FormsModule,
     AngularFontAwesomeModule,

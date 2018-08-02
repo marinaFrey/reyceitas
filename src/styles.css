@@ -6,6 +6,7 @@
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 @import url('https://fonts.googleapis.com/css?family=Dancing+Script');
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
 @font-face {
    font-family: 'Quirlycues';
    src: url(/src/assets/fonts/Quirlycues.ttf);
