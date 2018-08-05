@@ -26,3 +26,35 @@ navigation {
     font-size: 16px;
     font-weight: normal;
 }
+
+.site_login{
+    color: #5c5c5c;
+    position: relative;
+    top: 10px;
+    height: 30px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* xs */
+.site_title .col-md-3:parent{
+    color: #5c5c5c;
+    position: relative;
+    text-align: center;
+    top: 0px;
+    height: 50px;
+    font-size: 32px;
+    font-weight: normal;
+}
+/* sm */
+@media (min-width: 768px) {
+    .site_title{
+        color: #5c5c5c;
+        position: relative;
+        text-align: left;
+        top: 0px;
+        height: 50px;
+        font-size: 32px;
+        font-weight: normal;
+    }
+}

@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="row vertical-align">
+    <div class="row ">
       <div class="col">
 
         <!-- Picture -->
@@ -30,40 +30,38 @@
           <img src="../../../assets/images/bbq-pork-ribs.jpg" alt="bbq-pork-ribs" class="recipe-picture" />
         </div>
 
-        <div class="col-md-1 wow lightSpeedIn"></div>
-
         <!-- Info -->
-        <div class="col-md-3 wow lightSpeedIn">
+        <div class="col-md-4 wow lightSpeedIn">
           <div class="recipe-info">
             <h3>Informações</h3>
 
             <!-- Time -->
             <div class="row">
-              <div class="col-md-2 text-center">
+              <div class="col-md-2 col-sm-2 col-xs-2 text-center">
                 <i class="fa fa-clock-o" aria-hidden="true"></i>
               </div>
-              <div class="col-md-6 text-center">Tempo</div>
-              <div class="col-md-4 text-center">{{recipe.duration}}</div>
+              <div class="col-md-6 col-sm-6 col-xs-6 text-center">Tempo</div>
+              <div class="col-md-4 col-sm-4 col-xs-4 text-center">{{recipe.duration}}</div>
             </div>
 
             <!-- Difficulty -->
             <div class="row">
-              <div class="col-md-2 text-center">
+              <div class="col-md-2 col-sm-2 col-xs-2 text-center">
                 <i class="fa fa-area-chart" aria-hidden="true"></i>
               </div>
-              <div class="col-md-6 text-center" >Difficuldade</div>
-              <div class="col-md-4 text-center">  
+              <div class="col-md-6 col-sm-6 col-xs-6 text-center" >Difficuldade</div>
+              <div class="col-md-4 col-sm-4 col-xs-4 text-center">  
                   <i *ngFor="let stars of numberOfDifficultyStars" class="fa fa-star" aria-hidden="true"></i>
               </div>
             </div>
 
             <!-- Serves -->
             <div class="row">
-              <div class="col-md-2 text-center">
+              <div class="col-md-2 col-sm-2 col-xs-2 text-center">
                 <i class="fa fa-users" aria-hidden="true"></i>
               </div>
-              <div class="col-md-6 text-center">Serve</div>
-              <div class="col-md-4 text-center">{{recipe.servings}}</div>
+              <div class="col-md-6 col-sm-6 col-xs-6 text-center">Serve</div>
+              <div class="col-md-4 col-sm-4 col-xs-4 text-center">{{recipe.servings}}</div>
             </div>
 
           </div>
