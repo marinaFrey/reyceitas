@@ -26,7 +26,11 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url("../../assets/images/kitchen-banner.jpg");
+    background-image:
+    radial-gradient(rgba(0, 13, 126, 0.15),
+    rgba(0, 59, 126, 0.75)),
+    url("../../assets/images/kitchen-banner.jpg");
+    /*background-image: url("../../assets/images/kitchen-banner.jpg");*/
   }
   #logo img {
     height: 100px;
@@ -34,9 +38,9 @@
     margin-top: 24px;
   }
   #logo h1 {
-    font-family: 'Quirlycues';
+    /*font-family: 'Quirlycues';*/
     font-size: 72px;
-    font-weight: normal;
+    font-weight: bold;
     padding-top: 24px;
     color: #f9f9f9;
   }

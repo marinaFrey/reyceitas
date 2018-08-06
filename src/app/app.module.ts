@@ -15,6 +15,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MessagesComponent } from './messages/messages.component';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
+import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { NavigationBarComponent } from './navigation-bar/navigation-bar.componen
     RecipeDetailsComponent,
     DashboardComponent,
     MessagesComponent,
-    NavigationBarComponent
+    NavigationBarComponent,
+    AdvancedSearchComponent
   ],
   imports: [
     AlertModule.forRoot(),
