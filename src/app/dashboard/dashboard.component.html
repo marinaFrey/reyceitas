@@ -1,6 +1,57 @@
-<p>
-  dashboard works!
-</p>
-<nav>
-  <a routerLink="/recipes">Receitas</a>
-</nav>
+<section id="items">
+
+  <div class="row">
+
+    <!-- First recipe item -->
+    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+      <div class="recipe-item text-center">
+          <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+                <h1 style="color: #7d6fce; vertical-align: middle;">
+                  <i class="fa fa-search-plus fa-fw " aria-hidden="true"></i>
+                </h1>
+              </div>
+              <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                <h1>
+                  Busca Avançada
+                </h1>
+              </div>
+            </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+      <div class="recipe-item text-center" >
+        <div class="row" routerLink="/recipes">
+          <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+            <h1 style="color: #487bce; vertical-align: middle;">
+              <i class="fa fa-folder-open fa-fw " aria-hidden="true"></i>
+            </h1>
+          </div>
+          <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+            <h1>
+              Ver Receitas
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+      <div class="recipe-item text-center">
+        <div class="row">
+          <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+            <h1 style="color: rgb(28, 207, 67); vertical-align: middle;">
+              <i class="fa fa-plus-circle fa-fw " aria-hidden="true"></i>
+            </h1>
+          </div>
+          <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+            <h1>
+              Adicionar Receita
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
