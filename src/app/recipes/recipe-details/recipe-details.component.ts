@@ -46,6 +46,26 @@ export class RecipeDetailsComponent implements OnInit
     this.editing = !this.editing;
   }
 
+  addIngredient(): void 
+  {
+    this.recipe.ingredients.push({id:10,name:"",amount:null,unit:""});
+  }
+
+  removeIngredient(index: number): void
+  {
+    this.recipe.ingredients.splice(index,1);
+  }
+
+  addDirection(): void 
+  {
+    this.recipe.preparation.push("");
+  }
+
+  removeDirection(index: number): void
+  {
+    this.recipe.preparation.splice(index,1);
+  }
+
   save(): void 
   {
     this.toggleEditing();
@@ -57,4 +77,8 @@ export class RecipeDetailsComponent implements OnInit
     console.log(this.numberOfDifficultyStars,this.recipe.difficulty);
   }
 
+  trackByFn(index: any, item: any) 
+  {
+    return index;
+  }
 }

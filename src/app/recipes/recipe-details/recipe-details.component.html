@@ -117,16 +117,21 @@
             <div *ngFor="let ingredient of recipe.ingredients;let index = index;">
               <div class="col-md-11">
                 <dt>
-                    <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.ingredients[index].amount" placeholder="duration" ng-disabled="editing">
+                  <input class="form-control" type="number" *ngIf="editing" [(ngModel)]="recipe.ingredients[index].amount" placeholder="quantidade" ng-disabled="editing">
                 </dt>
                 <dd>
-                  <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.ingredients[index].unit" placeholder="duration" ng-disabled="editing">
-                  de 
-                  <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.ingredients[index].name" placeholder="duration" ng-disabled="editing">
+                  <div class="input-group">
+
+                    <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.ingredients[index].unit" placeholder="unidade de medida" ng-disabled="editing">
+                    <span class="input-group-addon">de</span>
+                    <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.ingredients[index].name" placeholder="ingrediente" ng-disabled="editing">
+
+                  </div>
                 </dd>
+
               </div>
               <div class="col-md-1">
-                <button class="btn btn-danger btn-sm " (click)="removeDirection()">
+                <button class="btn btn-danger btn-sm " (click)="removeIngredient(index)">
                   <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
               </div>
@@ -134,8 +139,14 @@
             </div>
           </dl>
         </div>
+
       </div>
+
     </div>
+    <button *ngIf="editing" class="btn btn-success " (click)="addIngredient()">
+      <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+
 
     <!-- Directions -->
     <div *ngIf="!editing" class="row wow slideInUp">
@@ -159,14 +170,14 @@
         <div class="recipe-directions">
           <h3>Modo de Preparo</h3>
           <ol>
-            <div class="row" *ngFor="let steps of recipe.preparation;let index = index;">
+            <div class="row" *ngFor="let steps of recipe.preparation;let index = index;trackBy:trackByFn">
               <div class=" col-xs-11 col-sm-11 col-md-11">
                 <li>
-                  <textarea class="form-control" [(ngModel)]="recipe.preparation[index]" placeholder="duration" ng-disabled="editing"></textarea>
+                  <textarea class="form-control" [(ngModel)]="recipe.preparation[index]" placeholder="insira o passo"></textarea>
                 </li>
               </div>
               <div class=" col-xs-11 col-sm-11 col-md-1">
-                <button class="btn btn-danger btn-sm" (click)="removeDirection()">
+                <button class="btn btn-danger btn-sm" (click)="removeDirection(index)">
                   <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
               </div>
