@@ -11,7 +11,12 @@
   }
   #items h3 {
     margin-top: 12px;
+    font-size: 3em;
     color: #666;
+  }
+
+  canvas {
+      padding: 20px;
   }
 
   .recipe-item {

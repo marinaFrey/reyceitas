@@ -19,7 +19,7 @@
       <!-- Title -->
       <h2>{{recipe.name}}
         <button type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
-          <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+          <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
         </button>
       </h2>
     </div>
@@ -40,7 +40,7 @@
             <!-- Time -->
             <div class="row">
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
-                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <i class="fa fa-clock" aria-hidden="true"></i>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 text-center">Tempo</div>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
@@ -54,7 +54,7 @@
             <!-- Difficulty -->
             <div *ngIf="!editing" class="row">
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
-                <i class="fa fa-area-chart" aria-hidden="true"></i>
+                <i class="fa fa-chart-area" aria-hidden="true"></i>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 text-center">Dificuldade</div>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
@@ -65,7 +65,7 @@
             <!-- EDITING Difficulty -->
             <div *ngIf="editing" class="row">
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
-                <i class="fa fa-area-chart" aria-hidden="true"></i>
+                  <i class="fa fa-chart-area" aria-hidden="true"></i>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 text-center">Dificuldade</div>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
