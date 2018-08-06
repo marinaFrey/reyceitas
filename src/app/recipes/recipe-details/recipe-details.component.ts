@@ -15,6 +15,7 @@ export class RecipeDetailsComponent implements OnInit
 
   @Input() recipe: Recipe;
   numberOfDifficultyStars: number[];
+  editing: boolean;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -25,6 +26,7 @@ export class RecipeDetailsComponent implements OnInit
   {
     this.getRecipe();
     this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
+    this.editing = false;
   }
 
   getRecipe(): void
@@ -37,6 +39,22 @@ export class RecipeDetailsComponent implements OnInit
   goBack(): void 
   {
     this.location.back();
+  }
+
+  toggleEditing(): void 
+  {
+    this.editing = !this.editing;
+  }
+
+  save(): void 
+  {
+    this.toggleEditing();
+    this.numberOfDifficultyStars = [];
+    for(let i = 0; i < this.recipe.difficulty; i++)
+    {
+      this.numberOfDifficultyStars.push(1);
+    }
+    console.log(this.numberOfDifficultyStars,this.recipe.difficulty);
   }
 
 }

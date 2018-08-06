@@ -93,7 +93,7 @@
       counter-reset: li;
       list-style: none;
       padding: 0;
-      margin-bottom: 4em;
+      margin-bottom: 0em;
       text-shadow: 0 1px 0 rgba(255,255,255,.5);
   }
   .recipe-directions ol ol {
@@ -145,7 +145,18 @@
       border-left-color: #487bce;
   }
 
+  input {
+    flex-basis: 100%;
+    min-width: 0;                       
+  }
 
+  button {
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+/*
   button {
     margin-top: 20px;
     font-family: Arial;
@@ -162,4 +173,4 @@
     background-color: #eee;
     color: #ccc;
     cursor: auto;
-  }
+  }*/
