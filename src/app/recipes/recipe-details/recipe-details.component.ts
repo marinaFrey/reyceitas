@@ -16,6 +16,7 @@ export class RecipeDetailsComponent implements OnInit
   @Input() recipe: Recipe;
   numberOfDifficultyStars: number[];
   editing: boolean;
+  newRecipe: boolean;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -26,14 +27,36 @@ export class RecipeDetailsComponent implements OnInit
   {
     this.getRecipe();
     this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
-    this.editing = false;
   }
 
   getRecipe(): void
   {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.recipeService.getRecipe(id)
-      .subscribe(recipe => this.recipe = recipe);
+    console.log(id);
+    if(isNaN(id))
+    {
+      this.recipe = { 
+        id: null, 
+        name: '', 
+        duration: "", 
+        difficulty: null, 
+        servings: null, 
+        description: '', 
+        ingredients: [{id:null,name:"",amount:null,unit:""}], 
+        preparation: [""]};
+
+        this.editing = true;
+        this.newRecipe = true;
+    }
+    else
+    {
+      this.recipeService.getRecipe(id)
+        .subscribe(recipe => this.recipe = recipe);
+
+      this.newRecipe = false;
+      this.editing = false;
+    }
+    
   }
 
   goBack(): void 

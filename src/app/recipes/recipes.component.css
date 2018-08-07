@@ -21,12 +21,22 @@
   .recipe-item {
     margin-bottom: 24px;
     padding-bottom: 12px;
-    background-color: #fff;
+    background-color: white;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.15);
     -moz-box-shadow: 0 1px 0 rgba(0,0,0,.15);
-    box-shadow: 0 1px 0 rgba(0,0,0,.15);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 5px; /* 5px rounded corners */
   }
   .recipe-item img {
+    width: 100%;
+    height: auto;
+  }
+  .recipe-item:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+  .recipe-item img {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     width: 100%;
     height: auto;
   }
