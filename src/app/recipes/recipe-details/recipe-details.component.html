@@ -22,26 +22,27 @@
           <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn-lg btn-danger" (click)="toggleEditing()">
-            <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
+          <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
         </button>
       </h2>
       <div *ngIf="editing" class="col">
-          <h1  class="row">
-              <div class="col-md-6 col-sm-6 col-xs-6">
-                <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.name" placeholder="nome da receita" ng-disabled="editing" style="padding:20px; margin-bottom:10px;">
-              </div>
-              <div class="col-md-6 col-sm-6 col-xs-6">
-                <button *ngIf="!newRecipe" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
-                  <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
-                </button>
-                <button *ngIf="!newRecipe" type="button" class="btn-lg btn-danger" (click)="toggleEditing()">
-                    <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
-                </button>
-              </div>
-      
-            </h1>
+        <h1 class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.name" placeholder="nome da receita" ng-disabled="editing"
+              style="padding:20px; margin-bottom:10px;">
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <button *ngIf="!newRecipe" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
+              <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
+            </button>
+            <button *ngIf="!newRecipe" type="button" class="btn-lg btn-danger" (click)="toggleEditing()">
+              <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
+            </button>
+          </div>
+
+        </h1>
       </div>
-      
+
     </div>
 
     <div class="row ">
@@ -210,16 +211,28 @@
             <i class="fa fa-plus" aria-hidden="true"></i>
           </button>
         </div>
-
       </div>
+    </div>
 
+    <!-- Tags -->
+    <div *ngIf="!editing" class="row wow slideInUp">
+      <div class="col-12">
+        <div class="recipe-directions">
+          <h3>Tags</h3>
+          <ol>
+            <button class="btn btn-secondary" *ngFor="let tag of recipe.tags">
+              {{tags[tag].name}}
+            </button>
+          </ol>
+        </div>
+      </div>
     </div>
 
 
     <!-- Edit options -->
     <div *ngIf="editing" class="row wow rollIn">
       <div class="col-12 text-center">
-        <button class="btn btn-danger" (click)="toggleEditing()">
+        <button *ngIf="!newRecipe" class="btn btn-danger" (click)="toggleEditing()">
           <i class="fa fa-times" aria-hidden="true"></i>
           Cancelar
         </button>
@@ -236,7 +249,7 @@
       <div class="col-12 text-center">
         <button class="btn btn-primary" (click)="goBack()">
           <i class="fa fa-backward" aria-hidden="true"></i>
-          Voltar para receitas
+          Voltar
         </button>
       </div>
     </div>

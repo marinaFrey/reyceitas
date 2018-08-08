@@ -7,6 +7,7 @@ export class Recipe {
     description: string;
     ingredients: Array<Ingredient>;
     preparation: Array<string>;
+    tags: Array<number>;
 }
 
 export class Ingredient {
@@ -14,4 +15,9 @@ export class Ingredient {
     name: string;
     amount: number;
     unit: string;
+}
+
+export class Tag {
+    id: number;
+    name: string;
 }

@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 
 import { RecipeService }  from '../../recipe.service';
 import { Recipe } from '../../recipe';
+import { Tag } from "../../recipe";
 
 @Component({
   selector: 'app-recipe-details',
@@ -17,6 +18,7 @@ export class RecipeDetailsComponent implements OnInit
   numberOfDifficultyStars: number[];
   editing: boolean;
   newRecipe: boolean;
+  tags: Tag[];
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -31,11 +33,14 @@ export class RecipeDetailsComponent implements OnInit
 
   getRecipe(): void
   {
+    this.recipeService.getTags()
+        .subscribe(tags => this.tags = tags);
+
     const id = +this.route.snapshot.paramMap.get('id');
-    console.log(id);
     if(isNaN(id))
     {
-      this.recipe = { 
+      this.recipe = 
+      { 
         id: null, 
         name: '', 
         duration: "", 
@@ -43,7 +48,9 @@ export class RecipeDetailsComponent implements OnInit
         servings: null, 
         description: '', 
         ingredients: [{id:null,name:"",amount:null,unit:""}], 
-        preparation: [""]};
+        preparation: [""],
+        tags:[null]
+      };
 
         this.editing = true;
         this.newRecipe = true;

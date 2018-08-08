@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Recipe } from './recipe';
+import { Tag } from './recipe';
 import { RECIPES } from './mock-recipes';
+import { TAGS } from './mock-recipes';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 
@@ -16,7 +18,13 @@ export class RecipeService {
   {
     this.messageService.add('RecipeService: fetched recipes');
     return of(RECIPES);
-  } 
+  }
+  
+  getTags(): Observable<Tag[]>
+  {
+    this.messageService.add('RecipeService: fetched tags');
+    return of(TAGS);
+  }
 
   getRecipe(id:number): Observable<Recipe>
   {
