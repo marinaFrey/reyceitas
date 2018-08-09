@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
+import { Tag } from "../recipe";
+import { RecipeService }  from '../recipe.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,9 +10,15 @@ import { Chart } from 'chart.js';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  tags: Tag[];
+
+  constructor(private recipeService: RecipeService) { }
 
   ngOnInit() {
+
+    this.recipeService.getTags()
+        .subscribe(tags => this.tags = tags);
+
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
       type: 'bar',

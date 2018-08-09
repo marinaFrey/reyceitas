@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavigationBarComponent implements OnInit {
 
+  searchTerm: string;
+  
   constructor() { }
 
   ngOnInit() {
+  }
+
+  doSearch()
+  {
+    console.log("doing search");
   }
 
 }

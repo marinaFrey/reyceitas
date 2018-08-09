@@ -8,7 +8,7 @@ import { AdvancedSearchComponent } from './advanced-search/advanced-search.compo
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'recipes', component: RecipesComponent },
+  { path: 'recipes/:term', component: RecipesComponent },
   { path: 'details/:id', component: RecipeDetailsComponent },
   { path: 'advancedsearch', component: AdvancedSearchComponent }
 ];

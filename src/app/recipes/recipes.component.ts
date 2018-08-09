@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipe';
+import { ActivatedRoute } from '@angular/router';
 import { RecipeService } from '../recipe.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-recipes',
@@ -12,8 +14,14 @@ export class RecipesComponent implements OnInit
 
   recipes: Recipe[];
 
-  constructor(private recipeService: RecipeService) 
-  {   
+  constructor(private route: ActivatedRoute,
+    private recipeService: RecipeService,
+    private location: Location) 
+  {
+    route.params.subscribe(val => 
+    {
+      this.getRecipes();
+    });
   }
 
   ngOnInit() 
@@ -23,7 +31,29 @@ export class RecipesComponent implements OnInit
   
   getRecipes(): void
   {
-    this.recipeService.getRecipes().subscribe(recipes => this.recipes = recipes);
+    var term = this.route.snapshot.paramMap.get('term');
+    var termNumber = +term;
+    console.log(term);
+    
+    if(isNaN(termNumber))
+    {
+      if(term == "all")
+      {
+        
+        this.recipeService.getRecipes().subscribe(recipes => this.recipes = recipes);
+      }
+      else
+      {
+        this.recipeService.searchRecipesByTerm(term).subscribe(recipes => this.recipes = recipes);
+      }
+      
+    }
+    else
+    {
+      this.recipeService.searchRecipesByTag(termNumber).subscribe(recipes => this.recipes = recipes);
+    }
+    
+    
   }
 
 }

@@ -10,23 +10,66 @@ import { MessageService } from './message.service';
   providedIn: 'root'
 })
 
-export class RecipeService {
+export class RecipeService 
+{
 
   constructor(private messageService: MessageService) { }
 
-  getRecipes(): Observable<Recipe[]>
+  getRecipes(): Observable<Recipe[]> 
   {
     this.messageService.add('RecipeService: fetched recipes');
     return of(RECIPES);
   }
-  
-  getTags(): Observable<Tag[]>
+
+  getTags(): Observable<Tag[]> 
   {
     this.messageService.add('RecipeService: fetched tags');
     return of(TAGS);
   }
 
-  getRecipe(id:number): Observable<Recipe>
+  searchTag(this:number, value: Recipe, index: number, obj: Recipe[]) : Recipe
+  {
+    for(var i=0; i < value.tags.length; i++)
+    {
+      if(value.tags[i] == this)
+        return value; 
+    }
+  }
+
+  searchRecipesByTag(term: number): Observable<Recipe[]> 
+  {
+    return of(RECIPES.filter(this.searchTag, term));
+  }
+
+  searchTerm(this:string, value: Recipe, index: number, obj: Recipe[]) : Recipe
+  {
+    if( value.name.toUpperCase().indexOf(this.toUpperCase()) >= 0 ){
+      return value;
+    }
+    for(var i=0; i < value.ingredients.length; i++)
+    {
+      if( value.ingredients[i].name.indexOf(this) >= 0 ){
+        return value;
+      }
+    }
+    for(var i=0; i < value.preparation.length; i++)
+    {
+      if( value.preparation[i].indexOf(this) >= 0 ){
+        return value;
+      }
+    }
+  }
+  searchRecipesByTerm(term: string): Observable<Recipe[]>
+  {
+    if (!term.trim()) 
+    {
+      return of([]);
+    }
+    console.log(RECIPES.filter(this.searchTerm, term));
+    return of(RECIPES.filter(this.searchTerm, term));
+  }
+
+  getRecipe(id: number): Observable<Recipe> 
   {
     this.messageService.add('RecipeService: fetched this specific recipe id=${id}`');
     return of(RECIPES.find(recipe => recipe.id === id));

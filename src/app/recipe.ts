@@ -20,4 +20,6 @@ export class Ingredient {
 export class Tag {
     id: number;
     name: string;
+    icon: string;
+    color: string;
 }

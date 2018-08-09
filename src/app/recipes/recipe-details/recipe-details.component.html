@@ -220,8 +220,27 @@
         <div class="recipe-directions">
           <h3>Tags</h3>
           <ol>
-            <button class="btn btn-secondary" *ngFor="let tag of recipe.tags">
+            <button class="btn btn-secondary" *ngFor="let tag of recipe.tags" routerLink="/recipes/{{tag}}">
               {{tags[tag].name}}
+            </button>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDITING Tags -->
+    <div *ngIf="editing" class="row wow slideInUp">
+      <div class="col-12">
+        <div class="recipe-directions">
+          <h3>Tags</h3>
+          <ol>
+            <button class="btn btn-secondary" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn" >
+              {{tags[tag].name}}
+              <i class="fa fa-times fa-fw " aria-hidden="true" (click)="removeTag(index)"></i>
+            </button>
+            <select [(ngModel)]="tags"></select>
+            <button class="btn btn-success " (click)="addTag()">
+              <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
           </ol>
         </div>

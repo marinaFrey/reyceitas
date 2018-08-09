@@ -15,16 +15,16 @@ export const RECIPES: Recipe[] =
 
 export const TAGS: Tag[] =
 [
-  {id:0, name:"favoritos"},
-  {id:1, name:"bebidas"},
-  {id:2, name:"sobremesas"},
-  {id:3, name:"vegetariano"},
-  {id:4, name:"refeições"},
-  {id:5, name:"sopas"},
-  {id:6, name:"lanches"},
-  {id:7, name:"peixes"},
-  {id:8, name:"aves"},
-  {id:9, name:"porco"},
-  {id:10, name:"carne vermelha"},
-  {id:11, name:"saudável"}
+  {id:0, name:"favoritos", icon: "fa-star", color: "#dfc013"},
+  {id:1, name:"bebidas", icon: "fa-coffee", color: "#915721"},
+  {id:2, name:"sobremesas", icon: "fa-birthday-cake", color: "#dd73d8"},
+  {id:3, name:"vegetariano", icon: "fa-feather-alt", color: "#72ce6f"},
+  {id:4, name:"refeições", icon: "fa-utensils", color: "#777777"},
+  {id:5, name:"sopas", icon: "fa-utensil-spoon", color: "#6fcebe"},
+  {id:6, name:"lanches", icon: "fa-cookie-bite", color: "#926d4b"},
+  {id:7, name:"peixes", icon: "fa-fish", color: "#6f98ce"},
+  {id:8, name:"aves", icon: "fa-crow", color: "#ce926f"},
+  {id:9, name:"porco", icon: "fa-piggy-bank", color: "#ce926f"},
+  {id:10, name:"carne vermelha", icon: "fa-chess-knight", color: "#ce926f"},
+  {id:11, name:"saudável", icon: "fa-apple-alt", color: "#9dce6f"}
 ]

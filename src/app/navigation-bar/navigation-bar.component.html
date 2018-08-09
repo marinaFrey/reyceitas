@@ -119,9 +119,9 @@
 		<div class="col-md-6 col-xs-12">
 			<div id="custom-search-input">
 				<div class="input-group col-md-12">
-					<input type="text" class="form-control input-lg" placeholder="Buscar" />
+					<input id="barSearch" type="text" class="form-control input-lg" placeholder="Buscar" [(ngModel)]="searchTerm" onkeydown = "if(event.keyCode == 13)document.getElementById('btnSearch').click();"     />
 					<span class="input-group-btn">
-						<button class="btn btn-primary btn-lg" type="button">
+						<button id="btnSearch" class="btn btn-primary btn-lg" type="button" [routerLink]="['recipes', searchTerm ]">
 							<i class="glyphicon glyphicon-search"></i>
 						</button>
 					</span>
@@ -130,7 +130,7 @@
 		</div>
 
 		<div class="hidden-xs col-md-3 text-right">
-			<a target="_blank" href="#" class="site_login ">
+			<a target="_blank" href="#" class="site_login " >
 				<span class="glyphicon glyphicon-log-in"></span>
 				Login
 			</a>

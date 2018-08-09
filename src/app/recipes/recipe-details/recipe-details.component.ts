@@ -96,6 +96,16 @@ export class RecipeDetailsComponent implements OnInit
     this.recipe.preparation.splice(index,1);
   }
 
+  removeTag(index: number): void
+  {
+    this.recipe.tags.splice(index,1);
+  }
+
+  addTag(id): void
+  {
+    this.recipe.tags.push(id);
+  }
+
   save(): void 
   {
     this.toggleEditing();

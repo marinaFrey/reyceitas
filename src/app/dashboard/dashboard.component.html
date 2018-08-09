@@ -21,7 +21,7 @@
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
       <div class="recipe-item text-center">
-        <div class="row" routerLink="/recipes">
+        <div class="row" routerLink="/recipes/all">
           <div class="col-md-3 col-sm-3 col-xs-3 text-right">
             <h1 style="color: #487bce; vertical-align: middle;">
               <i class="fa fa-folder-open fa-fw " aria-hidden="true"></i>
@@ -53,124 +53,14 @@
     </div>
 
   </div>
+
   <div class="row">
 
-    <!-- First recipe item -->
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
+    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn" *ngFor="let tag of tags;let index = index;" routerLink="/recipes/{{index}}">
       <div class="recipe-item text-center">
         <div class="row">
-          <h3 style="color: #dfc013; vertical-align: middle;">
-            <i class="fa fa-star fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4  wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #915721; vertical-align: middle;">
-            <i class="fa fa-coffee fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #dd73d8; vertical-align: middle;">
-            <i class="fa fa-birthday-cake fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #72ce6f; vertical-align: middle;">
-            <i class="fa fa-feather-alt  " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #777777; vertical-align: middle;">
-            <i class="fa fa-utensils fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #6fcebe; vertical-align: middle;">
-            <i class="fa fa-utensil-spoon fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #926d4b; vertical-align: middle;">
-            <i class="fa fa-cookie-bite fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #6f98ce; vertical-align: middle;">
-            <i class="fa fa-fish fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4  wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #ce926f; vertical-align: middle;">
-            <i class="fa fa-crow fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #ce926f; vertical-align: middle;">
-            <i class="fa fa-piggy-bank fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #ce926f; vertical-align: middle;">
-            <i class="fa fa-chess-knight fa-fw " aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <h3 style="color: #9dce6f; vertical-align: middle;">
-            <i class="fa fa-apple-alt fa-fw " aria-hidden="true"></i>
+          <h3 [ngStyle]="{'color': tag.color}" style="vertical-align: middle;">
+            <i class="fa {{tag.icon}} fa-fw " aria-hidden="true"></i>
           </h3>
         </div>
       </div>
