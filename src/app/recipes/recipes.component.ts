@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipe';
+import { Tag } from '../recipe';
 import { ActivatedRoute } from '@angular/router';
 import { RecipeService } from '../recipe.service';
 import { Location } from '@angular/common';
@@ -13,6 +14,7 @@ export class RecipesComponent implements OnInit
 {
 
   recipes: Recipe[];
+  searchTerm: string;
 
   constructor(private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -33,7 +35,7 @@ export class RecipesComponent implements OnInit
   {
     var term = this.route.snapshot.paramMap.get('term');
     var termNumber = +term;
-    console.log(term);
+    
     
     if(isNaN(termNumber))
     {
@@ -45,14 +47,17 @@ export class RecipesComponent implements OnInit
       else
       {
         this.recipeService.searchRecipesByTerm(term).subscribe(recipes => this.recipes = recipes);
+        this.searchTerm = term;
       }
       
     }
     else
     {
       this.recipeService.searchRecipesByTag(termNumber).subscribe(recipes => this.recipes = recipes);
+      var tagList;
+      this.recipeService.getTags().subscribe(tags => tagList = tags);
+      this.searchTerm = tagList[termNumber].name;
     }
-    
     
   }
 
