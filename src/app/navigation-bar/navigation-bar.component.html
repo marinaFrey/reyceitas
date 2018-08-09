@@ -30,10 +30,62 @@
 		</div>
 
 		<div class="hidden-xs col-md-3 text-right">
-			<button type="button" class="site_login btn btn-secondary" data-toggle="modal" data-target="#loginModal">
+
+			<button *ngIf="!isLoggedIn" type="button" class="site_login btn btn-secondary" data-toggle="modal" data-target="#loginModal">
 				<span class="glyphicon glyphicon-log-in"></span>
 				Login
 			</button>
+
+			
+			<a *ngIf="isLoggedIn" href="#" class="site_login" data-toggle="dropdown" data-target="#userTab">
+				<span class="glyphicon glyphicon-user"></span>
+				<span id="welcomeUserString">
+					<strong>Bem vindo(a), Pessoa</strong>
+				</span>
+				<span class="glyphicon glyphicon-chevron-down"></span>
+			</a>
+
+			
+
+			
+			<li *ngIf="isLoggedIn"  class="dropdown" id="userTab">
+				<ul class="dropdown-menu">
+					<li>
+						<div class="navbar-login">
+							<div class="row">
+								<div class="col-lg-4">
+									<p class="text-center">
+										<span class="glyphicon glyphicon-user icon-size"></span>
+									</p>
+								</div>
+								<div class="col-lg-8">
+									<p class="text-left" id="fullnameString">
+										<strong>Full Name</strong>
+									</p>
+									<p class="text-left small" id="emailString">Email</p>
+									<p class="text-left small" id="roleString">Nivel</p>
+									<p class="text-left">
+										<a href="#" class="btn btn-primary btn-block btn-sm" data-toggle="modal" data-target="#loginConfigurationModal">Update Information</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="divider navbar-login-session-bg"></li>
+					<li>
+						<div class="navbar-login navbar-login-session">
+							<div class="row">
+								<div class="col-lg-12">
+									<p>
+										<a href="#" class="btn btn-danger btn-block" onClick="return logout();">Logout</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</li>
+
 		</div>
 
 	</div>
@@ -56,10 +108,12 @@
 
 				<form class="form col-md-12 center-block">
 					<div class="form-group">
-						<input id="username" type="text" required=true class="form-control input-lg" placeholder="Nome de Usuário">
+						<input id="username" type="text" required=true class="form-control input-lg" [(ngModel)]="username" [ngModelOptions]="{standalone: true}"
+						 placeholder="Nome de Usuário">
 					</div>
 					<div class="form-group">
-						<input id="password" type="password" required=true class="form-control input-lg" placeholder="Senha">
+						<input type="password" required=true class="form-control input-lg" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"
+						 placeholder="Senha">
 					</div>
 					<div class="form-group">
 						<button class="btn btn-primary btn-lg btn-block" (click)="submitLogin()">Entrar</button>
@@ -107,7 +161,7 @@
 					<div class="form-group">
 						<input id="emailConfig" type="email" required=true class="form-control input-lg" placeholder="Email">
 					</div>
-					<div class="form-group">
+					<div *ngIf="isLoggedIn" class="form-group">
 						<input id="oldPasswordConfig" type="password" required=true class="form-control input-lg" placeholder="Current Password">
 					</div>
 					<div class="form-group">

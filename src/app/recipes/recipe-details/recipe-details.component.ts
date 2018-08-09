@@ -134,7 +134,6 @@ export class RecipeDetailsComponent implements OnInit
     {
       this.numberOfDifficultyStars.push(1);
     }
-    console.log(this.numberOfDifficultyStars,this.recipe.difficulty);
   }
 
   trackByFn(index: any, item: any) 

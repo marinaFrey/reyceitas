@@ -23,3 +23,9 @@ export class Tag {
     icon: string;
     color: string;
 }
+
+export class ChartFormat {
+    labels: string[];
+    data: number[];
+    colors: string[];
+}

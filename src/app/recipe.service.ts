@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Recipe } from './recipe';
 import { Tag } from './recipe';
+import { ChartFormat } from './recipe';
 import { RECIPES } from './mock-recipes';
 import { TAGS } from './mock-recipes';
 import { Observable, of } from 'rxjs';
@@ -36,6 +37,39 @@ export class RecipeService
     }
   }
 
+  organizeChartData():  Observable<ChartFormat>
+  {
+    var chartData = 
+    {
+      labels: [],
+      data: [],
+      colors: []
+    }
+
+    for(var i = 0; i < TAGS.length; i++)
+    {
+      chartData.labels.push(TAGS[i].name);
+      chartData.colors.push(TAGS[i].color);
+    }
+
+    for(var j = 0; j < RECIPES.length; j++)
+    {
+      for(var k = 0; k < RECIPES[j].tags.length; k++)
+      {
+        if(chartData.data[RECIPES[j].tags[k]])
+        {
+          chartData.data[RECIPES[j].tags[k]]++;
+        }
+        else
+        {
+          chartData.data[RECIPES[j].tags[k]] = 1;
+        }
+      }
+    }
+    
+    return of(chartData);
+  }
+
   searchRecipesByTag(term: number): Observable<Recipe[]> 
   {
     return of(RECIPES.filter(this.searchTag, term));
@@ -65,7 +99,6 @@ export class RecipeService
     {
       return of([]);
     }
-    console.log(RECIPES.filter(this.searchTerm, term));
     return of(RECIPES.filter(this.searchTerm, term));
   }
 
@@ -73,5 +106,10 @@ export class RecipeService
   {
     this.messageService.add('RecipeService: fetched this specific recipe id=${id}`');
     return of(RECIPES.find(recipe => recipe.id === id));
+  }
+
+  getNumberOfRecipes(): Observable<number>
+  {
+    return of(RECIPES.length);
   }
 }

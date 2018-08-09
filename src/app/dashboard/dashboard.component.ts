@@ -11,6 +11,7 @@ import { RecipeService }  from '../recipe.service';
 export class DashboardComponent implements OnInit {
 
   tags: Tag[];
+  numberOfRecipes: number;
 
   constructor(private recipeService: RecipeService) { }
 
@@ -19,36 +20,24 @@ export class DashboardComponent implements OnInit {
     this.recipeService.getTags()
         .subscribe(tags => this.tags = tags);
 
-    this.createGraph();    
+    this.recipeService.getNumberOfRecipes().subscribe(num => this.numberOfRecipes = num);
+    
+    var graphData;
+    this.recipeService.organizeChartData().subscribe(data => graphData = data);
+    this.createGraph(graphData);  
   }
 
-  createGraph(): void
+  createGraph(data): void
   {
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange","a","f","b","g","w","p"],
+        labels: data.labels,
         datasets: [{
           label: 'Número de receitas por categoria',
-          data: [12, 19, 3, 5, 2, 3,6,2,5,7,9,3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
+          data: data.data,
+          backgroundColor: data.colors
         }]
       },
       options: {
