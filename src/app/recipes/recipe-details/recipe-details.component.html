@@ -238,7 +238,11 @@
               {{tags[tag].name}}
               <i class="fa fa-times fa-fw " aria-hidden="true" (click)="removeTag(index)"></i>
             </button>
-            <select [(ngModel)]="tags"></select>
+            <select [(ngModel)]="selectedTag">
+              <option *ngFor="let tagOption of availableTags" [ngValue]="tagOption.id">
+                {{tagOption.name}}
+              </option>
+            </select>
             <button class="btn btn-success " (click)="addTag()">
               <i class="fa fa-plus" aria-hidden="true"></i>
             </button>

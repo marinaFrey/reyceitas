@@ -19,6 +19,8 @@ export class RecipeDetailsComponent implements OnInit
   editing: boolean;
   newRecipe: boolean;
   tags: Tag[];
+  availableTags : Tag[];
+  selectedTag: string;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -29,6 +31,7 @@ export class RecipeDetailsComponent implements OnInit
   {
     this.getRecipe();
     this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
+    this.filterAvailableTags();
   }
 
   getRecipe(): void
@@ -101,9 +104,26 @@ export class RecipeDetailsComponent implements OnInit
     this.recipe.tags.splice(index,1);
   }
 
-  addTag(id): void
+  addTag(): void
   {
-    this.recipe.tags.push(id);
+    this.recipe.tags.push(+this.selectedTag);
+    this.filterAvailableTags();
+  }
+
+  filterAvailableTags(): void
+  {
+    this.availableTags = JSON.parse(JSON.stringify(this.tags));
+    for(var i=0; i< this.tags.length; i++)
+    {
+      for(var j=0; j < this.recipe.tags.length; j++)
+      {
+        if(this.tags[i].id == this.recipe.tags[j])
+        {
+          var index = this.availableTags.map(function(d){return d.id}).indexOf(this.recipe.tags[j]);
+          this.availableTags.splice(index,1);
+        }
+      }
+    }
   }
 
   save(): void 
