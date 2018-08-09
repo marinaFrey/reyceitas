@@ -14,9 +14,10 @@ export class NavigationBarComponent implements OnInit {
   ngOnInit() {
   }
 
-  doSearch()
+  submitLogin(): void
   {
-    console.log("doing search");
   }
+
+
 
 }

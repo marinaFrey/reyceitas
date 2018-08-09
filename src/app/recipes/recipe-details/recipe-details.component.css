@@ -156,6 +156,10 @@
     margin-right: 5px;
     margin-bottom: 5px;
   }
+
+  a {
+    color:#333;
+  }
 /*
   button {
     margin-top: 20px;

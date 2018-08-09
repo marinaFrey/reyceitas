@@ -234,18 +234,23 @@
         <div class="recipe-directions">
           <h3>Tags</h3>
           <ol>
-            <button class="btn btn-secondary" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn" >
-              {{tags[tag].name}}
-              <i class="fa fa-times fa-fw " aria-hidden="true" (click)="removeTag(index)"></i>
-            </button>
+            <a *ngIf="recipe.tags">
+              <button class="btn btn-secondary" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn">
+                {{tags[tag].name}}
+                <i class="fa fa-times fa-fw " aria-hidden="true" (click)="removeTag(index)"></i>
+              </button>
+            </a>
+
             <select [(ngModel)]="selectedTag">
               <option *ngFor="let tagOption of availableTags" [ngValue]="tagOption.id">
                 {{tagOption.name}}
               </option>
             </select>
+
             <button class="btn btn-success " (click)="addTag()">
               <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
+
           </ol>
         </div>
       </div>

@@ -19,14 +19,19 @@ export class DashboardComponent implements OnInit {
     this.recipeService.getTags()
         .subscribe(tags => this.tags = tags);
 
+    this.createGraph();    
+  }
+
+  createGraph(): void
+  {
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange","a","f","b","g","w","p"],
         datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
+          label: 'Número de receitas por categoria',
+          data: [12, 19, 3, 5, 2, 3,6,2,5,7,9,3],
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',

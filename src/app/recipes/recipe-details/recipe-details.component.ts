@@ -52,7 +52,7 @@ export class RecipeDetailsComponent implements OnInit
         description: '', 
         ingredients: [{id:null,name:"",amount:null,unit:""}], 
         preparation: [""],
-        tags:[null]
+        tags:[]
       };
 
         this.editing = true;

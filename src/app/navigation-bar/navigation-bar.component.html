@@ -1,104 +1,3 @@
-<!--
-<div class="navbar navbar-default navbar-expand-lg navbar-fixed-top" role="navigation">
-	<div class="container">
-
-		<div class="navbar-header">
-			<a target="_blank" href="#" class="navbar-brand">
-				<span class="glyphicon glyphicon-king"></span>
-				REYceitas
-			</a>
-		</div>
-
-		<div class="collapse navbar-collapse">
-			<ul class="nav navbar-nav navbar-right">
-
-				<li>
-					<a href="#" id="loginButton" onClick="return showLoginPopup();">
-						<span class="glyphicon glyphicon-log-in"></span>
-						Login
-					</a>
-				</li>
-
-				<li class="dropdown" id="userTab" style="display:none">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-user"></span>
-						<span id="welcomeUserString">
-							<strong>Welcome, Pessoa</strong>
-						</span>
-						<span class="glyphicon glyphicon-chevron-down"></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li>
-							<div class="navbar-login">
-								<div class="row">
-									<div class="col-lg-4">
-										<p class="text-center">
-											<span class="glyphicon glyphicon-user icon-size"></span>
-										</p>
-									</div>
-									<div class="col-lg-8">
-										<p class="text-left" id="fullnameString">
-											<strong>Full Name</strong>
-										</p>
-										<p class="text-left small" id="emailString">Email</p>
-										<p class="text-left small" id="roleString">Nivel</p>
-										<p class="text-left">
-											<a href="#" class="btn btn-primary btn-block btn-sm" onClick="return changeUsersInfo();">Update Information</a>
-										</p>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li class="divider navbar-login-session-bg"></li>
-						<li>
-							<div class="navbar-login navbar-login-session">
-								<div class="row">
-									<div class="col-lg-12">
-										<p>
-											<a href="#" class="btn btn-danger btn-block" onClick="return logout();">Logout</a>
-										</p>
-									</div>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</li>
-
-			</ul>
-		</div>
-	</div>
-</div>-->
-<!--
-<div class="navigation">
-	<div class="container">
-		<div class="row">
-
-			<div class="col-md-3 col-sm-12 text-left">
-				<a target="_blank" href="#" class="site_title">
-					<span class="glyphicon glyphicon-king"></span>
-					REYceitas
-				</a>
-			</div>
-
-				<form class="form-inline row col-md-6 col-sm-12 text-left">
-					<input class="form-control col-sm-3" type="search" placeholder="Search" aria-label="Search">
-					<button class="btn btn-outline-success  col-sm-3" type="submit">Search</button>
-				</form>
-
-
-			<div class="col-md-3 col-sm-12 text-right">
-
-				<a class="navigation_texts" href="#" id="loginButton" onClick="return showLoginPopup();">
-					<span class="glyphicon glyphicon-log-in"></span>
-					Login
-				</a>
-
-			</div>
-		</div>
-	</div>
-</div>
--->
-
 <div style="margin: 5px 20px 5px 20px;">
 	<div class="row">
 
@@ -110,16 +9,17 @@
 		</div>
 
 		<div class="hidden-lg hidden-sm hidden-md col-xs-6 text-right">
-				<a target="_blank" href="#" class="site_login ">
-					<span class="glyphicon glyphicon-log-in"></span>
-					Login
-				</a>
-			</div>
+			<a target="_blank" href="#" class="site_login ">
+				<span class="glyphicon glyphicon-log-in"></span>
+				Login
+			</a>
+		</div>
 
 		<div class="col-md-6 col-xs-12">
 			<div id="custom-search-input">
 				<div class="input-group col-md-12">
-					<input id="barSearch" type="text" class="form-control input-lg" placeholder="Buscar" [(ngModel)]="searchTerm" onkeydown = "if(event.keyCode == 13)document.getElementById('btnSearch').click();"     />
+					<input id="barSearch" type="text" class="form-control input-lg" placeholder="Buscar" [(ngModel)]="searchTerm" onkeydown="if(event.keyCode == 13)document.getElementById('btnSearch').click();"
+					/>
 					<span class="input-group-btn">
 						<button id="btnSearch" class="btn btn-primary btn-lg" type="button" [routerLink]="['recipes', searchTerm ]">
 							<i class="glyphicon glyphicon-search"></i>
@@ -130,11 +30,102 @@
 		</div>
 
 		<div class="hidden-xs col-md-3 text-right">
-			<a target="_blank" href="#" class="site_login " >
+			<button type="button" class="site_login btn btn-secondary" data-toggle="modal" data-target="#loginModal">
 				<span class="glyphicon glyphicon-log-in"></span>
 				Login
-			</a>
+			</button>
 		</div>
 
+	</div>
+</div>
+
+<!--login modal-->
+<div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h1 class="text-center">Login</h1>
+			</div>
+			<div class="modal-body">
+
+				<div id="loginErrorAlert" class="alert alert-danger" role="alert" style="display:none">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Erro:</span>Nome de usuário ou senha inválidos
+				</div>
+
+				<form class="form col-md-12 center-block">
+					<div class="form-group">
+						<input id="username" type="text" required=true class="form-control input-lg" placeholder="Nome de Usuário">
+					</div>
+					<div class="form-group">
+						<input id="password" type="password" required=true class="form-control input-lg" placeholder="Senha">
+					</div>
+					<div class="form-group">
+						<button class="btn btn-primary btn-lg btn-block" (click)="submitLogin()">Entrar</button>
+						<span class="pull-right">
+							<a href="#" data-toggle="modal" data-target="#loginConfigurationModal">Crie sua conta</a>
+						</span>
+						<span>
+							<a href="#" onClick="resetUsersPassword()">Esqueceu sua senha?</a>
+						</span>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="col-md-12">
+					<button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--login configuration modal-->
+<div id="loginConfigurationModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h1 class="text-center" id="loginConfigModalTitle">User Information</h1>
+			</div>
+			<div class="modal-body">
+
+				<div id="informationErrorAlert" class="alert alert-danger" role="alert" style="display:none">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					<a id="informationErrorAlertText" style="color:inherit;text-decoration: none">Invalid password.</a>
+				</div>
+
+				<form class="form col-md-12 center-block">
+					<div class="form-group">
+						<input id="usernameConfig" type="text" required=true class="form-control input-lg" placeholder="Username">
+					</div>
+					<div class="form-group">
+						<input id="fullnameConfig" type="text" required=true class="form-control input-lg" placeholder="Full Name">
+					</div>
+					<div class="form-group">
+						<input id="emailConfig" type="email" required=true class="form-control input-lg" placeholder="Email">
+					</div>
+					<div class="form-group">
+						<input id="oldPasswordConfig" type="password" required=true class="form-control input-lg" placeholder="Current Password">
+					</div>
+					<div class="form-group">
+						<input id="passwordConfig" type="password" required=true class="form-control input-lg" placeholder="New Password">
+					</div>
+					<div class="form-group">
+						<input id="passwordConfirmationConfig" type="password" required=true class="form-control input-lg" placeholder="Confirm New Password">
+					</div>
+					<div class="form-group">
+						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" onClick="submitChangesInUser()">Submit</button>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="col-md-12">
+					<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
