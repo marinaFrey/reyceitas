@@ -57,6 +57,10 @@
     background-color: #f9f9f9;
     margin-top: 24px;
   }
+
+
+
+  /* Ingredients */
   .ingredients-list dl {
     display: inline-block;
     width: 100%;
@@ -160,6 +164,16 @@
 
   a {
     color:#333;
+  }
+  .image-info .row {
+    margin-top: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-left:10px;
+  }
+
+  .thumbnail-image {
+    height:50px;
   }
 /*
   button {

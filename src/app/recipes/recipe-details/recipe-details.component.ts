@@ -46,7 +46,7 @@ export class RecipeDetailsComponent implements OnInit
       { 
         id: null, 
         name: '', 
-        photos:["../../../assets/images/bbq-pork-ribs.jpg"], 
+        photos:[], 
         duration: "", 
         difficulty: null, 
         servings: null, 
@@ -79,6 +79,22 @@ export class RecipeDetailsComponent implements OnInit
   {
     this.editing = !this.editing;
   }
+
+  addImage(): void
+  {
+
+  }
+
+  reuploadImage(): void
+  {
+
+  }
+
+  deleteImage(imgIndex): void
+  {
+    // pode usar recipe.photos[imgIndex] para pegar a URL da imagem e retirar do banco de dados
+    this.recipe.photos.splice(imgIndex,1);
+  } 
 
   addIngredient(): void 
   {
