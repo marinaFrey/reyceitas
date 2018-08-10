@@ -1,26 +1,26 @@
 <section id="items">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <h2 *ngIf="!searchTerm">Receitas</h2>
-          <h2 *ngIf="searchTerm">Receitas - {{searchTerm}}</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Receitas</h2>
+      </div>
+    </div>
+    <div class="row">
+
+      <!-- First recipe item -->
+      <div *ngFor="let recipe of recipes" class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+        <div class="recipe-item text-center">
+          <a routerLink="/details/{{recipe.id}}">
+            <img src="{{recipe.photos[0]}}" alt="bbq-pork-ribs" />
+          </a>
+          <br />
+          <h3>{{recipe.name}}</h3>
         </div>
       </div>
-      <div class="row">
 
-        <!-- First recipe item -->
-        <div *ngFor="let recipe of recipes" class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
-          <div class="recipe-item text-center">
-              <a routerLink="/details/{{recipe.id}}">
-              <img src="../../../assets/images/bbq-pork-ribs.jpg" alt="bbq-pork-ribs" />
-            </a>
-            <br />
-            <h3>{{recipe.name}}</h3>
-          </div>
-        </div>
+    </div>
 
-      </div>
-      <!-- Back to recipes -->
+    <!-- Back to dashboard -->
     <div class="row wow rollIn">
       <div class="col-12 text-center">
         <button class="btn btn-primary" routerLink="/dashboard">
@@ -29,5 +29,6 @@
         </button>
       </div>
     </div>
-    </div>
-  </section>
+
+  </div>
+</section>

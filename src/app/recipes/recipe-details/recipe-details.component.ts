@@ -46,6 +46,7 @@ export class RecipeDetailsComponent implements OnInit
       { 
         id: null, 
         name: '', 
+        photos:["../../../assets/images/bbq-pork-ribs.jpg"], 
         duration: "", 
         difficulty: null, 
         servings: null, 

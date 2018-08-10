@@ -48,10 +48,28 @@
     <div class="row ">
       <div class="col">
 
-        <!-- Picture -->
-        <div class="col-md-8 wow swing">
-          <img src="../../../assets/images/bbq-pork-ribs.jpg" alt="bbq-pork-ribs" class="recipe-picture" />
+        <!-- Picture-->
+        <div class="col-md-8 wow swing ">
+          <div id="carouselExampleIndicators" class="carousel slide recipe-picture" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" data-slide-to="index" [ngClass]="{active: index == 0}"></li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="item" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" [ngClass]="{active: index == 0}">
+                <img class="d-block w-100" [src]="recipe.photos[index]" alt="index">
+              </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
         </div>
+
 
         <!-- Info -->
         <div class="col-md-4 wow lightSpeedIn">
@@ -108,6 +126,17 @@
 
               </div>
             </div>
+
+            <!-- created by -->
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-xs-2 text-center">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-center">Criada por</div>
+                <div class="col-md-4 col-sm-4 col-xs-4 text-center">
+                    user
+                </div>
+              </div>
 
           </div>
         </div>
@@ -220,7 +249,7 @@
         <div class="recipe-directions">
           <h3>Tags</h3>
           <ol>
-            <button class="btn btn-secondary" *ngFor="let tag of recipe.tags" routerLink="/recipes/{{tag}}">
+            <button class="btn btn-light" *ngFor="let tag of recipe.tags" routerLink="/recipes/{{tag}}">
               {{tags[tag].name}}
             </button>
           </ol>
@@ -235,7 +264,7 @@
           <h3>Tags</h3>
           <ol>
             <a *ngIf="recipe.tags">
-              <button class="btn btn-secondary" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn">
+              <button class="btn btn-light" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn">
                 {{tags[tag].name}}
                 <i class="fa fa-times fa-fw " aria-hidden="true" (click)="removeTag(index)"></i>
               </button>

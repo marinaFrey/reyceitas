@@ -1,6 +1,7 @@
 export class Recipe {
     id: number;
     name: string;
+    photos: string[];
     duration: string;
     difficulty: number; // 1 to 5
     servings: number;
@@ -22,6 +23,14 @@ export class Tag {
     name: string;
     icon: string;
     color: string;
+}
+
+export class User {
+    id: number;
+    username: string;
+    password: string;
+    fullName: string;
+    email: string;
 }
 
 export class ChartFormat {
