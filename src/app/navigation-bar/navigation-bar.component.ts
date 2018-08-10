@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './navigation-bar.component.html',
   styleUrls: ['./navigation-bar.component.css']
 })
+
 export class NavigationBarComponent implements OnInit {
 
   // acho que eh uma variavel que deveria ser meio "global" ao sistema, mas por enquanto vou deixar ela definida aqui

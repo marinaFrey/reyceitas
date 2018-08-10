@@ -57,10 +57,10 @@
   <div class="row">
 
     <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn" *ngFor="let tag of tags;let index = index;" routerLink="/recipes/{{index}}">
-      <div class="recipe-item text-center">
+      <div class="recipe-item">
         <div class="row">
-          <h3 [ngStyle]="{'color': tag.color}" style="vertical-align: middle;">
-            <i class="fa {{tag.icon}} fa-fw " aria-hidden="true"></i>
+          <h3 class="col-md-12 col-sm-12 col-xs-12 text-center" [ngStyle]="{'color': tag.color}">
+            <i class="fa {{tag.icon}} fa-fw" aria-hidden="true"></i>
           </h3>
         </div>
       </div>
@@ -77,23 +77,40 @@
         </div>
       </div>
     </div>
+
     <div class="col-lg-3 col-md-3 col-sm-12 wow fadeIn">
       <div class="recipe-item text-center">
+
         <div class="row">
-          <h3>{{numberOfRecipes}}</h3>
-          <h4>Receitas salvas</h4>
+          <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <h3>{{numberOfRecipes}}</h3>
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <h4>Receitas Cadastradas</h4>
+          </div>
+        </div>
+
       </div>
       <div class="recipe-item text-center">
-        <div class="row">
-          <h3>10</h3>
-          <h4>Usuários Cadastrados</h4>
-        </div>
-      </div>
 
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+              <h3>{{numberOfRecipes}}</h3>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+              <h4>Usuários Cadastrados</h4>
+            </div>
+          </div>
+          
+        </div>
     </div>
 
   </div>
 
 </section>
-

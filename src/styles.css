@@ -18,11 +18,16 @@
 */
 
 body {
+  padding: 0px;
+  padding-right: 0 !important;
   color: #666;
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   line-height: 1.50;
   overflow-x: hidden;
+}
+.modal-open {
+  overflow: scroll;
 }
 ol, ul {
   list-style: none;

@@ -31,12 +31,12 @@
 
 		<div class="hidden-xs col-md-3 text-right">
 
-			<button *ngIf="!isLoggedIn" type="button" class="site_login btn btn-secondary" data-toggle="modal" data-target="#loginModal">
+			<button *ngIf="!isLoggedIn" type="button" class="site_login btn btn-light" data-toggle="modal" data-target="#loginModal">
 				<span class="glyphicon glyphicon-log-in"></span>
 				Login
 			</button>
 
-			
+
 			<a *ngIf="isLoggedIn" href="#" class="site_login" data-toggle="dropdown" data-target="#userTab">
 				<span class="glyphicon glyphicon-user"></span>
 				<span id="welcomeUserString">
@@ -45,11 +45,8 @@
 				<span class="glyphicon glyphicon-chevron-down"></span>
 			</a>
 
-			
-
-			
-			<li *ngIf="isLoggedIn"  class="dropdown" id="userTab">
-				<ul class="dropdown-menu">
+			<div *ngIf="isLoggedIn" class="dropdown" >
+				<div class="dropdown-menu" style="margin: -10px 40px 0px 0px;">
 					<li>
 						<div class="navbar-login">
 							<div class="row">
@@ -83,19 +80,21 @@
 							</div>
 						</div>
 					</li>
-				</ul>
-			</li>
+				</div>
+			</div>
 
 		</div>
 
 	</div>
 </div>
 
+
+
 <!--login modal-->
 <div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
+			<div class="modal-header center-block col-md-12 col-sm-12 col-xs-12 text-center">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 				<h1 class="text-center">Login</h1>
 			</div>
@@ -116,7 +115,7 @@
 						 placeholder="Senha">
 					</div>
 					<div class="form-group">
-						<button class="btn btn-primary btn-lg btn-block" (click)="submitLogin()">Entrar</button>
+						<button class="btn btn-primary btn-lg btn-block" data-dismiss="modal" (click)="submitLogin()">Entrar</button>
 						<span class="pull-right">
 							<a href="#" data-toggle="modal" data-target="#loginConfigurationModal">Crie sua conta</a>
 						</span>
@@ -125,6 +124,7 @@
 						</span>
 					</div>
 				</form>
+				
 			</div>
 			<div class="modal-footer">
 				<div class="col-md-12">
@@ -139,7 +139,7 @@
 <div id="loginConfigurationModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
+			<div class="modal-header center-block col-md-12 col-sm-12 col-xs-12 text-center">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 				<h1 class="text-center" id="loginConfigModalTitle">User Information</h1>
 			</div>
@@ -171,7 +171,7 @@
 						<input id="passwordConfirmationConfig" type="password" required=true class="form-control input-lg" placeholder="Confirm New Password">
 					</div>
 					<div class="form-group">
-						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" onClick="submitChangesInUser()">Submit</button>
+						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" data-dismiss="modal" onClick="submitChangesInUser()">Submit</button>
 					</div>
 				</form>
 			</div>

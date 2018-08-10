@@ -35,16 +35,30 @@ export class DashboardComponent implements OnInit {
       data: {
         labels: data.labels,
         datasets: [{
-          label: 'Número de receitas por categoria',
           data: data.data,
           backgroundColor: data.colors
         }]
       },
       options: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'Número de Receitas por Categoria',
+          fontSize: 30
+        },
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              fontSize: 20
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              beginAtZero: true,
+              fontSize: 20
             }
           }]
         }
