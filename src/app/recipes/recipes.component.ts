@@ -28,7 +28,7 @@ export class RecipesComponent implements OnInit
 
   ngOnInit() 
   {
-    this.getRecipes();
+    this.getRecipes(); 
   }
   
   getRecipes(): void
@@ -36,12 +36,11 @@ export class RecipesComponent implements OnInit
     var term = this.route.snapshot.paramMap.get('term');
     var termNumber = +term;
     
-    
+
     if(isNaN(termNumber))
     {
       if(term == "all")
       {
-        
         this.recipeService.getRecipes().subscribe(recipes => this.recipes = recipes);
       }
       else
@@ -55,8 +54,12 @@ export class RecipesComponent implements OnInit
     {
       this.recipeService.searchRecipesByTag(termNumber).subscribe(recipes => this.recipes = recipes);
       var tagList;
-      this.recipeService.getTags().subscribe(tags => tagList = tags);
+      this.recipeService.getTags().subscribe(tags => {
+        tagList = tags;
+      });
+      console.log(termNumber);
       this.searchTerm = tagList[termNumber].name;
+
     }
     
   }

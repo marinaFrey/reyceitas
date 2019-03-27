@@ -16,6 +16,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MessagesComponent } from './messages/messages.component';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
+import {HttpClientModule} from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { AdvancedSearchComponent } from './advanced-search/advanced-search.compo
     BrowserModule,
     FormsModule,
     AngularFontAwesomeModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   
   providers: [RecipeService],

@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { Recipe } from './recipe';
 import { Tag } from './recipe';
 import { ChartFormat } from './recipe';
-import { RECIPES } from './mock-recipes';
-import { TAGS } from './mock-recipes';
+// import { RECIPES } from './mock-recipes';
+// import { TAGS } from './mock-recipes';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,18 +17,54 @@ import { MessageService } from './message.service';
 export class RecipeService 
 {
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService, 
+    private httpCli: HttpClient) {}
 
+  // constructor(private messageService: MessageService) {}
+  
   getRecipes(): Observable<Recipe[]> 
   {
     this.messageService.add('RecipeService: fetched recipes');
-    return of(RECIPES);
+
+
+    var recps = this.httpCli.get<Recipe[]>(
+      "http://localhost:8000/get_recipies.php");
+    
+    // var recps = this.httpCli.get(
+        // "http://localhost:8000/get_recipies.php");
+
+    
+    // window.alert( JSON.stringify(recps) );
+
+    return recps;
+    // return of(RECIPES);
   }
 
   getTags(): Observable<Tag[]> 
   {
     this.messageService.add('RecipeService: fetched tags');
-    return of(TAGS);
+
+    var tags = this.httpCli.get<Tag[]>(
+      "http://localhost:8000/list_tags.php");
+    
+    
+
+    // this.httpCli.get(
+        // "http://localhost:8000/list_tags.php").subscribe((res)=>{
+          // window.alert("aa");
+          // window.alert(JSON.stringify(res));
+      // });
+    // window.alert("bb");
+    
+    // window.alert( JSON.stringify(tags) );
+
+    return tags;
+    // return aaa;
+    // this.messageService.add("");
+    // return of(a);
+    // return of(TAGS);
+
+
   }
 
   searchTag(this:number, value: Recipe, index: number, obj: Recipe[]) : Recipe
@@ -46,33 +85,46 @@ export class RecipeService
       colors: []
     }
 
-    for(var i = 0; i < TAGS.length; i++)
-    {
-      chartData.labels.push(TAGS[i].name);
-      chartData.colors.push(TAGS[i].color);
-    }
+    // for(var i = 0; i < TAGS.length; i++)
+    // {
+    //   chartData.labels.push(TAGS[i].name);
+    //   chartData.colors.push(TAGS[i].color);
+    // }
 
-    for(var j = 0; j < RECIPES.length; j++)
-    {
-      for(var k = 0; k < RECIPES[j].tags.length; k++)
-      {
-        if(chartData.data[RECIPES[j].tags[k]])
-        {
-          chartData.data[RECIPES[j].tags[k]]++;
-        }
-        else
-        {
-          chartData.data[RECIPES[j].tags[k]] = 1;
-        }
-      }
-    }
+    // for(var j = 0; j < RECIPES.length; j++)
+    // {
+    //   for(var k = 0; k < RECIPES[j].tags.length; k++)
+    //   {
+    //     if(chartData.data[RECIPES[j].tags[k]])
+    //     {
+    //       chartData.data[RECIPES[j].tags[k]]++;
+    //     }
+    //     else
+    //     {
+    //       chartData.data[RECIPES[j].tags[k]] = 1;
+    //     }
+    //   }
+    // }
     
     return of(chartData);
   }
 
   searchRecipesByTag(term: number): Observable<Recipe[]> 
   {
-    return of(RECIPES.filter(this.searchTag, term));
+    // return of(RECIPES.filter(this.searchTag, term));
+
+    return this.getRecipes().pipe(
+      map( (recs  : Recipe[])  => {
+        return recs.filter(this.searchTerm, term)
+      } ));
+
+
+    // var recips = this.getRecipes();
+    // return of(RECIPES.find(recipe => recipe.id === id));
+    
+    // return recips;
+
+
   }
 
   searchTerm(this:string, value: Recipe, index: number, obj: Recipe[]) : Recipe
@@ -99,17 +151,63 @@ export class RecipeService
     {
       return of([]);
     }
-    return of(RECIPES.filter(this.searchTerm, term));
+
+    // return of(RECIPES.filter(this.searchTerm, term));
+    return this.getRecipes().pipe(
+      map( (recs  : Recipe[])  => {
+        return recs.filter(this.searchTerm, term)
+      } ));
+
+
   }
 
   getRecipe(id: number): Observable<Recipe> 
   {
     this.messageService.add('RecipeService: fetched this specific recipe id=${id}`');
-    return of(RECIPES.find(recipe => recipe.id === id));
+    // var recips = this.getRecipes();
+    // return of(RECIPES.find(recipe => recipe.id === id));
+    
+    
+    // var oneRec = recips.subscribe( (recps : Recipe[]) => {
+        // console.log("F");
+        // return of(recps.find(recipe => recipe.id === id));
+    // } );
+    
+    return this.getRecipes().pipe(
+        map( (recs  : Recipe[])  => {
+          return recs.find(recipe => recipe.id === id)
+        } ));
+    
   }
 
   getNumberOfRecipes(): Observable<number>
   {
-    return of(RECIPES.length);
+    // return of(RECIPES.length);
+
+    return this.getRecipes().pipe(
+      map( (recs  : Recipe[])  => {
+        
+        // console.log(recs)
+
+        return recs.length
+      } ));
+
+
+    // var recips = this.getRecipes();
+    // var lenRec;
+    // recips.subscribe( (recps : Recipe[]) => {
+    //   lenRec = of(recps.length);
+    // } );
+    
+    // return lenRec;
+
+
+
+    // var recipies = this.httpCli.get<Recipe[]>(
+      // "http://localhost:8000/get_recipies.php");
+    
+    // recipies.
+
+    // return recipies;
   }
 }

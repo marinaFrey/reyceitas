@@ -13,6 +13,30 @@ export const RECIPES: Recipe[] =
   { id: 20, name: 'Ovos Cozidos', photos:[], duration: "1:00H", difficulty: 4, servings: 3, description: 'que nem a do outback', ingredients: [{id:1,name:"sal",amount:2,unit:"pitadas"},{id:2,name:"pimenta",amount:4,unit:"pitadas"}], preparation: ["step1", "step2", "step3", "step4"], tags:[1,7,3]}
 ];
 
+
+// [
+//   { "id":101,
+//     "name":"test recipy",
+//     "photos":[],
+//     "duration":"0:20:0",
+//     "difficulty":1,
+//     "servings":2,
+//     "description":"test",
+//     "ingredients":[
+//       {"name":"rice","amount":1,"unit":"cup"},
+//       {"name":"water","amount":2,"unit":"cup"}],
+//     "preparation":[
+//       "put rice in bowl",
+//       "put water in rice",
+//       "cook for 20 minutes"],
+//     "tags":[
+//       {"id":42,"name":"favoritos","icon":"fa-star",
+//       "color":"#dfc013"}
+//     ]
+//   }
+// ];
+
+
 export const TAGS: Tag[] =
 [
   {id:0, name:"favoritos", icon: "fa-star", color: "#dfc013"},

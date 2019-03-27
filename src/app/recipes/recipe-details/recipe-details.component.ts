@@ -30,14 +30,15 @@ export class RecipeDetailsComponent implements OnInit
   ngOnInit() 
   {
     this.getRecipe();
-    this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
-    this.filterAvailableTags();
   }
 
   getRecipe(): void
   {
     this.recipeService.getTags()
-        .subscribe(tags => this.tags = tags);
+        .subscribe(tags => {
+          this.tags = tags;
+          this.filterAvailableTags();
+        });
 
     const id = +this.route.snapshot.paramMap.get('id');
     if(isNaN(id))
@@ -62,7 +63,12 @@ export class RecipeDetailsComponent implements OnInit
     else
     {
       this.recipeService.getRecipe(id)
-        .subscribe(recipe => this.recipe = recipe);
+        .subscribe(recipe => {
+          this.recipe = recipe;
+          this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
+        });
+      
+
 
       this.newRecipe = false;
       this.editing = false;
