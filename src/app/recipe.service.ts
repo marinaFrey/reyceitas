@@ -28,10 +28,10 @@ export class RecipeService
 
 
     var recps = this.httpCli.get<Recipe[]>(
-      "http://localhost:8000/get_recipies.php");
+      "http://localhost:8000/get_recipes.php");
     
     // var recps = this.httpCli.get(
-        // "http://localhost:8000/get_recipies.php");
+        // "http://localhost:8000/get_recipes.php");
 
     
     // window.alert( JSON.stringify(recps) );
@@ -203,11 +203,11 @@ export class RecipeService
 
 
 
-    // var recipies = this.httpCli.get<Recipe[]>(
-      // "http://localhost:8000/get_recipies.php");
+    // var recipes = this.httpCli.get<Recipe[]>(
+      // "http://localhost:8000/get_recipes.php");
     
-    // recipies.
+    // recipes.
 
-    // return recipies;
+    // return recipes;
   }
 }

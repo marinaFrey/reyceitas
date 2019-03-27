@@ -3,14 +3,14 @@ header("Access-Control-Allow-Origin: *");
 
 class MyDB extends SQLite3 {
     function __construct() {
-        $this->open('recipies.db');
+        $this->open('recipes.db');
         if(!$this) {
             echo $this->lastErrorMsg();
          } else {
-            // echo "Opened database successfully\n";
-            // $this->create_tables();
-            // $this->populate_with_dummy_info();
-            // $this->list_all_recipies();
+             //echo "Opened database successfully\n";
+             //create_tables();
+             //populate_with_dummy_info();
+             //$this->list_all_recipes();
             // $this->list_tags();
          }
     }
@@ -30,7 +30,7 @@ function create_tables() {
         full_name TEXT
     );
 
-    CREATE TABLE IF NOT EXISTS recipies (
+    CREATE TABLE IF NOT EXISTS recipes (
         recip_id INTEGER PRIMARY KEY,
         owner INTEGER NOT NULL,
     
@@ -44,36 +44,36 @@ function create_tables() {
     );
 
 
-    CREATE TABLE IF NOT EXISTS recipy_ingredients (
+    CREATE TABLE IF NOT EXISTS recipe_ingredients (
         ingr_id INTEGER PRIMARY KEY,
         src_recip INTEGER,
         quantity REAL NOT NULL,
         unit_name TEXT,
         description TEXT,
         
-        FOREIGN KEY (src_recip) REFERENCES recipies(recip_id)
+        FOREIGN KEY (src_recip) REFERENCES recipes(recip_id)
     );
 
 
-    CREATE TABLE IF NOT EXISTS recipy_steps (
+    CREATE TABLE IF NOT EXISTS recipe_steps (
         step_id INTEGER PRIMARY KEY,
         src_recip INTEGER,
         step_order INTEGER NOT NULL,
         description TEXT,
         
-        FOREIGN KEY (src_recip) REFERENCES recipies(recip_id)
+        FOREIGN KEY (src_recip) REFERENCES recipes(recip_id)
     );
 
-    CREATE TABLE IF NOT EXISTS recipy_contributiors (
+    CREATE TABLE IF NOT EXISTS recipe_contributiors (
         src_recip INTEGER,
         contributor_id INTEGER NOT NULL,
         permission_level INTEGER NOT NULL,
         
         FOREIGN KEY (contributor_id) REFERENCES users(user_id),
-        FOREIGN KEY (src_recip) REFERENCES recipies(recip_id)
+        FOREIGN KEY (src_recip) REFERENCES recipes(recip_id)
     );
 
-    CREATE TABLE IF NOT EXISTS recipy_pictures (
+    CREATE TABLE IF NOT EXISTS recipe_pictures (
         picture_id INTEGER PRIMARY KEY,
         file_name TEXT NOT NULL,
         img_data BLOB NOT NULL,
@@ -87,12 +87,12 @@ function create_tables() {
         color TEXT
     );
     
-    CREATE TABLE IF NOT EXISTS recipy_tags (
+    CREATE TABLE IF NOT EXISTS recipe_tags (
         id_recip INTEGER,
         id_tag INTEGER,
         
-        FOREIGN KEY (id_recip) REFERENCES recipies(recip_id),
-        FOREIGN KEY (id_tag) REFERENCES recipies(tag_id)
+        FOREIGN KEY (id_recip) REFERENCES recipes(recip_id),
+        FOREIGN KEY (id_tag) REFERENCES tags(tag_id)
     );
 EOF;
     $db = connect();
@@ -108,20 +108,20 @@ function populate_with_dummy_info() {
     $sql =<<<EOF
     INSERT INTO users (user_id, full_name, password) VALUES (42, "test", "123");
 
-    INSERT INTO recipies
+    INSERT INTO recipes
         (recip_id, owner, name, difficulty, n_served, duration, description)
     VALUES
-        (101, 42, "test recipy", 1, 2, '1:00H', 'test');
+        (101, 42, "test recipe", 1, 2, '1:00H', 'test');
         
 
-    INSERT INTO recipy_ingredients
+    INSERT INTO recipe_ingredients
         (src_recip, quantity, unit_name, description)
     VALUES
         (101, 1, "cup", "rice"),
         (101, 2, "cup", "water");
         
 
-    INSERT INTO recipy_steps
+    INSERT INTO recipe_steps
         (src_recip, step_order, description)
     VALUES
         (101, 0, "put rice in bowl"),
@@ -131,7 +131,7 @@ function populate_with_dummy_info() {
     
     INSERT INTO tags VALUES (42, "favoritos", "fa-star", "#dfc013");
 
-    INSERT INTO recipy_tags VALUES (101, 42);
+    INSERT INTO recipe_tags VALUES (101, 42);
 EOF;
     $db = connect();
     $ret = $db->exec($sql);

@@ -16,7 +16,7 @@ export const RECIPES: Recipe[] =
 
 // [
 //   { "id":101,
-//     "name":"test recipy",
+//     "name":"test recipe",
 //     "photos":[],
 //     "duration":"0:20:0",
 //     "difficulty":1,

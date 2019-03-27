@@ -1,6 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 
-// require 'get_recipies.php';
+// require 'get_recipes.php';
 
 ?>
