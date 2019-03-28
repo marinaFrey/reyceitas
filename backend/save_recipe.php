@@ -17,7 +17,7 @@ EOF;
         if(!$ret) {
             echo $db->lastErrorMsg();
         }
-
+        $last_id = $db->lastInsertRowId();
         //echo $db->last_insert_rowid();
 
     }

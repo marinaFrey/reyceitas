@@ -41,8 +41,23 @@ export class RecipeService {
     var recps = this.httpCli.get<Recipe[]>(
       "http://localhost:8000/save_recipe.php", { params: param });
     var t = recps.subscribe((data) => {
-      console.log("got some data from backend", data);
+      console.log("saved recipe", data);
 
+    }, (error) => {
+      console.log("error!", error);
+    });
+
+  }
+
+  editRecipe(recipe) {
+    console.log(recipe);
+    this.messageService.add('RecipeService: edited recipe');
+    let param: any = { 'recipe': JSON.stringify(recipe) };
+    let params = new HttpParams();
+    var recps = this.httpCli.get<Recipe[]>(
+      "http://localhost:8000/edit_recipe.php", { params: param });
+    var t = recps.subscribe((data) => {
+      console.log("edited recipe", data);
     }, (error) => {
       console.log("error!", error);
     });
@@ -51,13 +66,13 @@ export class RecipeService {
 
   deleteRecipe(recipe) {
     console.log(recipe);
-    this.messageService.add('RecipeService: saved new recipe');
+    this.messageService.add('RecipeService: deleted recipe');
     let param: any = { 'id': recipe.id.toString() };
     let params = new HttpParams();
     var recps = this.httpCli.get<Recipe[]>(
       "http://localhost:8000/delete_recipe.php", { params: param });
     var t = recps.subscribe((data) => {
-      console.log("got some data from backend", data);
+      console.log("deleted recipe");
 
     }, (error) => {
       console.log("error!", error);
