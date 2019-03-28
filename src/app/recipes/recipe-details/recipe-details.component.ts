@@ -72,6 +72,15 @@ export class RecipeDetailsComponent implements OnInit
         {
           this.recipe = recipe;
           this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
+          if (!this.recipe.tags)
+            this.recipe.tags = [];
+          if (!this.recipe.ingredients)
+            this.recipe.ingredients = [];
+          if (!this.recipe.preparation)
+            this.recipe.preparation = [];
+          if (!this.recipe.photos)
+            this.recipe.photos = [];
+
         });
 
       this.newRecipe = false;

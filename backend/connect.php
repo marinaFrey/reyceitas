@@ -151,6 +151,7 @@ EOF;
         // echo "Records created successfully\n";
     }
 }
+
 //connect();
 //create_tables();
 //populate_with_dummy_info();

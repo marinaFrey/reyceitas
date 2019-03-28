@@ -16,7 +16,7 @@
             DELETE FROM recipe_tags WHERE src_recipe = '$id';
 EOF;
         $db = connect();
-        $ret = $db->query($sql);
+        $ret = $db->exec($sql);
         if(!$ret) {
             echo $db->lastErrorMsg();
         }
