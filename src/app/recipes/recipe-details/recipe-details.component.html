@@ -21,7 +21,7 @@
         <button type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
           <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
         </button>
-        <button type="button" class="btn-lg btn-danger" (click)="toggleEditing()">
+        <button type="button" class="btn-lg btn-danger" (click)="delete()">
           <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
         </button>
       </h2>
@@ -52,7 +52,8 @@
         <div class="col-md-8 wow swing " *ngIf="!editing && recipe.photos.length > 0">
           <div id="carouselExampleIndicators" class="carousel slide recipe-picture" data-ride="carousel">
             <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" data-slide-to="index" [ngClass]="{active: index == 0}"></li>
+              <li data-target="#carouselExampleIndicators" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" data-slide-to="index"
+                [ngClass]="{active: index == 0}"></li>
             </ol>
             <div class="carousel-inner">
               <div class="item" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" [ngClass]="{active: index == 0}">
@@ -71,44 +72,44 @@
         </div>
 
         <div class="col-md-8 wow swing " *ngIf="!editing && recipe.photos.length == 0">
-            <img class="d-block w-100" src="../../../assets/images/imgThumbnailPlaceholder.svg"  alt="index">
+          <img class="d-block w-100" src="../../../assets/images/imgThumbnailPlaceholder.svg" alt="index">
         </div>
 
         <!-- EDITING Picture-->
         <div class="col-md-8 wow swing " *ngIf="editing">
-            <div class="image-info">
-                <h3>Imagens</h3>
-    
-                <!-- Time -->
-                <div class="row" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn">
-                  <div class="col-md-2 col-sm-2 col-xs-2 text-center">
-                    <img class="thumbnail-image" [src]="recipe.photos[index]">
-                  </div>
-                  <div class="col-md-6 col-sm-6 col-xs-6 text-left">
-                      <button class="btn btn-primary" (click)="reuploadImage()">
-                          <i  class="fa fa-upload" style="color:white" aria-hidden="true"></i>
-                          Fazer Re-upload da Imagem
-                        </button>
-                  </div>
-                  <div class="col-md-4 col-sm-4 col-xs-4 text-left">
-                      <button class="btn btn-danger" (click)="deleteImage(index)">
-                          <i  class="fa fa-times" style="color:white" aria-hidden="true"></i>
-                          Deletar Imagem
-                        </button>
-                  </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-6 text-left">
-                        <button class="btn btn-primary" (click)="addImage()">
-                            <i  class="fa fa-upload" style="color:white" aria-hidden="true"></i>
-                            Novo Upload
-                          </button>
-                    </div>
-                </div>
-    
+          <div class="image-info">
+            <h3>Imagens</h3>
 
-    
+            <!-- Time -->
+            <div class="row" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn">
+              <div class="col-md-2 col-sm-2 col-xs-2 text-center">
+                <img class="thumbnail-image" [src]="recipe.photos[index]">
               </div>
+              <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                <button class="btn btn-primary" (click)="reuploadImage()">
+                  <i class="fa fa-upload" style="color:white" aria-hidden="true"></i>
+                  Fazer Re-upload da Imagem
+                </button>
+              </div>
+              <div class="col-md-4 col-sm-4 col-xs-4 text-left">
+                <button class="btn btn-danger" (click)="deleteImage(index)">
+                  <i class="fa fa-times" style="color:white" aria-hidden="true"></i>
+                  Deletar Imagem
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                <button class="btn btn-primary" (click)="addImage()">
+                  <i class="fa fa-upload" style="color:white" aria-hidden="true"></i>
+                  Novo Upload
+                </button>
+              </div>
+            </div>
+
+
+
+          </div>
         </div>
 
 
@@ -168,18 +169,59 @@
               </div>
             </div>
 
-            <!-- created by -->
+            <!-- seen by -->
             <div class="row">
                 <div class="col-md-2 col-sm-2 col-xs-2 text-center">
                   <i class="fa fa-user" aria-hidden="true"></i>
                 </div>
-                <div class="col-md-6 col-sm-6 col-xs-6 text-center">Criada por</div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-center">Visível para</div>
                 <div class="col-md-4 col-sm-4 col-xs-4 text-center">
-                    user
+                  <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.authenticationLevelRequired" placeholder="nivel" ng-disabled="editing">
+                  <div *ngIf="!editing">
+                    {{recipe.authenticationLevelRequired}}
+                  </div>
                 </div>
               </div>
 
+            <!-- created by -->
+            <div class="row">
+              <div class="col-md-2 col-sm-2 col-xs-2 text-center">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-6 text-center">Criada por</div>
+              <div class="col-md-4 col-sm-4 col-xs-4 text-center">
+                {{recipe.userId}}
+              </div>
+            </div>
+
           </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Description -->
+    <div *ngIf="!editing" class="row wow slideInUp">
+      <div class="col-12">
+        <div class="recipe-directions">
+          <h3>Descrição</h3>
+          <ol>
+            {{recipe.description}}
+          </ol>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!--EDITING Description -->
+    <div *ngIf="editing" class="row wow slideInUp">
+      <div class="col-12">
+        <div class="recipe-directions">
+          <h3>Descrição</h3>
+          <ol>
+            <textarea class="form-control" [(ngModel)]="recipe.description" placeholder="insira a descrição"></textarea>
+          </ol>
         </div>
       </div>
     </div>
@@ -291,7 +333,7 @@
           <h3>Tags</h3>
           <ol>
             <button class="btn btn-light" *ngFor="let tag of recipe.tags" routerLink="/recipes/{{tag}}">
-              {{tags[tag].name}}
+              {{tag.name}}
             </button>
           </ol>
         </div>
@@ -306,7 +348,7 @@
           <ol>
             <a *ngIf="recipe.tags">
               <button class="btn btn-light" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn">
-                {{tags[tag].name}}
+                {{tag.name}}
                 <i class="fa fa-times fa-fw " aria-hidden="true" (click)="removeTag(index)"></i>
               </button>
             </a>

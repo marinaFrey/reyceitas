@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { Tag } from "../recipe";
-import { RecipeService }  from '../recipe.service';
+import { RecipeService } from '../recipe.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,22 +14,30 @@ export class DashboardComponent implements OnInit {
   tags: Tag[];
   numberOfRecipes: number;
 
-  constructor(private recipeService: RecipeService) { }
+  constructor(private recipeService: RecipeService, private router: Router) { }
 
   ngOnInit() {
 
     this.recipeService.getTags()
-        .subscribe(tags => this.tags = tags);
+      .subscribe(tags => this.tags = tags);
 
     this.recipeService.getNumberOfRecipes().subscribe(num => this.numberOfRecipes = num);
-    
+
     var graphData;
     this.recipeService.organizeChartData().subscribe(data => graphData = data);
-    this.createGraph(graphData);  
+    this.createGraph(graphData);
   }
 
-  createGraph(data): void
-  {
+  goToNewRecipePage() {
+    if (this.recipeService.getUserLevel() > 0) {
+      this.router.navigateByUrl('/details/new');
+    }
+    else {
+      window.alert("Você não possui autorização para realizar modificações no banco de dados!");
+    }
+  }
+
+  createGraph(data): void {
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
       type: 'bar',

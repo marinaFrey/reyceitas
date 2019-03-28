@@ -9,6 +9,8 @@ export class Recipe {
     ingredients: Array<Ingredient>;
     preparation: Array<string>;
     tags: Array<number>;
+    userId: number;
+    authenticationLevelRequired: number;
 }
 
 export class Ingredient {
