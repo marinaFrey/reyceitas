@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Recipe } from './recipe';
 import { Tag } from './recipe';
+import { User } from './recipe';
 import { ChartFormat } from './recipe';
 // import { RECIPES } from './mock-recipes';
 // import { TAGS } from './mock-recipes';
@@ -89,12 +90,41 @@ export class RecipeService {
 
 
   }
+  getUsers(): Observable<User[]> 
+  {
+    this.messageService.add('RecipeService: fetched users');
+
+    var users = this.httpCli.get<User[]>(
+      "http://localhost:8000/get_users.php");
+    return users;
+  }
+  searchUsers(username: string): Observable<User[]> 
+  {
+    this.messageService.add('RecipeService: fetched users');
+
+    var users = this.httpCli.get<User[]>(
+        `http://localhost:8000/get_users.php?username=${username}`);
+    return users;
+  }
 
   searchTag(this: number, value: Recipe, index: number, obj: Recipe[]): Recipe {
     for (var i = 0; i < value.tags.length; i++) {
       if (value.tags[i] == this)
         return value;
     }
+  }
+  newUser(user: User): number 
+  {
+    this.messageService.add('RecipeService: new user');
+
+    var str_json = (JSON.stringify(user))
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "http://localhost:8000/save_user.php", false);
+    xmlHttp.setRequestHeader("Content-type", "application/json");
+    xmlHttp.send(str_json);
+    console.log(xmlHttp.response);
+
+    return 0;
   }
 
   organizeChartData(): Observable<ChartFormat> {

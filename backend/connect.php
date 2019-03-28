@@ -1,6 +1,5 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-
 class MyDB extends SQLite3 {
     function __construct() {
         $this->open('recipes.db');
@@ -8,10 +7,7 @@ class MyDB extends SQLite3 {
             echo $this->lastErrorMsg();
          } else {
              //echo "Opened database successfully\n";
-             //create_tables();
-             //populate_with_dummy_info();
-             //$this->list_all_recipes();
-            // $this->list_tags();
+             //Let's not drop recursive bombs here
          }
     }
 }
@@ -21,10 +17,12 @@ function connect() {
     return $db;
 }
 
+
 function create_tables() {
     $sql =<<<EOF
     CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY,
+        username TEXT,
         password TEXT,
         email TEXT,
         full_name TEXT
@@ -106,7 +104,9 @@ EOF;
 
 function populate_with_dummy_info() {
     $sql =<<<EOF
-    INSERT INTO users (user_id, full_name, password) VALUES (42, "test", "123");
+    INSERT INTO users (user_id, username, full_name, password) VALUES (42, "testudo", "testy mactesterson", "123");
+    INSERT INTO users (user_id, username, full_name, password) VALUES (1, "testinho", "testinho testado", "1234");
+    INSERT INTO users (user_id, username, full_name, password) VALUES (2, "testículo", "testículo testação", "12345");
 
     INSERT INTO recipes
         (recip_id, owner, name, difficulty, n_served, duration, description)
@@ -142,5 +142,6 @@ EOF;
     }
 }
 
-
+create_tables();
+//populate_with_dummy_info();
 ?>
