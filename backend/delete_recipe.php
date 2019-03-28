@@ -9,15 +9,15 @@
 
         $db = connect();
 /*
-        $sql = "DELETE FROM recipes WHERE recip_id = $id";
+        $sql = "DELETE FROM recipes WHERE recipe_id = $id";
         $db->query($sql);
-        $sql = "DELETE FROM recipe_contributiors WHERE src_recip = $id";
+        $sql = "DELETE FROM recipe_contributors WHERE src_recipe = $id";
         $db->query($sql);
-        $sql = "DELETE FROM recipe_ingredients WHERE src_recip = $id";
+        $sql = "DELETE FROM recipe_ingredients WHERE src_recipe = $id";
         $db->query($sql);
-        $sql = "DELETE FROM recipe_steps WHERE src_recip = $id";
+        $sql = "DELETE FROM recipe_steps WHERE src_recipe = $id";
         $db->query($sql);
-        $sql = "DELETE FROM recipe_tags WHERE src_recip = $id";
+        $sql = "DELETE FROM recipe_tags WHERE src_recipe = $id";
         $db->query($sql);*/
     }
 

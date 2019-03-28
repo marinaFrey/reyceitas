@@ -48,7 +48,6 @@ export class RecipesComponent implements OnInit
         this.recipeService.searchRecipesByTerm(term).subscribe(recipes => this.recipes = recipes);
         this.searchTerm = term;
       }
-      
     }
     else
     {
