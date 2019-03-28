@@ -123,10 +123,14 @@ export class RecipeService {
   }
 
   searchTag(this: number, value: Recipe, index: number, obj: Recipe[]): Recipe {
-    for (var i = 0; i < value.tags.length; i++) {
-      if (value.tags[i] == this)
-        return value;
+    if(value.tags)
+    {
+      for (var i = 0; i < value.tags.length; i++) {
+        if (value.tags[i] == this)
+          return value;
+      }
     }
+    
   }
   /*
   newUser(user: User): number 
@@ -186,19 +190,17 @@ export class RecipeService {
   }
 
   searchRecipesByTag(term: number): Observable<Recipe[]> {
-    // return of(RECIPES.filter(this.searchTag, term));
 
     return this.getRecipes().pipe(
       map((recs: Recipe[]) => {
-        return recs.filter(this.searchTerm, term)
+        return recs.filter(this.searchTag, term)
       }));
 
-
-    // var recips = this.getRecipes();
-    // return of(RECIPES.find(recipe => recipe.id === id));
-
-    // return recips;
-
+    /*
+    return this.getRecipes().pipe(
+      map((recs: Recipe[]) => {
+        return recs.filter(this.searchTerm, term)
+      }));*/
 
   }
 
@@ -216,6 +218,7 @@ export class RecipeService {
     }
   }
 
+  
 
   searchTerm(this: string, value: Recipe, index: number, obj: Recipe[]): Recipe {
 

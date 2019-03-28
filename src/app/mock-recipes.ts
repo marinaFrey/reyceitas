@@ -36,7 +36,7 @@ export const RECIPES: Recipe[] =
 //   }
 // ];
 
-
+/*
 export const TAGS: Tag[] =
 [
   {id:0, name:"favoritos", icon: "fa-star", color: "#dfc013"},
@@ -51,4 +51,4 @@ export const TAGS: Tag[] =
   {id:9, name:"porco", icon: "fa-piggy-bank", color: "#ce926f"},
   {id:10, name:"carne vermelha", icon: "fa-chess-knight", color: "#ce926f"},
   {id:11, name:"saudável", icon: "fa-apple-alt", color: "#9dce6f"}
-]
+]*/

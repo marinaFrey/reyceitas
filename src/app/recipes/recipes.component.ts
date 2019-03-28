@@ -58,7 +58,6 @@ export class RecipesComponent implements OnInit
         this.searchTerm = this.recipeService.searchTagById(termNumber,tagList);
       });
       
-
     }
     
   }
