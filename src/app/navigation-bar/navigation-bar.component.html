@@ -153,25 +153,25 @@
 
 				<form class="form col-md-12 center-block">
 					<div class="form-group">
-						<input id="usernameConfig" type="text" required=true class="form-control input-lg" placeholder="Username">
+                        <input id="usernameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="usernameConfig" [ngModelOptions]="{standalone: true}" placeholder="Username">
 					</div>
 					<div class="form-group">
-						<input id="fullnameConfig" type="text" required=true class="form-control input-lg" placeholder="Full Name">
+                        <input id="fullnameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="fullnameConfig" [ngModelOptions]="{standalone: true}" placeholder="Full Name">
 					</div>
 					<div class="form-group">
-						<input id="emailConfig" type="email" required=true class="form-control input-lg" placeholder="Email">
+                        <input id="emailConfig" type="email" required=true class="form-control input-lg" [(ngModel)]="emailConfig" [ngModelOptions]="{standalone: true}" placeholder="Email">
 					</div>
 					<div *ngIf="isLoggedIn" class="form-group">
-						<input id="oldPasswordConfig" type="password" required=true class="form-control input-lg" placeholder="Current Password">
+                        <input id="oldPasswordConfig" type="password" required=true class="form-control input-lg" [(ngModel)]="oldPasswordConfig" [ngModelOptions]="{standalone: true}" placeholder="Current Password">
 					</div>
 					<div class="form-group">
-						<input id="passwordConfig" type="password" required=true class="form-control input-lg" placeholder="New Password">
+                        <input id="passwordConfig" type="password" required=true class="form-control input-lg" [(ngModel)]="passwordConfig" [ngModelOptions]="{standalone: true}" placeholder="New Password">
 					</div>
 					<div class="form-group">
-						<input id="passwordConfirmationConfig" type="password" required=true class="form-control input-lg" placeholder="Confirm New Password">
+                        <input id="passwordConfirmationConfig" type="password" required=true class="form-control input-lg" [(ngModel)]="passwordConfirmationConfig" [ngModelOptions]="{standalone: true}" placeholder="Confirm New Password">
 					</div>
 					<div class="form-group">
-						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" data-dismiss="modal" onClick="submitChangesInUser()">Submit</button>
+						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" data-dismiss="modal" (click)="submitChangesInUser()">Submit</button>
 					</div>
 				</form>
 			</div>
