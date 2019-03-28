@@ -11,8 +11,8 @@
       <div *ngFor="let recipe of recipes" class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
         <div class="recipe-item text-center">
           <a routerLink="/details/{{recipe.id}}">
-            <img *ngIf="recipe.photos.length" src="{{recipe.photos[0]}}" alt="bbq-pork-ribs" />
-            <img *ngIf="!recipe.photos.length" src="../../assets/images/imgThumbnailPlaceholder.svg" alt="thumbnail-img" />
+            <img *ngIf="recipe.photos && recipe.photos.length" src="{{recipe.photos[0]}}" alt="bbq-pork-ribs" />
+            <img *ngIf="!recipe.photos || !recipe.photos.length" src="../../assets/images/imgThumbnailPlaceholder.svg" alt="thumbnail-img" />
 
           </a>
           <br />

@@ -17,25 +17,25 @@ header("Access-Control-Allow-Origin: *");
 
         function fill_tags_for_recipies(&$mapIdToRecip, &$resArrVals) {
             $sql =<<<EOF
-            SELECT id_recip, id_tag, name, icon, color FROM recipy_tags, tags
-                WHERE tags.tag_id == recipy_tags.id_tag
-                ORDER BY recipy_tags.id_recip ASC;
+            SELECT src_recipe, src_tag, name, icon, color FROM recipy_tags, tags
+                WHERE tags.tag_id == recipy_tags.src_tag
+                ORDER BY recipy_tags.src_recipe ASC;
 EOF;
             $ret = $this->query($sql);
             while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
-                // $tag = array( "id" => $row["id_tag"], "name" => $row["name"],
+                // $tag = array( "id" => $row["src_tag"], "name" => $row["name"],
                     // "icon" => $row["icon"],"color" => $row["color"]);
-                $tag_id = $row["id_tag"];
-                $i_recip = $mapIdToRecip[$row['id_recip']];
+                $tag_id = $row["src_tag"];
+                $i_recip = $mapIdToRecip[$row['src_recipe']];
                 $v = array_push($resArrVals[$i_recip]['tags'], $tag_id);
             }
         }
 
         function fill_ingredients_for_recipies(&$mapIdToRecip, &$resArrVals) {
             $sql =<<<EOF
-            SELECT ingr_id, src_recip, quantity, unit_name, description
+            SELECT ingr_id, src_recipe, quantity, unit_name, description
             FROM recipy_ingredients
-                ORDER BY src_recip ASC, ingr_id ASC;
+                ORDER BY src_recipe ASC, ingr_id ASC;
 EOF;
             $ret = $this->query($sql);
             while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
@@ -43,19 +43,19 @@ EOF;
                     "amount" => $row["quantity"], "unit" => $row["unit_name"]);
                 
                 
-                $i_recip = $mapIdToRecip[$row['src_recip']];
+                $i_recip = $mapIdToRecip[$row['src_recipe']];
                 $v = array_push($resArrVals[$i_recip]['ingredients'], $ingred);
             }
         }
 
         function fill_steps_for_recipies(&$mapIdToRecip, &$resArrVals) {
             $sql =<<<EOF
-            SELECT src_recip, description FROM recipy_steps
-                ORDER BY src_recip ASC, step_id ASC;
+            SELECT src_recipe, description FROM recipy_steps
+                ORDER BY src_recipe ASC, step_id ASC;
 EOF;
             $ret = $this->query($sql);
             while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
-                $i_recip = $mapIdToRecip[$row['src_recip']];
+                $i_recip = $mapIdToRecip[$row['src_recipe']];
                 $v = array_push($resArrVals[$i_recip]['preparation'],
                     $row['description']);
             }
@@ -97,7 +97,7 @@ EOF;
             // Find recipies.
             $i_recp=0;
             while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
-                $resArrVals[$i_recp]['id']=$row['recip_id'];
+                $resArrVals[$i_recp]['id']=$row['recipe_id'];
                 $resArrVals[$i_recp]['name']=$row['name'];
                 $resArrVals[$i_recp]['duration']=$row['duration'];
                 $resArrVals[$i_recp]['difficulty']=$row['difficulty'];

@@ -25,6 +25,8 @@
           <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
         </button>
       </h2>
+
+      <!-- EDITING Title -->
       <div *ngIf="editing" class="col">
         <h1 class="row">
           <div class="col-md-6 col-sm-6 col-xs-6">
@@ -49,7 +51,7 @@
       <div class="col">
 
         <!-- Picture-->
-        <div class="col-md-8 wow swing " *ngIf="!editing && recipe.photos.length > 0">
+        <div class="col-md-8 wow swing " *ngIf="!editing && recipe.photos && recipe.photos.length > 0">
           <div id="carouselExampleIndicators" class="carousel slide recipe-picture" data-ride="carousel">
             <ol class="carousel-indicators">
               <li data-target="#carouselExampleIndicators" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" data-slide-to="index"
@@ -71,7 +73,7 @@
           </div>
         </div>
 
-        <div class="col-md-8 wow swing " *ngIf="!editing && recipe.photos.length == 0">
+        <div class="col-md-8 wow swing " *ngIf="!editing && (!recipe.photos || recipe.photos.length == 0)">
           <img class="d-block w-100" src="../../../assets/images/imgThumbnailPlaceholder.svg" alt="index">
         </div>
 

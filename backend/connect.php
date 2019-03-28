@@ -25,13 +25,14 @@ function create_tables() {
         username TEXT,
         password TEXT,
         email TEXT,
-        full_name TEXT
+        full_name TEXT,
+        authentication_level INTEGER
     );
 
     CREATE TABLE IF NOT EXISTS recipes (
-        recip_id INTEGER PRIMARY KEY,
+        recipe_id INTEGER PRIMARY KEY,
         owner INTEGER NOT NULL,
-    
+
         name TEXT NOT NULL,
         difficulty INTEGER DEFAULT 0,
         n_served INTEGER DEFAULT 0,
@@ -44,38 +45,41 @@ function create_tables() {
 
     CREATE TABLE IF NOT EXISTS recipe_ingredients (
         ingr_id INTEGER PRIMARY KEY,
-        src_recip INTEGER,
+        src_recipe INTEGER,
         quantity REAL NOT NULL,
         unit_name TEXT,
         description TEXT,
         
-        FOREIGN KEY (src_recip) REFERENCES recipes(recip_id)
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
     );
 
 
     CREATE TABLE IF NOT EXISTS recipe_steps (
         step_id INTEGER PRIMARY KEY,
-        src_recip INTEGER,
+        src_recipe INTEGER,
         step_order INTEGER NOT NULL,
         description TEXT,
         
-        FOREIGN KEY (src_recip) REFERENCES recipes(recip_id)
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
     );
 
-    CREATE TABLE IF NOT EXISTS recipe_contributiors (
-        src_recip INTEGER,
+    CREATE TABLE IF NOT EXISTS recipe_contributors (
+        src_recipe INTEGER,
         contributor_id INTEGER NOT NULL,
         permission_level INTEGER NOT NULL,
         
         FOREIGN KEY (contributor_id) REFERENCES users(user_id),
-        FOREIGN KEY (src_recip) REFERENCES recipes(recip_id)
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
     );
 
     CREATE TABLE IF NOT EXISTS recipe_pictures (
         picture_id INTEGER PRIMARY KEY,
+        src_recipe INTEGER,
         file_name TEXT NOT NULL,
         img_data BLOB NOT NULL,
-        is_of_instructions INTEGER DEFAULT 0
+        is_of_instructions INTEGER DEFAULT 0,
+
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
     );
 
     CREATE TABLE IF NOT EXISTS tags (
@@ -86,11 +90,11 @@ function create_tables() {
     );
     
     CREATE TABLE IF NOT EXISTS recipe_tags (
-        id_recip INTEGER,
-        id_tag INTEGER,
+        src_recipe INTEGER,
+        src_tag INTEGER,
         
-        FOREIGN KEY (id_recip) REFERENCES recipes(recip_id),
-        FOREIGN KEY (id_tag) REFERENCES tags(tag_id)
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id),
+        FOREIGN KEY (src_tag) REFERENCES tags(tag_id)
     );
 EOF;
     $db = connect();
@@ -109,20 +113,20 @@ function populate_with_dummy_info() {
     INSERT INTO users (user_id, username, full_name, password) VALUES (2, "testículo", "testículo testação", "12345");
 
     INSERT INTO recipes
-        (recip_id, owner, name, difficulty, n_served, duration, description)
+        (recipe_id, owner, name, difficulty, n_served, duration, description)
     VALUES
         (101, 42, "test recipe", 1, 2, '1:00H', 'test');
         
 
     INSERT INTO recipe_ingredients
-        (src_recip, quantity, unit_name, description)
+        (src_recipe, quantity, unit_name, description)
     VALUES
         (101, 1, "cup", "rice"),
         (101, 2, "cup", "water");
         
 
     INSERT INTO recipe_steps
-        (src_recip, step_order, description)
+        (src_recipe, step_order, description)
     VALUES
         (101, 0, "put rice in bowl"),
         (101, 1, "put water in rice"),
