@@ -191,20 +191,43 @@ export class RecipeService {
 
   }
 
+  searchTagById(tagId, tagList): string
+  {
+    if (tagList)
+    {
+      for (var i = 0; i < tagList.length; i++)
+      {
+        if(tagList[i].id == tagId)
+        {
+          return tagList[i].name;
+        }
+      }
+    }
+  }
+
+
   searchTerm(this: string, value: Recipe, index: number, obj: Recipe[]): Recipe {
-    if (value.name.toUpperCase().indexOf(this.toUpperCase()) >= 0) {
+
+    if (value.name && (value.name.toUpperCase().indexOf(this.toUpperCase()) >= 0)) {
       return value;
     }
-    for (var i = 0; i < value.ingredients.length; i++) {
-      if (value.ingredients[i].name.indexOf(this) >= 0) {
-        return value;
+    if(value.ingredients)
+    {
+      for (var i = 0; i < value.ingredients.length; i++) {
+        if (value.ingredients[i].name.indexOf(this) >= 0) {
+          return value;
+        }
       }
     }
-    for (var i = 0; i < value.preparation.length; i++) {
-      if (value.preparation[i].indexOf(this) >= 0) {
-        return value;
+    if(value.preparation)
+    {
+      for (var i = 0; i < value.preparation.length; i++) {
+        if (value.preparation[i].indexOf(this) >= 0) {
+          return value;
+        }
       }
     }
+    
   }
   searchRecipesByTerm(term: string): Observable<Recipe[]> {
     if (!term.trim()) {

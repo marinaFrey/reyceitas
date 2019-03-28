@@ -89,6 +89,11 @@ export class RecipeDetailsComponent implements OnInit
 
   }
 
+  getTagFromId(tagId): string
+  {
+    return this.recipeService.searchTagById(tagId, this.tags);
+  }
+
   goBack(): void
   {
     this.location.back();

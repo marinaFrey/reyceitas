@@ -152,7 +152,37 @@ EOF;
     }
 }
 
+function populateTags()
+{
+
+  $sql =<<<EOF
+    INSERT INTO tags 
+    VALUES 
+    (42, "favoritos", "fa-star", "#dfc013"),
+    (43, "bebidas", "fa-coffee", "#915721"),
+    (44, "sobremesas", "fa-birthday-cake", "#dd73d8"),
+    (45, "vegetariano", "fa-feather-alt", "#72ce6f"),
+    (46, "refeições", "fa-utensils", "#777777"),
+    (47, "sopas", "fa-utensil-spoon", "#6fcebe"),
+    (48, "lanches", "fa-cookie-bite", "#926d4b"),
+    (49, "peixes", "fa-fish", "#6f98ce"),
+    (50, "aves", "fa-crow", "#ce926f"),
+    (51, "porco", "fa-piggy-bank", "#ce926f"),
+    (52, "carne vermelha", "fa-chess-knight", "#ce926f"),
+    (53, "saudável", "fa-apple-alt", "#9dce6f");
+
+EOF;
+    $db = connect();
+    $ret = $db->exec($sql);
+    if(!$ret) {
+        echo $db->lastErrorMsg();
+    } else {
+        // echo "Records created successfully\n";
+    }
+}
+
 //connect();
 //create_tables();
 //populate_with_dummy_info();
+
 ?>

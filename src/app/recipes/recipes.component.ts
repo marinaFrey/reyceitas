@@ -55,9 +55,9 @@ export class RecipesComponent implements OnInit
       var tagList;
       this.recipeService.getTags().subscribe(tags => {
         tagList = tags;
+        this.searchTerm = this.recipeService.searchTagById(termNumber,tagList);
       });
-      console.log(termNumber);
-      this.searchTerm = tagList[termNumber].name;
+      
 
     }
     
