@@ -30,7 +30,6 @@ function get_user($username) {
     $sql =<<<EOF
     SELECT * FROM users where username = '$username'; 
 EOF;
-    $mapIdToData [] = array();
     $ret = $db->query($sql);
 
     $i=0;

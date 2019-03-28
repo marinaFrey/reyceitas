@@ -9,10 +9,58 @@
 		</div>
 
 		<div class="hidden-lg hidden-sm hidden-md col-xs-6 text-right">
-			<a target="_blank" href="#" class="site_login ">
+			<button *ngIf="!isLoggedIn" type="button" class="site_login btn btn-light" data-toggle="modal" data-target="#loginModal">
 				<span class="glyphicon glyphicon-log-in"></span>
 				Login
+			</button>
+
+
+			<a *ngIf="isLoggedIn" href="#" class="site_login" data-toggle="dropdown" data-target="#userTab">
+				<span class="glyphicon glyphicon-user"></span>
+				<span id="welcomeUserString">
+                    <strong>Bem vindo(a), {{username}}</strong>
+				</span>
+				<span class="glyphicon glyphicon-chevron-down"></span>
 			</a>
+
+			<div *ngIf="isLoggedIn" class="dropdown" >
+				<div class="dropdown-menu" style="margin: -10px 40px 0px 0px;">
+					<li>
+						<div class="navbar-login">
+							<div class="row">
+								<div class="col-lg-4">
+									<p class="text-center">
+										<span class="glyphicon glyphicon-user icon-size"></span>
+									</p>
+								</div>
+								<div class="col-lg-8">
+									<p class="text-left" id="fullnameString" >
+                                    <strong>{{fullname}}</strong>
+									</p>
+                                    <p class="text-left small" id="emailString">{{email}}</p>
+                                    <p class="text-left small" id="fullname">{{fullname}}</p>
+									<p class="text-left small" id="roleString">Nivel</p>
+									<p class="text-left">
+										<a href="#" class="btn btn-primary btn-block btn-sm" data-toggle="modal" data-target="#loginConfigurationModal">Update Information</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="divider navbar-login-session-bg"></li>
+					<li>
+						<div class="navbar-login navbar-login-session">
+							<div class="row">
+								<div class="col-lg-12">
+									<p>
+										<a href="#" class="btn btn-danger btn-block" onClick="return logout();">Logout</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</div>
+			</div>
 		</div>
 
 		<div class="col-md-6 col-xs-12">
@@ -152,8 +200,11 @@
 				</div>
 
 				<form class="form col-md-12 center-block">
-					<div class="form-group">
+					<div *ngIf="!isLoggedIn" class="form-group">
                         <input id="usernameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="usernameConfig" [ngModelOptions]="{standalone: true}" placeholder="Username">
+					</div>
+					<div *ngIf="isLoggedIn" class="form-group">
+                        <strong>{{username}}</strong>
 					</div>
 					<div class="form-group">
                         <input id="fullnameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="fullnameConfig" [ngModelOptions]="{standalone: true}" placeholder="Full Name">
@@ -170,8 +221,11 @@
 					<div class="form-group">
                         <input id="passwordConfirmationConfig" type="password" required=true class="form-control input-lg" [(ngModel)]="passwordConfirmationConfig" [ngModelOptions]="{standalone: true}" placeholder="Confirm New Password">
 					</div>
-					<div class="form-group">
-						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" data-dismiss="modal" (click)="submitChangesInUser()">Submit</button>
+					<div *ngIf="!isLoggedIn" class="form-group">
+						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" data-dismiss="modal" (click)="submitNewUser()">Sign Up</button>
+					</div>
+					<div *ngIf="isLoggedIn" class="form-group">
+						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" data-dismiss="modal" (click)="submitChangesInUser()">Edit User</button>
 					</div>
 				</form>
 			</div>

@@ -113,11 +113,13 @@ export class RecipeService {
         return value;
     }
   }
+  /*
   newUser(user: User): number 
   {
     this.messageService.add('RecipeService: new user');
 
-    var str_json = (JSON.stringify(user))
+    var str_json = (JSON.stringify(user).replace(/ /g,'\ '))
+    console.log(str_json);
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", "http://localhost:8000/save_user.php", false);
     xmlHttp.setRequestHeader("Content-type", "application/json");
@@ -125,7 +127,16 @@ export class RecipeService {
     console.log(xmlHttp.response);
 
     return 0;
-  }
+    }*/
+    newUser(user: User): Observable<number> 
+    {
+        this.messageService.add('RecipeService: new user');
+        let param: any = { 'user': JSON.stringify(user) };
+        let params = new HttpParams();
+        var user_id;
+        var result = this.httpCli.get<number>("http://localhost:8000/save_user.php", { params: param });
+        return result;
+    }
 
   organizeChartData(): Observable<ChartFormat> {
     var chartData =
