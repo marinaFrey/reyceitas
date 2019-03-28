@@ -7,18 +7,20 @@
     {
         $id = $_GET['id'];
 
+        $sql = <<<EOF
+            DELETE FROM recipes WHERE recipe_id = '$id';
+            DELETE FROM recipe_contributors WHERE src_recipe = '$id';
+            DELETE FROM recipe_pictures WHERE src_recipe = '$id';
+            DELETE FROM recipe_ingredients WHERE src_recipe = '$id';
+            DELETE FROM recipe_steps WHERE src_recipe = '$id';
+            DELETE FROM recipe_tags WHERE src_recipe = '$id';
+EOF;
         $db = connect();
-/*
-        $sql = "DELETE FROM recipes WHERE recipe_id = $id";
-        $db->query($sql);
-        $sql = "DELETE FROM recipe_contributors WHERE src_recipe = $id";
-        $db->query($sql);
-        $sql = "DELETE FROM recipe_ingredients WHERE src_recipe = $id";
-        $db->query($sql);
-        $sql = "DELETE FROM recipe_steps WHERE src_recipe = $id";
-        $db->query($sql);
-        $sql = "DELETE FROM recipe_tags WHERE src_recipe = $id";
-        $db->query($sql);*/
+        $ret = $db->exec($sql);
+        if(!$ret) {
+            echo $db->lastErrorMsg();
+        }
+
     }
 
 ?>

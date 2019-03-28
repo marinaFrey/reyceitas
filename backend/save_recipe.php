@@ -18,7 +18,48 @@ EOF;
             echo $db->lastErrorMsg();
         }
 
-        //echo $db->last_insert_rowid();
+        $recipe_id = $db->lastInsertRowId();
+        
+        foreach($recipe->ingredients as $ingredient)
+        {
+            $sql = <<<EOF
+            INSERT INTO recipe_ingredients (src_recipe, quantity, unit_name, description)
+            VALUES ('$recipe_id', '$ingredient->amount', '$ingredient->unit', '$ingredient->name');
+EOF;
+        
+            $ret2 = $db->query($sql);
+            if(!$ret2) {
+                echo $db->lastErrorMsg();
+            }
+        }
+
+        $numberOfStep = 0;
+        foreach($recipe->preparation as $step)
+        {
+            $sql = <<<EOF
+            INSERT INTO recipe_steps (src_recipe, step_order, description)
+            VALUES ('$recipe_id', '$numberOfStep', '$step');
+EOF;
+        
+            $ret2 = $db->query($sql);
+            if(!$ret2) {
+                echo $db->lastErrorMsg();
+            }
+            $numberOfStep++;
+        }
+
+        foreach($recipe->tags as $tag)
+        {
+            $sql = <<<EOF
+            INSERT INTO recipe_tags (src_recipe, src_tag)
+            VALUES ('$recipe_id', '$tag');
+EOF;
+        
+            $ret2 = $db->query($sql);
+            if(!$ret2) {
+                echo $db->lastErrorMsg();
+            }
+        }
 
     }
 

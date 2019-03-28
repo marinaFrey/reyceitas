@@ -333,9 +333,9 @@
       <div class="col-12">
         <div class="recipe-directions">
           <h3>Tags</h3>
-          <ol>
+          <ol *ngIf="tags && tags.length">
             <button class="btn btn-light" *ngFor="let tag of recipe.tags" routerLink="/recipes/{{tag}}">
-              {{tag.name}}
+              {{getTagFromId(tag)}}<!--{{tags[tag].name}}-->
             </button>
           </ol>
         </div>
@@ -350,7 +350,7 @@
           <ol>
             <a *ngIf="recipe.tags">
               <button class="btn btn-light" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn">
-                {{tag.name}}
+                {{getTagFromId(tag)}}<!--{{tags[tag].name}}-->
                 <i class="fa fa-times fa-fw " aria-hidden="true" (click)="removeTag(index)"></i>
               </button>
             </a>

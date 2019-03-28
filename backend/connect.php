@@ -115,14 +115,17 @@ function populate_with_dummy_info() {
     INSERT INTO recipes
         (recipe_id, owner, name, difficulty, n_served, duration, description)
     VALUES
-        (101, 42, "test recipe", 1, 2, '1:00H', 'test');
+        (101, 42, "test recipe", 1, 2, '1:00H', 'test'),
+        (102, 42, "test recipe2", 3, 4, '2:00H', 'teste2');
         
 
     INSERT INTO recipe_ingredients
         (src_recipe, quantity, unit_name, description)
     VALUES
         (101, 1, "cup", "rice"),
-        (101, 2, "cup", "water");
+        (101, 2, "cup", "water"),
+        (102, 1, "cup", "rice"),
+        (102, 2, "cup", "water");;
         
 
     INSERT INTO recipe_steps
@@ -130,7 +133,10 @@ function populate_with_dummy_info() {
     VALUES
         (101, 0, "put rice in bowl"),
         (101, 1, "put water in rice"),
-        (101, 2, "cook for 20 minutes");
+        (101, 2, "cook for 20 minutes"),
+        (102, 0, "put rice in bowl"),
+        (102, 1, "put water in rice"),
+        (102, 2, "cook for 20 minutes");;
         
     
     INSERT INTO tags VALUES (42, "favoritos", "fa-star", "#dfc013");
@@ -146,6 +152,37 @@ EOF;
     }
 }
 
-create_tables();
+function populateTags()
+{
+
+  $sql =<<<EOF
+    INSERT INTO tags 
+    VALUES 
+    (42, "favoritos", "fa-star", "#dfc013"),
+    (43, "bebidas", "fa-coffee", "#915721"),
+    (44, "sobremesas", "fa-birthday-cake", "#dd73d8"),
+    (45, "vegetariano", "fa-feather-alt", "#72ce6f"),
+    (46, "refeições", "fa-utensils", "#777777"),
+    (47, "sopas", "fa-utensil-spoon", "#6fcebe"),
+    (48, "lanches", "fa-cookie-bite", "#926d4b"),
+    (49, "peixes", "fa-fish", "#6f98ce"),
+    (50, "aves", "fa-crow", "#ce926f"),
+    (51, "porco", "fa-piggy-bank", "#ce926f"),
+    (52, "carne vermelha", "fa-chess-knight", "#ce926f"),
+    (53, "saudável", "fa-apple-alt", "#9dce6f");
+
+EOF;
+    $db = connect();
+    $ret = $db->exec($sql);
+    if(!$ret) {
+        echo $db->lastErrorMsg();
+    } else {
+        // echo "Records created successfully\n";
+    }
+}
+
+//connect();
+//create_tables();
 //populate_with_dummy_info();
+
 ?>
