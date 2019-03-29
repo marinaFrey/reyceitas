@@ -23,7 +23,10 @@ EOF;
 
         $i++;
     }
-    echo json_encode($resArrVals);
+    if($i>0)
+    {
+        echo json_encode($resArrVals);
+    }
 }
 function get_user($username) {
     $db = connect();
@@ -45,7 +48,10 @@ EOF;
 
         $i++;
     }
-    echo json_encode($resArrVals);
+    if($i>0)
+    {
+        echo json_encode($resArrVals);
+    }
 }
 if ($_GET) {
     get_user($_GET['username']);

@@ -83,7 +83,7 @@ export class NavigationBarComponent implements OnInit {
                     console.log("Username already taken");
                     return;
                 }
-                if(this.passwordConfig == this.passwordConfirmationConfig) 
+                if(this.passwordConfig != this.passwordConfirmationConfig) 
                 {
                     console.log("Password confirmation does not match");
                     return;
@@ -123,7 +123,7 @@ export class NavigationBarComponent implements OnInit {
                 if(this.user_list.length > 0 && this.passwordHashed == this.user_list[0].password)
                 {
                     console.log("Editing user" + this.user_list[0].id);
-                    if(this.passwordConfig == this.passwordConfirmationConfig) 
+                    if(this.passwordConfig != this.passwordConfirmationConfig) 
                     {
                         console.log("Password confirmation does not match");
                         return;
