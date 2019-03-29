@@ -104,8 +104,21 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   addImage(): void {
-    var x = (<HTMLInputElement>document.getElementById('fileUploader')).files;
-    console.log(x);
+    const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
+    const url = 'http://localhost:8000/upload_file.php'
+
+    const formData = new FormData()
+    for (let i = 0; i < files.length; i++) 
+    {
+        let file = files[i]
+        formData.append('files[]', file)
+    }
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+    }).then(response => {
+        console.log(response)
+    })
   }
 
   reuploadImage(imgIndex): void {
