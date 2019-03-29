@@ -3,6 +3,7 @@ header("Access-Control-Allow-Origin: *");
 class MyDB extends SQLite3 {
     function __construct() {
         $this->open('recipes.db');
+        $this->exec('PRAGMA foreign_keys = ON;');
         if(!$this) {
             echo $this->lastErrorMsg();
          } else {
@@ -50,7 +51,7 @@ function create_tables() {
         unit_name TEXT,
         description TEXT,
         
-        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id) ON DELETE CASCADE
     );
 
 
@@ -60,7 +61,7 @@ function create_tables() {
         step_order INTEGER NOT NULL,
         description TEXT,
         
-        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS recipe_contributors (
@@ -68,8 +69,8 @@ function create_tables() {
         contributor_id INTEGER NOT NULL,
         permission_level INTEGER NOT NULL,
         
-        FOREIGN KEY (contributor_id) REFERENCES users(user_id),
-        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
+        FOREIGN KEY (contributor_id) REFERENCES users(user_id) ON DELETE CASCADE,
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS recipe_pictures (
@@ -78,7 +79,7 @@ function create_tables() {
         file_name TEXT NOT NULL,
         is_of_instructions INTEGER DEFAULT 0,
 
-        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS tags (
@@ -92,9 +93,12 @@ function create_tables() {
         src_recipe INTEGER,
         src_tag INTEGER,
         
-        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id),
-        FOREIGN KEY (src_tag) REFERENCES tags(tag_id)
+        FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id) ON DELETE CASCADE,
+        FOREIGN KEY (src_tag) REFERENCES tags(tag_id) ON DELETE CASCADE
     );
+
+    PRAGMA foreign_keys = ON;
+
 EOF;
     $db = connect();
     $ret = $db->exec($sql);
@@ -178,9 +182,10 @@ EOF;
     }
 }
 
-//connect();
-//create_tables();
-//populate_with_dummy_info();
-//populateTags();
+// connect();
+// create_tables();
+// populate_with_dummy_info();
+// populateTags();
+
 
 ?>
