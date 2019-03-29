@@ -18,7 +18,7 @@
 			<a *ngIf="isLoggedIn" href="#" class="site_login" data-toggle="dropdown" data-target="#userTab">
 				<span class="glyphicon glyphicon-user"></span>
 				<span id="welcomeUserString">
-                    <strong>Bem vindo(a), {{username}}</strong>
+                    <strong>Bem vindo(a), {{usernameSession}}</strong>
 				</span>
 				<span class="glyphicon glyphicon-chevron-down"></span>
 			</a>
@@ -35,11 +35,9 @@
 								</div>
 								<div class="col-lg-8">
 									<p class="text-left" id="fullnameString" >
-                                    <strong>{{fullname}}</strong>
+                                    <strong>{{fullnameSession}}</strong>
 									</p>
-                                    <p class="text-left small" id="emailString">{{email}}</p>
-                                    <p class="text-left small" id="fullname">{{fullname}}</p>
-									<p class="text-left small" id="roleString">Nivel</p>
+                                    <p class="text-left small" id="emailString">{{emailSession}}</p>
 									<p class="text-left">
 										<a href="#" class="btn btn-primary btn-block btn-sm" data-toggle="modal" data-target="#loginConfigurationModal">Update Information</a>
 									</p>
@@ -88,7 +86,7 @@
 			<a *ngIf="isLoggedIn" href="#" class="site_login" data-toggle="dropdown" data-target="#userTab">
 				<span class="glyphicon glyphicon-user"></span>
 				<span id="welcomeUserString">
-					<strong>Bem vindo(a), Pessoa</strong>
+                    <strong>Bem vindo(a), {{usernameSession}}</strong>
 				</span>
 				<span class="glyphicon glyphicon-chevron-down"></span>
 			</a>
@@ -105,10 +103,9 @@
 								</div>
 								<div class="col-lg-8">
 									<p class="text-left" id="fullnameString">
-										<strong>Full Name</strong>
+                                    <strong>{{fullnameSession}}</strong>
 									</p>
-									<p class="text-left small" id="emailString">Email</p>
-									<p class="text-left small" id="roleString">Nivel</p>
+                                    <p class="text-left small" id="emailString">{{emailSession}}</p>
 									<p class="text-left">
 										<a href="#" class="btn btn-primary btn-block btn-sm" data-toggle="modal" data-target="#loginConfigurationModal">Update Information</a>
 									</p>
@@ -204,7 +201,7 @@
                         <input id="usernameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="usernameConfig" [ngModelOptions]="{standalone: true}" placeholder="Username">
 					</div>
 					<div *ngIf="isLoggedIn" class="form-group">
-                        <strong>{{username}}</strong>
+                        <strong>{{usernameSession}}</strong>
 					</div>
 					<div class="form-group">
                         <input id="fullnameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="fullnameConfig" [ngModelOptions]="{standalone: true}" placeholder="Full Name">

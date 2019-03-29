@@ -4,7 +4,7 @@ import { Tag } from './recipe';
 import { User } from './recipe';
 import { ChartFormat } from './recipe';
 // import { RECIPES } from './mock-recipes';
-// import { TAGS } from './mock-recipes';
+//import { TAGS } from './mock-recipes';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -147,6 +147,15 @@ export class RecipeService {
 
     return 0;
     }*/
+    editUser(user: User): Observable<number> 
+    {
+        this.messageService.add('RecipeService: edit user');
+        let param: any = { 'user_edit': JSON.stringify(user) };
+        let params = new HttpParams();
+        var user_id;
+        var result = this.httpCli.get<number>("http://localhost:8000/save_user.php", { params: param });
+        return result;
+    }
     newUser(user: User): Observable<number> 
     {
         this.messageService.add('RecipeService: new user');
