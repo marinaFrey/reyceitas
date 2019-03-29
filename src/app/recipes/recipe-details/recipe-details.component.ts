@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { RecipeService } from '../../recipe.service';
 import { Recipe } from '../../recipe';
@@ -12,7 +13,8 @@ import { md5 } from "../../md5";
   templateUrl: './recipe-details.component.html',
   styleUrls: ['./recipe-details.component.css']
 })
-export class RecipeDetailsComponent implements OnInit {
+export class RecipeDetailsComponent implements OnInit
+{
 
   @Input() recipe: Recipe;
   numberOfDifficultyStars: number[];
@@ -24,17 +26,21 @@ export class RecipeDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private recipeService: RecipeService,
-    private location: Location) { }
+    private location: Location,
+    private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit()
+  {
     this.getRecipe();
 
   }
 
-  getRecipe(): void {
+  getRecipe(): void
+  {
 
     this.recipeService.getTags()
-      .subscribe(tags => {
+      .subscribe(tags =>
+      {
         this.tags = tags;
         this.filterAvailableTags();
       });
@@ -56,15 +62,18 @@ export class RecipeDetailsComponent implements OnInit {
       };
 
     const id = +this.route.snapshot.paramMap.get('id');
-    if (isNaN(id)) {
+    if (isNaN(id))
+    {
       this.recipe.id = null;
 
       this.editing = true;
       this.newRecipe = true;
     }
-    else {
+    else
+    {
       this.recipeService.getRecipe(id)
-        .subscribe(recipe => {
+        .subscribe(recipe =>
+        {
           this.recipe = recipe;
           this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
           if (!this.recipe.tags)
@@ -84,21 +93,25 @@ export class RecipeDetailsComponent implements OnInit {
 
   }
 
-  getTagFromId(tagId): string {
+  getTagFromId(tagId): string
+  {
     return this.recipeService.searchTagById(tagId, this.tags);
   }
 
-  goBack(): void {
+  goBack(): void
+  {
     this.location.back();
   }
 
-  toggleEditing(): void {
+  toggleEditing(): void
+  {
     if (this.recipeService.getUserLevel() > 1) 
     {
       this.editing = !this.editing;
     }
 
-    else {
+    else
+    {
       window.alert("Você não possui autorização para realizar modificações no banco de dados!");
     }
 
@@ -109,89 +122,107 @@ export class RecipeDetailsComponent implements OnInit {
     return "../../../../backend/uploads/" + this.recipe.photos[index];
   }
 
-  addImage(): void {
+  addImage(): void
+  {
     const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
     const url = 'http://localhost:8000/upload_file.php'
 
     const formData = new FormData()
     for (let i = 0; i < files.length; i++) 
     {
-        var file = files[i]
-        var fileHashedName = md5((file.lastModified + Date.now() + file.size).toString())
-        var filename =  fileHashedName + this.recipe.photos.length + '.' + file.name.split('.').pop();
-        if(!this.recipe.photos)
-        {
-            this.recipe.photos = [];
-        }
-        this.recipe.photos.push(filename);
-        formData.append('files[]', file)
-        formData.append('filenames[]', filename)
+      var file = files[i]
+      var fileHashedName = md5((file.lastModified + Date.now() + file.size).toString())
+      var filename = fileHashedName + this.recipe.photos.length + '.' + file.name.split('.').pop();
+      if (!this.recipe.photos)
+      {
+        this.recipe.photos = [];
+      }
+      this.recipe.photos.push(filename);
+      formData.append('files[]', file)
+      formData.append('filenames[]', filename)
     }
     fetch(url, {
-        method: 'POST',
-        body: formData,
-    }).then(response => {
-        console.log(response)
+      method: 'POST',
+      body: formData,
+    }).then(response =>
+    {
+      console.log(response)
     })
   }
 
-  reuploadImage(imgIndex): void {
+  reuploadImage(imgIndex): void
+  {
 
   }
 
-  deleteImage(imgIndex): void {
+  deleteImage(imgIndex): void
+  {
     // pode usar recipe.photos[imgIndex] para pegar a URL da imagem e retirar do banco de dados
     this.recipe.photos.splice(imgIndex, 1);
   }
 
-  addIngredient(): void {
+  addIngredient(): void
+  {
     if (this.recipe.ingredients)
       this.recipe.ingredients.push({ id: 10, name: "", amount: null, unit: "" });
-    else {
+    else
+    {
       this.recipe.ingredients = [];
       this.recipe.ingredients.push({ id: 10, name: "", amount: null, unit: "" });
     }
   }
 
-  removeIngredient(index: number): void {
+  removeIngredient(index: number): void
+  {
     this.recipe.ingredients.splice(index, 1);
   }
 
-  addDirection(): void {
+  addDirection(): void
+  {
     if (this.recipe.preparation)
       this.recipe.preparation.push("");
-    else {
+    else
+    {
       this.recipe.preparation = [];
       this.recipe.preparation.push("");
     }
 
   }
 
-  removeDirection(index: number): void {
+  removeDirection(index: number): void
+  {
     this.recipe.preparation.splice(index, 1);
   }
 
-  removeTag(index: number): void {
+  removeTag(index: number): void
+  {
     this.recipe.tags.splice(index, 1);
   }
 
-  addTag(): void {
-    if (this.recipe.tags) {
+  addTag(): void
+  {
+    if (this.recipe.tags)
+    {
       this.recipe.tags.push(+this.selectedTag);
       this.filterAvailableTags();
     }
-    else {
+    else
+    {
       this.recipe.tags = [];
       this.recipe.tags.push(+this.selectedTag);
       this.filterAvailableTags();
     }
   }
 
-  filterAvailableTags(): void {
+  filterAvailableTags(): void
+  {
     this.availableTags = JSON.parse(JSON.stringify(this.tags));
-    for (var i = 0; i < this.tags.length; i++) {
-      for (var j = 0; j < this.recipe.tags.length; j++) {
-        if (this.tags[i].id == this.recipe.tags[j]) {
+    for (var i = 0; i < this.tags.length; i++)
+    {
+      for (var j = 0; j < this.recipe.tags.length; j++)
+      {
+        if (this.tags[i].id == this.recipe.tags[j])
+        {
           var index = this.availableTags.map(function (d) { return d.id }).indexOf(this.recipe.tags[j]);
           this.availableTags.splice(index, 1);
         }
@@ -199,37 +230,47 @@ export class RecipeDetailsComponent implements OnInit {
     }
   }
 
-  save(): void {
-    if (this.recipeService.getUserLevel() > 0) {
+  save(): void
+  {
+    if (this.recipeService.getUserLevel() > 0)
+    {
       this.toggleEditing();
       this.numberOfDifficultyStars = [];
-      for (let i = 0; i < this.recipe.difficulty; i++) {
+      for (let i = 0; i < this.recipe.difficulty; i++)
+      {
         this.numberOfDifficultyStars.push(1);
       }
       if (this.newRecipe)
         this.recipeService.saveNewRecipe(this.recipe);
       else
         this.recipeService.editRecipe(this.recipe);
+      this.router.navigateByUrl('recipes/all');
     }
-    else {
+    else
+    {
       window.alert("Você não possui autorização para realizar modificações no banco de dados!");
     }
 
   }
 
-  delete(): void {
-    if (this.recipeService.getUserLevel() > 1) {
-      if (confirm("Você tem certeza que deseja deletar esta receita? Essa ação é irreversível.")) {
+  delete(): void
+  {
+    if (this.recipeService.getUserLevel() > 1)
+    {
+      if (confirm("Você tem certeza que deseja deletar esta receita? Essa ação é irreversível."))
+      {
         this.recipeService.deleteRecipe(this.recipe);
         this.goBack();
       }
     }
-    else {
+    else
+    {
       window.alert("Você não possui autorização para realizar modificações no banco de dados!");
     }
   }
 
-  trackByFn(index: any, item: any) {
+  trackByFn(index: any, item: any)
+  {
     return index;
   }
 }

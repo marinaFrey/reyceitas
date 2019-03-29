@@ -74,6 +74,8 @@ EOF;
             }
         }
 
+        echo $recipe_id;
+
     }
 
 ?>

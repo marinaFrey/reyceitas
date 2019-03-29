@@ -42,7 +42,7 @@ export class RecipeService {
       "http://localhost:8000/save_recipe.php", { params: param });
     var t = recps.subscribe((data) => {
       console.log("saved recipe", data);
-
+      return data;
     }, (error) => {
       console.log("error!", error);
     });

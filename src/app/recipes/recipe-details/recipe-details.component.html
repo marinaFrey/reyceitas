@@ -54,7 +54,7 @@
         <div class="col-md-8 wow swing " *ngIf="!editing && recipe.photos && recipe.photos.length > 0">
           <div id="carouselExampleIndicators" class="carousel slide recipe-picture" data-ride="carousel">
             <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" data-slide-to="index"
+              <li data-target="#carouselExampleIndicators" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn"
                 [ngClass]="{active: index == 0}"></li>
             </ol>
             <div class="carousel-inner">
@@ -370,7 +370,7 @@
             </select>
 
             <button class="btn btn-success " (click)="addTag()">
-              <i class="fa fa-plus" aria-hidden="true"></i>
+              <i class="fa fa-check" aria-hidden="true"></i>
             </button>
 
           </ol>
