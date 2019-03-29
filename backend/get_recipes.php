@@ -51,6 +51,21 @@ EOF;
     }
 }
 
+function fill_photos_for_recipes(&$mapIdToRecip, &$resArrVals) {
+    $sql =<<<EOF
+    SELECT picture_id, src_recipe, file_name
+    FROM recipe_pictures
+        ORDER BY src_recipe ASC, picture_id ASC;
+EOF;
+    $db = connect();
+    $ret = $db->query($sql);
+    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
+        $i_recip = $mapIdToRecip[$row['src_recipe']];
+        $v = array_push($resArrVals[$i_recip]['photos'],
+            $row['file_name']);
+    }
+}
+
 function list_tags() {
     $sql =<<<EOF
     SELECT tag_id, name, icon, color FROM tags;
@@ -109,6 +124,7 @@ EOF;
     fill_steps_for_recipes($mapIdToData, $resArrVals);
     fill_ingredients_for_recipes($mapIdToData, $resArrVals);
     fill_tags_for_recipes($mapIdToData, $resArrVals);
+    fill_photos_for_recipes($mapIdToData, $resArrVals);
 
     echo json_encode($resArrVals);
 }

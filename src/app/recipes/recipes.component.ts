@@ -30,6 +30,11 @@ export class RecipesComponent implements OnInit
   {
     this.getRecipes(); 
   }
+
+  getImageSrc(index, recipe)
+  {
+    return "../../../../backend/uploads/" + recipe.photos[index];
+  }
   
   getRecipes(): void
   {
