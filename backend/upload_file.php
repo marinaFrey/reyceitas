@@ -12,12 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         for ($i = 0; $i < $all_files; $i++) {
             $file_name = $_FILES['files']['name'][$i];
+            $new_file_name = $_POST['filenames'][$i];
             $file_tmp = $_FILES['files']['tmp_name'][$i];
             $file_type = $_FILES['files']['type'][$i];
             $file_size = $_FILES['files']['size'][$i];
             $file_ext = strtolower(end(explode('.', $_FILES['files']['name'][$i])));
 
-            $file = $path . $file_name;
+            $file = $path . $new_file_name;
 
             if (!in_array($file_ext, $extensions)) {
                 $errors[] = 'Extension not allowed: ' . $file_name . ' ' . $file_type;

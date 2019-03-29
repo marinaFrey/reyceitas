@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { RecipeService } from '../../recipe.service';
 import { Recipe } from '../../recipe';
 import { Tag } from "../../recipe";
+import { md5 } from "../../md5";
 
 @Component({
   selector: 'app-recipe-details',
@@ -110,8 +111,16 @@ export class RecipeDetailsComponent implements OnInit {
     const formData = new FormData()
     for (let i = 0; i < files.length; i++) 
     {
-        let file = files[i]
+        var file = files[i]
+        var fileHashedName = md5((file.lastModified + Date.now() + file.size).toString())
+        var filename =  fileHashedName + this.recipe.photos.length + '.' + file.name.split('.').pop();
+        if(!this.recipe.photos)
+        {
+            this.recipe.photos = [];
+        }
+        this.recipe.photos.push(filename);
         formData.append('files[]', file)
+        formData.append('filenames[]', filename)
     }
     fetch(url, {
         method: 'POST',
