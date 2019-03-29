@@ -59,7 +59,7 @@
             </ol>
             <div class="carousel-inner">
               <div class="item" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" [ngClass]="{active: index == 0}">
-                <img class="d-block w-100" [src]="recipe.photos[index]" alt="index">
+                <img class="d-block w-100" [src]="getImageSrc(index)" alt="index">
               </div>
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -85,7 +85,7 @@
             <!-- Time -->
             <div class="row" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn">
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
-                <img class="thumbnail-image" [src]="recipe.photos[index]">
+                <img class="thumbnail-image" [src]="getImageSrc(index)">
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 text-left">
                 <button class="btn btn-primary" (click)="reuploadImage(index)">
@@ -107,7 +107,7 @@
                   <input id ="fileUploader" type="file" name="file[]" multiple>
                   <button class="btn btn-primary" (click)="addImage()">
                     <i class="fa fa-upload" style="color:white" aria-hidden="true"></i>
-                    Novo Upload
+                    Upload
                   </button>
 
                 </form>

@@ -104,6 +104,11 @@ export class RecipeDetailsComponent implements OnInit {
 
   }
 
+  getImageSrc(index)
+  {
+    return "../../../../backend/uploads/" + this.recipe.photos[index];
+  }
+
   addImage(): void {
     const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
     const url = 'http://localhost:8000/upload_file.php'

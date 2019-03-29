@@ -76,7 +76,6 @@ function create_tables() {
         picture_id INTEGER PRIMARY KEY,
         src_recipe INTEGER,
         file_name TEXT NOT NULL,
-        img_data BLOB NOT NULL,
         is_of_instructions INTEGER DEFAULT 0,
 
         FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
@@ -139,8 +138,6 @@ function populate_with_dummy_info() {
         (102, 2, "cook for 20 minutes");;
         
     
-    INSERT INTO tags VALUES (42, "favoritos", "fa-star", "#dfc013");
-
     INSERT INTO recipe_tags VALUES (101, 42);
 EOF;
     $db = connect();
@@ -184,5 +181,6 @@ EOF;
 //connect();
 //create_tables();
 //populate_with_dummy_info();
+//populateTags();
 
 ?>
