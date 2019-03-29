@@ -24,6 +24,19 @@ EOF;
             echo $db->lastErrorMsg();
         }
 
+        foreach($recipe->photos as $photo)
+        {
+            $sql = <<<EOF
+            INSERT INTO recipe_pictures (src_recipe, file_name)
+            VALUES ('$recipe->id', '$photo');
+EOF;
+        
+            $ret2 = $db->query($sql);
+            if(!$ret2) {
+                echo $db->lastErrorMsg();
+            }
+        }
+
         foreach($recipe->ingredients as $ingredient)
         {
             $sql = <<<EOF

@@ -103,6 +103,11 @@ export class RecipeDetailsComponent implements OnInit {
 
   }
 
+  getImageSrc(index)
+  {
+    return "../../../../assets/backend/uploads/" + this.recipe.photos[index];
+  }
+
   addImage(): void {
     const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
     const url = 'http://localhost:8000/upload_file.php'
@@ -110,8 +115,10 @@ export class RecipeDetailsComponent implements OnInit {
     const formData = new FormData()
     for (let i = 0; i < files.length; i++) 
     {
+      
         let file = files[i]
         formData.append('files[]', file)
+        console.log(file.name);
     }
     fetch(url, {
         method: 'POST',

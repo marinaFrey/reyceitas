@@ -76,7 +76,6 @@ function create_tables() {
         picture_id INTEGER PRIMARY KEY,
         src_recipe INTEGER,
         file_name TEXT NOT NULL,
-        img_data BLOB NOT NULL,
         is_of_instructions INTEGER DEFAULT 0,
 
         FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id)
