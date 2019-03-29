@@ -2,21 +2,24 @@
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     require 'connect.php';
-    
+
     if (isset($_GET['id']))
     {
+        $db = connect();
+        $sql = <<<EOF
+            DELETE FROM recipes WHERE recipe_id = :id ;
+            DELETE FROM recipe_contributors WHERE src_recipe = :id ;
+            DELETE FROM recipe_pictures WHERE src_recipe = :id ;
+            DELETE FROM recipe_ingredients WHERE src_recipe = :id ;
+            DELETE FROM recipe_steps WHERE src_recipe = :id ;
+            DELETE FROM recipe_tags WHERE src_recipe = :id ;
+EOF;
+        $stmt = $db->prepare($sql);
         $id = $_GET['id'];
 
-        $sql = <<<EOF
-            DELETE FROM recipes WHERE recipe_id = '$id';
-            DELETE FROM recipe_contributors WHERE src_recipe = '$id';
-            DELETE FROM recipe_pictures WHERE src_recipe = '$id';
-            DELETE FROM recipe_ingredients WHERE src_recipe = '$id';
-            DELETE FROM recipe_steps WHERE src_recipe = '$id';
-            DELETE FROM recipe_tags WHERE src_recipe = '$id';
-EOF;
-        $db = connect();
-        $ret = $db->exec($sql);
+        $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+        
+        $ret = $stmt->execute();
         if(!$ret) {
             echo $db->lastErrorMsg();
         }
