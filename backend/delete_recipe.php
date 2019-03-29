@@ -6,20 +6,12 @@
     if (isset($_GET['id']))
     {
         $db = connect();
-        $sql = <<<EOF
-            DELETE FROM recipes WHERE recipe_id = :id ;
-            DELETE FROM recipe_contributors WHERE src_recipe = :id ;
-            DELETE FROM recipe_pictures WHERE src_recipe = :id ;
-            DELETE FROM recipe_ingredients WHERE src_recipe = :id ;
-            DELETE FROM recipe_steps WHERE src_recipe = :id ;
-            DELETE FROM recipe_tags WHERE src_recipe = :id ;
-EOF;
+        $sql = "DELETE FROM recipes WHERE recipe_id = :r_id ;";
         $stmt = $db->prepare($sql);
-        $id = $_GET['id'];
-
-        $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
-        
+        $r_id = intval($_GET['id']);
+        $stmt->bindValue(':r_id', $r_id, SQLITE3_INTEGER);
         $ret = $stmt->execute();
+
         if(!$ret) {
             echo $db->lastErrorMsg();
         }
