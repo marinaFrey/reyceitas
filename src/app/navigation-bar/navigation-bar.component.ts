@@ -164,8 +164,8 @@ export class NavigationBarComponent implements OnInit
     }
     submitChangesInUser(): void
     {
-        if (!this.checkField(this.usernameConfig, "usernameConfig") 
-        || !this.checkField(this.fullnameConfig, "fullnameConfig")
+        if (
+         !this.checkField(this.fullnameConfig, "fullnameConfig")
         || !this.checkField(this.emailConfig, "emailConfig")
         || !this.checkField(this.passwordConfig, "passwordConfig")
         )
