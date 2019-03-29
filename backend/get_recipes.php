@@ -119,7 +119,7 @@ EOF;
 
         $i_recp++;
     }
-    
+
     // Fill values.
     fill_steps_for_recipes($mapIdToData, $resArrVals);
     fill_ingredients_for_recipes($mapIdToData, $resArrVals);
