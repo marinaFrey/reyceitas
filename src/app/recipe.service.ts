@@ -174,6 +174,9 @@ export class RecipeService {
       colors: []
     }
 
+    var r = this.getRecipes();
+    
+    console.log(r);
     // for(var i = 0; i < TAGS.length; i++)
     // {
     //   chartData.labels.push(TAGS[i].name);
@@ -281,6 +284,16 @@ export class RecipeService {
 
     return this.getRecipes().pipe(
       map((recs: Recipe[]) => {
+
+        return recs.length
+      }));
+  }
+
+  getNumberOfUsers(): Observable<number> {
+    // return of(RECIPES.length);
+
+    return this.getUsers().pipe(
+      map((recs: User[]) => {
 
         return recs.length
       }));

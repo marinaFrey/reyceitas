@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
 
   tags: Tag[];
   numberOfRecipes: number;
+  numberOfUsers: number;
 
   constructor(private recipeService: RecipeService, private router: Router) { }
 
@@ -22,10 +23,12 @@ export class DashboardComponent implements OnInit {
       .subscribe(tags => this.tags = tags);
 
     this.recipeService.getNumberOfRecipes().subscribe(num => this.numberOfRecipes = num);
+    this.recipeService.getNumberOfUsers().subscribe(num => this.numberOfUsers = num);
 
     var graphData;
     this.recipeService.organizeChartData().subscribe(data => graphData = data);
     this.createGraph(graphData);
+    console.log(graphData);
   }
 
   goToNewRecipePage() {

@@ -97,6 +97,7 @@ EOF;
         $resArrVals[$i_recp]['description']=$row['description'];
         $resArrVals[$i_recp]['ingredients']= array();
         $resArrVals[$i_recp]['preparation']= array();
+        $resArrVals[$i_recp]['tags']= array();
         $resArrVals[$i_recp]['photos']= array();
         // Keep this reference recipe id -> its place in the array.
         $mapIdToData[$resArrVals[$i_recp]['id']] = $i_recp;
