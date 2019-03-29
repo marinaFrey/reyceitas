@@ -10,65 +10,91 @@
         
         $sql = <<<EOF
             INSERT INTO recipes (owner, name, difficulty, n_served, duration, description)
-            VALUES ('$recipe->servings', '$recipe->name', '$recipe->difficulty', '$recipe->servings', '$recipe->duration', '$recipe->description' );
+            VALUES (:owner, :name, :difficulty, :n_served, :duration, :description);
 EOF;
         $db = connect();
-        $ret = $db->query($sql);
+        $stmt = $db->prepare($sql);
+        // TODO: Change once auth is added.
+        $stmt->bindValue(':owner', $recipe->servings, SQLITE3_INTEGER);
+        $stmt->bindValue(':name', $recipe->name, SQLITE3_TEXT);
+        $stmt->bindValue(':difficulty', $recipe->difficulty, SQLITE3_INTEGER);
+        $stmt->bindValue(':n_served', $recipe->servings, SQLITE3_INTEGER);
+        $stmt->bindValue(':duration', $recipe->duration, SQLITE3_TEXT);
+        $stmt->bindValue(':description', $recipe->duration, SQLITE3_TEXT);
+
+        $ret = $stmt->execute();
         if(!$ret) {
             echo $db->lastErrorMsg();
         }
 
         $recipe_id = $db->lastInsertRowId();
         
+        $sql = <<<EOF
+        INSERT INTO recipe_pictures (src_recipe, file_name)
+        VALUES (:recp_id, :file_name);
+EOF;
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':recp_id', $recipe_id, SQLITE3_INTEGER);
         foreach($recipe->photos as $photo)
         {
-            $sql = <<<EOF
-            INSERT INTO recipe_pictures (src_recipe, file_name)
-            VALUES ('$recipe_id', '$photo');
-EOF;
-        
-            $ret2 = $db->query($sql);
+            $stmt->bindValue(':file_name', $recipe->duration, SQLITE3_TEXT);
+            $ret2 = $stmt->execute();
             if(!$ret2) {
                 echo $db->lastErrorMsg();
             }
         }
 
+
+        $sql = <<<EOF
+            INSERT INTO recipe_ingredients (src_recipe, quantity, unit_name, description)
+            VALUES (:recp_id, :amount, :unit, :description);
+EOF;
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':recp_id', $recipe_id, SQLITE3_INTEGER);
         foreach($recipe->ingredients as $ingredient)
         {
-            $sql = <<<EOF
-            INSERT INTO recipe_ingredients (src_recipe, quantity, unit_name, description)
-            VALUES ('$recipe_id', '$ingredient->amount', '$ingredient->unit', '$ingredient->name');
-EOF;
-        
-            $ret2 = $db->query($sql);
+            $stmt->bindValue(':amount', floatval($ingredient->amount), SQLITE3_FLOAT);
+            $stmt->bindValue(':unit', $ingredient->unit, SQLITE3_TEXT);
+            $stmt->bindValue(':description', $ingredient->name, SQLITE3_TEXT);
+
+            $ret2 = $stmt->execute();
             if(!$ret2) {
                 echo $db->lastErrorMsg();
             }
         }
 
+
         $numberOfStep = 0;
+        $sql = <<<EOF
+            INSERT INTO recipe_steps (src_recipe, step_order, description)
+            VALUES (:recp_id, :step_numbr, :description);
+EOF;
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':recp_id', $recipe_id, SQLITE3_INTEGER);
         foreach($recipe->preparation as $step)
         {
-            $sql = <<<EOF
-            INSERT INTO recipe_steps (src_recipe, step_order, description)
-            VALUES ('$recipe_id', '$numberOfStep', '$step');
-EOF;
-        
-            $ret2 = $db->query($sql);
+            $stmt->bindValue(':step_numbr', $numberOfStep, SQLITE3_INTEGER);
+            $stmt->bindValue(':description', $step, SQLITE3_TEXT);
+
+            $ret2 = $stmt->execute();
             if(!$ret2) {
                 echo $db->lastErrorMsg();
             }
             $numberOfStep++;
         }
 
+        $sql = <<<EOF
+            INSERT INTO recipe_tags (src_recipe, src_tag)
+            VALUES (:recp_id, :tag_id);
+EOF;
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':recp_id', $recipe_id, SQLITE3_INTEGER);
         foreach($recipe->tags as $tag)
         {
-            $sql = <<<EOF
-            INSERT INTO recipe_tags (src_recipe, src_tag)
-            VALUES ('$recipe_id', '$tag');
-EOF;
-        
-            $ret2 = $db->query($sql);
+            $stmt->bindValue(':tag_id', $tag, SQLITE3_INTEGER);
+            echo $recipe->id;
+            echo $tag;
+            $ret2 = $stmt->execute();
             if(!$ret2) {
                 echo $db->lastErrorMsg();
             }

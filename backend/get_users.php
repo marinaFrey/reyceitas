@@ -31,9 +31,11 @@ EOF;
 function get_user($username) {
     $db = connect();
     $sql =<<<EOF
-    SELECT * FROM users where username = '$username'; 
+    SELECT * FROM users where username = :usr_nm; 
 EOF;
-    $ret = $db->query($sql);
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':usr_nm', $username, SQLITE3_TEXT);
+    $ret = $stmt->execute();
 
     $i=0;
     while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
@@ -43,9 +45,6 @@ EOF;
         $resArrVals[$i]['email']=$row['email'];
         $resArrVals[$i]['fullname']=$row['full_name'];
         
-        // Keep this reference recipe id -> its place in the array.
-        //$mapIdToData[$resArrVals[$i]['id']] = $i;
-
         $i++;
     }
     if($i>0)
