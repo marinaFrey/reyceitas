@@ -28,7 +28,6 @@ export class DashboardComponent implements OnInit {
     var graphData;
     this.recipeService.organizeChartData().subscribe(data => graphData = data);
     this.createGraph(graphData);
-    console.log(graphData);
   }
 
   goToNewRecipePage() {

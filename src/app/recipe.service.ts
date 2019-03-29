@@ -105,32 +105,29 @@ export class RecipeService {
 
 
   }
-  getUsers(): Observable<User[]> 
-  {
+  getUsers(): Observable<User[]> {
     this.messageService.add('RecipeService: fetched users');
 
     var users = this.httpCli.get<User[]>(
       "http://localhost:8000/get_users.php");
     return users;
   }
-  searchUsers(username: string): Observable<User[]> 
-  {
+  searchUsers(username: string): Observable<User[]> {
     this.messageService.add('RecipeService: fetched users');
 
     var users = this.httpCli.get<User[]>(
-        `http://localhost:8000/get_users.php?username=${username}`);
+      `http://localhost:8000/get_users.php?username=${username}`);
     return users;
   }
 
   searchTag(this: number, value: Recipe, index: number, obj: Recipe[]): Recipe {
-    if(value.tags)
-    {
+    if (value.tags) {
       for (var i = 0; i < value.tags.length; i++) {
         if (value.tags[i] == this)
           return value;
       }
     }
-    
+
   }
   /*
   newUser(user: User): number 
@@ -147,24 +144,22 @@ export class RecipeService {
 
     return 0;
     }*/
-    editUser(user: User): Observable<number> 
-    {
-        this.messageService.add('RecipeService: edit user');
-        let param: any = { 'user_edit': JSON.stringify(user) };
-        let params = new HttpParams();
-        var user_id;
-        var result = this.httpCli.get<number>("http://localhost:8000/save_user.php", { params: param });
-        return result;
-    }
-    newUser(user: User): Observable<number> 
-    {
-        this.messageService.add('RecipeService: new user');
-        let param: any = { 'user': JSON.stringify(user) };
-        let params = new HttpParams();
-        var user_id;
-        var result = this.httpCli.get<number>("http://localhost:8000/save_user.php", { params: param });
-        return result;
-    }
+  editUser(user: User): Observable<number> {
+    this.messageService.add('RecipeService: edit user');
+    let param: any = { 'user_edit': JSON.stringify(user) };
+    let params = new HttpParams();
+    var user_id;
+    var result = this.httpCli.get<number>("http://localhost:8000/save_user.php", { params: param });
+    return result;
+  }
+  newUser(user: User): Observable<number> {
+    this.messageService.add('RecipeService: new user');
+    let param: any = { 'user': JSON.stringify(user) };
+    let params = new HttpParams();
+    var user_id;
+    var result = this.httpCli.get<number>("http://localhost:8000/save_user.php", { params: param });
+    return result;
+  }
 
   organizeChartData(): Observable<ChartFormat> {
     var chartData =
@@ -174,30 +169,38 @@ export class RecipeService {
       colors: []
     }
 
-    var r = this.getRecipes();
-    
-    console.log(r);
-    // for(var i = 0; i < TAGS.length; i++)
-    // {
-    //   chartData.labels.push(TAGS[i].name);
-    //   chartData.colors.push(TAGS[i].color);
-    // }
+    this.getRecipes().subscribe(num => {
+      var recipes = num
+      this.getTags().subscribe(t => {
+        var tags = t;
+        for (var i = 0; i < tags.length; i++) {
+          chartData.labels.push(tags[i].name);
+          chartData.colors.push(tags[i].color);
+        }
+        var dummy = [];
+        for (var j = 0; j < recipes.length; j++) {
+          for (var k = 0; k < recipes[j].tags.length; k++) {
 
-    // for(var j = 0; j < RECIPES.length; j++)
-    // {
-    //   for(var k = 0; k < RECIPES[j].tags.length; k++)
-    //   {
-    //     if(chartData.data[RECIPES[j].tags[k]])
-    //     {
-    //       chartData.data[RECIPES[j].tags[k]]++;
-    //     }
-    //     else
-    //     {
-    //       chartData.data[RECIPES[j].tags[k]] = 1;
-    //     }
-    //   }
-    // }
+            if (dummy[recipes[j].tags[k]]) {
+              dummy[recipes[j].tags[k]]++;
+            }
+            else {
+              dummy[recipes[j].tags[k]] = 1;
+            }
+          }
+        }
 
+        for (var l = 0; l < tags.length; l++) {
+          if (dummy[tags[l].id])
+            chartData.data.push(dummy[tags[l].id]);
+          else
+            chartData.data.push(0);
+        }
+
+        return of(chartData);
+      });
+    }
+    );
     return of(chartData);
   }
 
@@ -216,44 +219,38 @@ export class RecipeService {
 
   }
 
-  searchTagById(tagId, tagList): string
-  {
-    if (tagList)
-    {
-      for (var i = 0; i < tagList.length; i++)
-      {
-        if(tagList[i].id == tagId)
-        {
+  searchTagById(tagId, tagList): string {
+    if (tagList) {
+      for (var i = 0; i < tagList.length; i++) {
+        if (tagList[i].id == tagId) {
           return tagList[i].name;
         }
       }
     }
   }
 
-  
+
 
   searchTerm(this: string, value: Recipe, index: number, obj: Recipe[]): Recipe {
 
     if (value.name && (value.name.toUpperCase().indexOf(this.toUpperCase()) >= 0)) {
       return value;
     }
-    if(value.ingredients)
-    {
+    if (value.ingredients) {
       for (var i = 0; i < value.ingredients.length; i++) {
         if (value.ingredients[i].name.indexOf(this) >= 0) {
           return value;
         }
       }
     }
-    if(value.preparation)
-    {
+    if (value.preparation) {
       for (var i = 0; i < value.preparation.length; i++) {
         if (value.preparation[i].indexOf(this) >= 0) {
           return value;
         }
       }
     }
-    
+
   }
   searchRecipesByTerm(term: string): Observable<Recipe[]> {
     if (!term.trim()) {
@@ -271,7 +268,7 @@ export class RecipeService {
 
   getRecipe(id: number): Observable<Recipe> {
     this.messageService.add('RecipeService: fetched this specific recipe id=${id}`');
-    
+
     return this.getRecipes().pipe(
       map((recs: Recipe[]) => {
         return recs.find(recipe => recipe.id === id)
@@ -299,8 +296,7 @@ export class RecipeService {
       }));
   }
 
-  getUserLevel()
-  {
+  getUserLevel() {
     return this.userLevel;
   }
 }
