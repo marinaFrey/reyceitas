@@ -12,7 +12,7 @@
             </h1>
           </div>
           <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-            <h1>
+            <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
               Busca Avançada
             </h1>
           </div>
@@ -28,7 +28,7 @@
             </h1>
           </div>
           <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-            <h1>
+            <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
               Ver Receitas
             </h1>
           </div>
@@ -44,7 +44,7 @@
             </h1>
           </div>
           <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-            <h1>
+            <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
               Adicionar Receita
             </h1>
           </div>
@@ -59,7 +59,7 @@
     <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn" *ngFor="let tag of tags;" routerLink="/recipes/{{tag.id}}">
       <div class="recipe-item">
         <div class="row">
-          <h3 class="col-md-12 col-sm-12 col-xs-12 text-center" [ngStyle]="{'color': tag.color}">
+          <h3 class="col-md-12 col-sm-12 col-xs-12 text-center" [ngStyle]="{'color': tag.color}" unselectable="on" onselectstart="return false;" onmousedown="return false;">
             <i class="fa {{tag.icon}} fa-fw" aria-hidden="true"></i>
           </h3>
         </div>
@@ -79,32 +79,40 @@
     </div>
 
     <div class="col-lg-3 col-md-3 col-sm-12 wow fadeIn">
-      <div class="recipe-item text-center" routerLink="/recipes/all">
+      <div class="recipe-item text-center" routerLink="/recipes/all" unselectable="on" onselectstart="return false;" onmousedown="return false;">
 
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h3>{{numberOfRecipes}}</h3>
+            <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+              {{numberOfRecipes}}
+            </h3>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h4>Receitas Cadastradas</h4>
+            <h4 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+              Receitas Cadastradas
+            </h4>
           </div>
         </div>
 
       </div>
-      <div class="recipe-item text-center">
+      <div class="recipe-item text-center" unselectable="on" onselectstart="return false;" onmousedown="return false;">
 
           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-              <h3>{{numberOfUsers}}</h3>
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                {{numberOfUsers}}
+              </h3>
             </div>
           </div>
   
           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-              <h4>Usuários Cadastrados</h4>
+              <h4 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                Usuários Cadastrados
+              </h4>
             </div>
           </div>
           
