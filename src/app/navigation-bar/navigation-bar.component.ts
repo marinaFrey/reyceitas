@@ -53,16 +53,26 @@ export class NavigationBarComponent implements OnInit {
             return;
         }
         this.passwordHashed = md5(this.password);
+        this.password = null;
         this.recipeService.searchUsers(this.username)
             .subscribe(user_list => {
                 this.user_list = user_list;
-                if(user_list.length > 0 && this.passwordHashed == user_list[0].password)
+                if(this.user_list.length > 0) 
                 {
+                    if(this.passwordHashed != this.user_list[0].password)
+                    {
+                        console.log("Password does not match");
+                        return;
+                    }
                     console.log("User "+this.username+" authenticated");
                     this.isLoggedIn = true;
                     this.fullnameSession = user_list[0].fullname;
                     this.emailSession = user_list[0].email;
                     this.usernameSession = user_list[0].username;
+                }else
+                {
+                    console.log("User not found");
+                    return;
                 }
             });
             return;
@@ -85,9 +95,13 @@ export class NavigationBarComponent implements OnInit {
                 }
                 if(this.passwordConfig != this.passwordConfirmationConfig) 
                 {
+                    this.passwordConfig = null;
+                    this.passwordConfirmationConfig = null;
                     console.log("Password confirmation does not match");
                     return;
                 }
+                this.passwordConfig = null;
+                this.passwordConfirmationConfig = null;
                 this.new_user = new User();
                 this.new_user.username=this.usernameConfig;
                 this.new_user.password=this.passwordHashed;
@@ -105,29 +119,36 @@ export class NavigationBarComponent implements OnInit {
                     }
                    });
             });
-
     }
-
     submitChangesInUser(): void
     {
-    console.log(this)
-        if(!this.username || !this.password)
+        if(!this.username || !this.oldPasswordConfig)
         {
             console.log("Please inform a valid username and password");
             return;
         }
-        this.passwordHashed = md5(this.password);
+        this.passwordHashed = md5(this.oldPasswordConfig);
+        this.oldPasswordConfig = null;
         this.recipeService.searchUsers(this.username)
             .subscribe(user_list => {
               this.user_list = user_list;
-                if(this.user_list.length > 0 && this.passwordHashed == this.user_list[0].password)
+                if(this.user_list.length > 0) 
                 {
+                    if(this.passwordHashed != this.user_list[0].password)
+                    {
+                        console.log("Password does not match");
+                        return;
+                    }
                     console.log("Editing user" + this.user_list[0].id);
                     if(this.passwordConfig != this.passwordConfirmationConfig) 
                     {
+                        this.passwordConfig = null;
+                        this.passwordConfirmationConfig = null;
                         console.log("Password confirmation does not match");
                         return;
                     }
+                    this.passwordConfig = null;
+                    this.passwordConfirmationConfig = null;
                     this.new_user = new User();
                     this.new_user.username=this.username;
                     this.new_user.password=this.passwordHashed;
@@ -154,9 +175,5 @@ export class NavigationBarComponent implements OnInit {
                 }
                 
             });
-
     }
-
-
-
 }
