@@ -21,9 +21,26 @@ function connect() {
 
 function create_tables() {
     $sql =<<<EOF
+    CREATE TABLE IF NOT EXISTS groups(
+        group_id INTEGER PRIMARY KEY,
+        name TEXT UNIQUE
+    );
+    CREATE TABLE IF NOT EXISTS user_groups (
+        user_group_id INTEGER PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        group_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+        FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE
+    );
+    CREATE TABLE IF NOT EXISTS recipe_permissions(
+        recipe_permissions_id INTEGER PRIMARY KEY,
+        recipe_id INTEGER,
+        group_id INTEGER,
+        authentication_level INTEGER
+    );
     CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY,
-        username TEXT,
+        username TEXT UNIQUE,
         password TEXT,
         email TEXT,
         full_name TEXT,
@@ -181,10 +198,31 @@ EOF;
         // echo "Records created successfully\n";
     }
 }
+function populateUserGroups()
+{
+
+  $sql =<<<EOF
+INSERT INTO users (user_id, username, full_name, password) VALUES (42, "testudo", "testy mactesterson", "123");
+INSERT INTO users (user_id, username, full_name, password) VALUES (1, "testinho", "testinho testado", "1234");
+INSERT INTO users (user_id, username, full_name, password) VALUES (2, "testículo", "testículo testação", "12345");
+INSERT INTO groups (group_id, name) VALUES (1,"grupinho");
+INSERT INTO groups (group_id, name) VALUES (2,"grupa");
+INSERT INTO user_groups (user_id, group_id) VALUES (2, 2);
+INSERT INTO user_groups (user_id, group_id) VALUES (1, 1);
+EOF;
+    $db = connect();
+    $ret = $db->exec($sql);
+    if(!$ret) {
+        echo $db->lastErrorMsg();
+    } else {
+        // echo "Records created successfully\n";
+    }
+}
 
 // connect();
 // create_tables();
 // populate_with_dummy_info();
+// populateUserGroups();
 // populateTags();
 
 
