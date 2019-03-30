@@ -58,6 +58,7 @@ function create_tables() {
         n_served INTEGER DEFAULT 0,
         duration TEXT,
         description TEXT,
+        global_authentication_level INTEGER DEFAULT 1,
         
         FOREIGN KEY (owner) REFERENCES users(user_id)
     );
@@ -226,7 +227,7 @@ EOF;
 // create_tables();
 // populateTags();
 // populate_with_dummy_info();
-// populateUserGroups();
+ //populateUserGroups();
 
 
 ?>
