@@ -110,8 +110,8 @@ function get_recipes_per_user($username)
             $resArrVals[$i]['preparation']= array();
             $resArrVals[$i]['tags']= array();
             $resArrVals[$i]['photos']= array();
-            $resArrVals[$i]['authentication_level']=$row['group_authentication_level'];
-            $resArrVals[$i]['global_authentication_level']=$row['global_authentication_level'];
+            $resArrVals[$i]['authenticationLevel']=$row['group_authentication_level'];
+            $resArrVals[$i]['globalAuthenticationLevel']=$row['global_authentication_level'];
             $mapIdToData[$resArrVals[$i]['id']] = $i;
             $i++;
         }
@@ -128,10 +128,33 @@ function get_recipes_per_user($username)
         echo json_encode($resArrVals);
     }
 }
+function get_group_per_recipes($recipe_name)
+{
+    $db = connect();
+    $sql = "SELECT *, r.name AS recipe_name, g.name AS group_name, rp.authentication_level AS group_authentication_level FROM recipe_permissions AS rp";
+    $sql.= " INNER JOIN groups AS g ON rp.group_id = g.group_id";
+    $sql.= " INNER JOIN recipes AS r ON rp.recipe_id = r.recipe_id";
+    $sql.= " WHERE recipe_name = :recipe_name";
+    $sql.= " ORDER BY group_authentication_level desc";
+    $stmt= $db->prepare($sql);
+    $stmt->bindValue(':recipe_name', $recipe_name, SQLITE3_TEXT);
+    $ret= $stmt->execute();
+
+    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC);$i++)
+    {
+        $resArrVals[$i]['groupId']=$row['group_id'];
+        $resArrVals[$i]['groupName']=$row['group_name'];
+        $resArrVals[$i]['authenticationLevel']=$row['group_authentication_level'];
+    }
+    if($i>0)
+    {
+        echo json_encode($resArrVals);
+    }
+}
 if (isset($_GET['username'])) {
     get_recipes_per_user($_GET['username']);
-} elseif (isset($_GET['group_name'])) {
-    get_recipes_per_group($_GET['group_name']);
+} elseif (isset($_GET['recipe_name'])) {
+    get_group_per_recipes($_GET['recipe_name']);
 } else {
     get_public_recipes();
     //list_all_recipe_permissions();
