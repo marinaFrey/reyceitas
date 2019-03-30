@@ -10,7 +10,8 @@ export class Recipe {
     preparation: Array<string>;
     tags: Array<number>;
     userId: number;
-    authenticationLevelRequired: number;
+    globalAuthenticationLevel: number;
+    groupsAuthenticationLevel: RecipeVisibility[];
 }
 
 export class Ingredient {

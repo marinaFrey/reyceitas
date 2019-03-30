@@ -140,12 +140,12 @@
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
                 <i class="fa fa-clock" aria-hidden="true"></i>
               </div>
-              <div class="col-md-6 col-sm-6 col-xs-6 text-center">Tempo</div>
+              <p class="col-md-6 col-sm-6 col-xs-6 text-center">Tempo</p>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
                 <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.duration" placeholder="duração" ng-disabled="editing">
-                <div *ngIf="!editing">
+                <p *ngIf="!editing">
                   {{recipe.duration}}
-                </div>
+                </p>
               </div>
             </div>
 
@@ -449,6 +449,15 @@
                 </tr>
               </thead>
               <tbody>
+                <td style="background-color: #ececec">Público</td>
+                <td class="recipe-info" style="background-color: #ececec">
+                  <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                  <input type="checkbox" class="form-check-input" id="visibilityPublic" (click)="setVisibilityCheckboxes('visibilityPublic')">
+                </td>
+                <td class="recipe-info" style="background-color: #ececec">
+                  <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                  <input type="checkbox" class="form-check-input" id="editingPublic" (click)="setVisibilityCheckboxes('editingPublic')">
+                </td>
                 <tr *ngFor="let group of userGroups;let index = index;trackBy:trackByFn">
                   <td>{{group.name}}</td>
                   <td class="recipe-info">

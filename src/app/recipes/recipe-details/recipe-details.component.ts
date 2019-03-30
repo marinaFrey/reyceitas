@@ -73,7 +73,8 @@ export class RecipeDetailsComponent implements OnInit {
         preparation: [""],
         tags: [],
         userId: null,
-        authenticationLevelRequired: 0
+        globalAuthenticationLevel: 0,
+        groupsAuthenticationLevel: []
       };
 
     const id = +this.route.snapshot.paramMap.get('id');
@@ -138,6 +139,13 @@ export class RecipeDetailsComponent implements OnInit {
     if (id == 'visibilityAll') {
       var state = (<HTMLInputElement>document.getElementById('visibilityAll')).checked;
 
+      var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibilityPublic'));
+      var editingCheckbox = (<HTMLInputElement>document.getElementById('editingPublic'));
+      visibilityCheckbox.checked = state;
+      if (editingCheckbox.checked) {
+        visibilityCheckbox.checked = true;
+      }
+
       for (var i = 0; i < this.userGroups.length; i++) {
         var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.userGroups[i].id));
         var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + this.userGroups[i].id));
@@ -152,6 +160,14 @@ export class RecipeDetailsComponent implements OnInit {
     if (id == 'editingAll') {
       var state = (<HTMLInputElement>document.getElementById('editingAll')).checked;
       (<HTMLInputElement>document.getElementById('visibilityAll')).checked = true;
+
+      if (state == true) {
+        var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibilityPublic'));
+        visibilityCheckbox.checked = state;
+      }
+      var editingCheckbox =(<HTMLInputElement>document.getElementById('editingPublic'));
+      editingCheckbox.checked = state;
+
       for (var i = 0; i < this.userGroups.length; i++) {
         if (state == true) {
           var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.userGroups[i].id));
@@ -163,6 +179,16 @@ export class RecipeDetailsComponent implements OnInit {
       }
       return;
     }
+
+    if (id == 'visibilityPublic' || id == 'editingPublic') {
+      var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibilityPublic'));
+      var editingCheckbox = (<HTMLInputElement>document.getElementById('editingPublic'));
+      if (editingCheckbox.checked) {
+        visibilityCheckbox.checked = true;
+      }
+      return;
+    }
+
     var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + id));
     var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + id));
     if (editingCheckbox.checked) {
@@ -311,8 +337,7 @@ export class RecipeDetailsComponent implements OnInit {
       window.alert("Por Favor adicione um nome à receita.");
       return;
     }
-    else
-    {
+    else {
       element.classList.remove("is-invalid");
     }
     if (this.recipeService.getUserLevel() > 0) {

@@ -49,9 +49,16 @@
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.15);
     -moz-box-shadow: 0 1px 0 rgba(0,0,0,.15);
     box-shadow: 0 1px 0 rgba(0,0,0,.15);
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .recipe-info i {
     color: #487bce;
+  }
+  .recipe-info p {
+    margin: 0
   }
   .recipe-ingredients {
     background-color: #f9f9f9;
@@ -94,6 +101,7 @@
     -moz-box-shadow: 0 1px 0 rgba(0,0,0,.15);
     box-shadow: 0 1px 0 rgba(0,0,0,.15);
   }
+
   .recipe-directions ol {
       counter-reset: li;
       list-style: none;
@@ -148,6 +156,9 @@
   .recipe-directions li:hover:after{
       left: -.5em;
       border-left-color: #487bce;
+  }
+  .recipe-directions button {
+    margin:0;
   }
 
   input {
