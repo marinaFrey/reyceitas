@@ -51,8 +51,8 @@ function get_public_recipes()
         $resArrVals[$i]['preparation']= array();
         $resArrVals[$i]['tags']= array();
         $resArrVals[$i]['photos']= array();
-        $resArrVals[$i]['groups']= array();
-        $resArrVals[$i]['global_authentication_level']=$row['global_authentication_level'];
+        $resArrVals[$i]['groupsAuthenticationLevel']= array();
+        $resArrVals[$i]['globalAuthenticationLevel']=$row['global_authentication_level'];
         $mapIdToData[$resArrVals[$i]['id']] = $i;
         $i++;
     }
@@ -63,7 +63,6 @@ function get_public_recipes()
         fill_ingredients_for_recipes($mapIdToData, $resArrVals);
         fill_tags_for_recipes($mapIdToData, $resArrVals);
         fill_photos_for_recipes($mapIdToData, $resArrVals);
-        fill_groups_for_recipes($mapIdToData, $resArrVals);
 
         echo json_encode($resArrVals);
     }
@@ -112,8 +111,8 @@ function get_recipes_per_user($username)
             $resArrVals[$i]['preparation']= array();
             $resArrVals[$i]['tags']= array();
             $resArrVals[$i]['photos']= array();
-            $resArrVals[$i]['groups']= array();
-            $resArrVals[$i]['authenticationLevel']=$row['group_authentication_level'];
+            $resArrVals[$i]['groupsAuthenticationLevel']= array();
+            //$resArrVals[$i]['authenticationLevel']=$row['group_authentication_level'];
             $resArrVals[$i]['globalAuthenticationLevel']=$row['global_authentication_level'];
             $mapIdToData[$resArrVals[$i]['id']] = $i;
             $i++;
@@ -127,7 +126,7 @@ function get_recipes_per_user($username)
         fill_ingredients_for_recipes($mapIdToData, $resArrVals);
         fill_tags_for_recipes($mapIdToData, $resArrVals);
         fill_photos_for_recipes($mapIdToData, $resArrVals);
-        fill_groups_for_recipes($mapIdToData, $resArrVals);
+        fill_groups_for_recipes($mapIdToData, $resArrVals, $username);
 
         echo json_encode($resArrVals);
     }
@@ -155,23 +154,28 @@ function get_group_per_recipes($recipe_name)
         echo json_encode($resArrVals);
     }
 }
-function fill_groups_for_recipes(&$mapIdToRecip, &$resArrVals) 
+function fill_groups_for_recipes(&$mapIdToRecip, &$resArrVals, $username) 
 {
     $db = connect();
     $sql = "SELECT *, r.name AS recipe_name, g.name AS group_name, rp.authentication_level AS group_authentication_level FROM recipe_permissions AS rp";
     $sql.= " INNER JOIN groups AS g ON rp.group_id = g.group_id";
     $sql.= " INNER JOIN recipes AS r ON rp.recipe_id = r.recipe_id";
+    $sql.= " INNER JOIN user_groups AS ug ON rp.group_id = ug.group_id";
+    $sql.= " INNER JOIN users AS u ON ug.user_id = u.user_id";
     $sql.= " ORDER BY group_authentication_level desc";
     $stmt= $db->prepare($sql);
+    //$stmt->bindValue(':username', $username, SQLITE3_TEXT);
     $ret= $stmt->execute();
-    $ret = $db->query($sql);
     while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
     {
-        $i_recip = $mapIdToRecip[$row['recipe_id']];
-        $groups['groupId'] = $row['group_id'];
-        $groups['groupName'] = $row['group_name'];
-        $groups['authenticationLevel'] = $row['group_authentication_level'];
-        $v = array_push($resArrVals[$i_recip]['groups'],$groups);
+        if(array_key_exists($row['recipe_id'],$mapIdToRecip))
+        {
+            $i_recip = $mapIdToRecip[$row['recipe_id']];
+            $groups['groupId'] = $row['group_id'];
+            $groups['groupName'] = $row['group_name'];
+            $groups['authenticationLevel'] = $row['group_authentication_level'];
+            $v = array_push($resArrVals[$i_recip]['groupsAuthenticationLevel'],$groups);
+        }
     }
 }
 if (isset($_GET['username'])) {

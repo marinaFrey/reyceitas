@@ -13,10 +13,14 @@ function fill_tags_for_recipes(&$mapIdToRecip, &$resArrVals) {
 EOF;
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
-        $tag_id = $row["src_tag"];
-        $i_recip = $mapIdToRecip[$row['src_recipe']];
-        $v = array_push($resArrVals[$i_recip]['tags'], $tag_id);
+    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
+    {
+        if(array_key_exists($row['src_recipe'],$mapIdToRecip))
+        {
+            $tag_id = $row["src_tag"];
+            $i_recip = $mapIdToRecip[$row['src_recipe']];
+            $v = array_push($resArrVals[$i_recip]['tags'], $tag_id);
+        }
     }
 }
 
@@ -28,12 +32,16 @@ function fill_ingredients_for_recipes(&$mapIdToRecip, &$resArrVals) {
 EOF;
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
-        $ingred = array( "id" => $row["ingr_id"], "name" => $row["description"],
-            "amount" => $row["quantity"], "unit" => $row["unit_name"]);
-               
-        $i_recip = $mapIdToRecip[$row['src_recipe']];
-        array_push($resArrVals[$i_recip]['ingredients'], $ingred);
+    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
+    {
+        if(array_key_exists($row['src_recipe'],$mapIdToRecip))
+        {
+            $ingred = array( "id" => $row["ingr_id"], "name" => $row["description"],
+                "amount" => $row["quantity"], "unit" => $row["unit_name"]);
+                   
+            $i_recip = $mapIdToRecip[$row['src_recipe']];
+            array_push($resArrVals[$i_recip]['ingredients'], $ingred);
+        }
     }
 }
 
@@ -44,10 +52,14 @@ function fill_steps_for_recipes(&$mapIdToRecip, &$resArrVals) {
 EOF;
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
-        $i_recip = $mapIdToRecip[$row['src_recipe']];
-        $v = array_push($resArrVals[$i_recip]['preparation'],
-            $row['description']);
+    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
+    {
+        if(array_key_exists($row['src_recipe'],$mapIdToRecip))
+        {
+            $i_recip = $mapIdToRecip[$row['src_recipe']];
+            $v = array_push($resArrVals[$i_recip]['preparation'],
+                $row['description']);
+        }
     }
 }
 
@@ -59,10 +71,14 @@ function fill_photos_for_recipes(&$mapIdToRecip, &$resArrVals) {
 EOF;
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
-        $i_recip = $mapIdToRecip[$row['src_recipe']];
-        $v = array_push($resArrVals[$i_recip]['photos'],
-            $row['file_name']);
+    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
+    {
+        if(array_key_exists($row['src_recipe'],$mapIdToRecip))
+        {
+            $i_recip = $mapIdToRecip[$row['src_recipe']];
+            $v = array_push($resArrVals[$i_recip]['photos'],
+                $row['file_name']);
+        }
     }
 }
 
