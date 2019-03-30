@@ -31,7 +31,10 @@
         <h1 class="row">
           <div class="col-md-6 col-sm-6 col-xs-6">
             <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.name" placeholder="nome da receita" ng-disabled="editing"
-              style="padding:20px; margin-bottom:10px;">
+              style="padding:20px; margin-bottom:10px;" id="recipeNameEditor">
+            <div class="invalid-feedback">
+              A receita precisa ter um nome para ser salva.
+            </div>
           </div>
           <div class="col-md-6 col-sm-6 col-xs-6">
             <button *ngIf="!newRecipe" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
@@ -54,8 +57,7 @@
         <div class="col-md-8 wow swing " *ngIf="!editing && recipe.photos && recipe.photos.length > 0">
           <div id="carouselExampleIndicators" class="carousel slide recipe-picture" data-ride="carousel">
             <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn"
-                [ngClass]="{active: index == 0}"></li>
+              <li data-target="#carouselExampleIndicators" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" [ngClass]="{active: index == 0}"></li>
             </ol>
             <div class="carousel-inner">
               <div class="item" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn" [ngClass]="{active: index == 0}">
@@ -82,29 +84,36 @@
           <div class="image-info">
             <h3>Imagens</h3>
 
-            <!-- Time -->
             <div class="row" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn">
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
                 <img class="thumbnail-image" [src]="getImageSrc(index)">
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 text-left">
-                <button class="btn btn-primary" (click)="reuploadImage(index)">
-                  <i class="fa fa-upload" style="color:white" aria-hidden="true"></i>
-                  Fazer Re-upload da Imagem
-                </button>
-              </div>
-              <div class="col-md-4 col-sm-4 col-xs-4 text-left">
                 <button class="btn btn-danger" (click)="deleteImage(index)">
                   <i class="fa fa-times" style="color:white" aria-hidden="true"></i>
                   Deletar Imagem
                 </button>
+                <!--
+                  <button class="btn btn-primary" (click)="reuploadImage(index)">
+                  <i class="fa fa-upload" style="color:white" aria-hidden="true"></i>
+                  Fazer Re-upload da Imagem
+                </button>
+                -->
+
+              </div>
+              <div class="col-md-4 col-sm-4 col-xs-4 text-left">
+                <!--
+                <button class="btn btn-danger" (click)="deleteImage(index)">
+                  <i class="fa fa-times" style="color:white" aria-hidden="true"></i>
+                  Deletar Imagem
+                </button>-->
               </div>
             </div>
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-6 text-left">
-                <form  method='post' action='' enctype='multipart/form-data'>
+                <form method='post' action='' enctype='multipart/form-data'>
 
-                  <input id ="fileUploader" type="file" name="file[]" multiple>
+                  <input id="fileUploader" type="file" name="file[]" multiple>
                   <button class="btn btn-primary" (click)="addImage()">
                     <i class="fa fa-upload" style="color:white" aria-hidden="true"></i>
                     Upload
@@ -158,7 +167,7 @@
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 text-center">Dificuldade</div>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
-                <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.difficulty" placeholder="nota" ng-disabled="editing">
+                <input class="form-control" type="number" min="1" *ngIf="editing" [(ngModel)]="recipe.difficulty" placeholder="nota" ng-disabled="editing">
               </div>
             </div>
 
@@ -169,7 +178,7 @@
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 text-center">Serve</div>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
-                <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.servings" placeholder="n pessoas" ng-disabled="editing">
+                <input class="form-control" type="number" min="1" *ngIf="editing" [(ngModel)]="recipe.servings" placeholder="n pessoas" ng-disabled="editing">
                 <div *ngIf="!editing">
                   {{recipe.servings}}
                 </div>
@@ -178,16 +187,20 @@
             </div>
 
             <!-- seen by -->
-            <div class="row">
+            <div class="row" *ngIf="editing">
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
-                <i class="fa fa-user" aria-hidden="true"></i>
+                <i class="fa fa-eye" aria-hidden="true"></i>
               </div>
-              <div class="col-md-6 col-sm-6 col-xs-6 text-center">Visível para</div>
+              <div class="col-md-6 col-sm-6 col-xs-6 text-center">Visibilidade</div>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#visibilityModal">
+                  <i class="fa fa-pencil-alt" style="color:white;"></i>
+                </button>
+                <!--
                 <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.authenticationLevelRequired" placeholder="nivel" ng-disabled="editing">
                 <div *ngIf="!editing">
                   {{recipe.authenticationLevelRequired}}
-                </div>
+                </div>-->
               </div>
             </div>
 
@@ -258,7 +271,7 @@
             <div *ngFor="let ingredient of recipe.ingredients;let index = index;">
               <div class="col-md-11">
                 <dt>
-                  <input class="form-control" type="number" *ngIf="editing" [(ngModel)]="recipe.ingredients[index].amount" placeholder="quantidade"
+                  <input class="form-control" type="number" min="0.1" *ngIf="editing" [(ngModel)]="recipe.ingredients[index].amount" placeholder="quantidade"
                     ng-disabled="editing">
                 </dt>
                 <dd>
@@ -406,3 +419,62 @@
 
   </div>
 </section>
+
+
+<!--visibility modal-->
+<div id="visibilityModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header center-block col-md-12 col-sm-12 col-xs-12 text-center">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h1 class="text-center">Gerenciar Visibilidade</h1>
+      </div>
+      <div class="modal-body">
+
+        <form class="form col-md-12 center-block">
+
+          <div *ngIf="userGroups">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nome do Grupo</th>
+                  <th class="recipe-info">
+                    <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="visibilityAll" (click)="setVisibilityCheckboxes('visibilityAll')">
+                  </th>
+                  <th class="recipe-info">
+                    <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="editingAll" (click)="setVisibilityCheckboxes('editingAll')">
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let group of userGroups;let index = index;trackBy:trackByFn">
+                  <td>{{group.name}}</td>
+                  <td class="recipe-info">
+                    <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="visibility{{group.id}}" (click)="setVisibilityCheckboxes(group.id)">
+                  </td>
+                  <td class="recipe-info">
+                    <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="editing{{group.id}}" (click)="setVisibilityCheckboxes(group.id)">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-primary btn-lg btn-block" data-dismiss="modal" (click)="submitVisibilityChanges()">Salvar</button>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <div class="col-md-12">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

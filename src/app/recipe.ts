@@ -27,12 +27,23 @@ export class Tag {
     color: string;
 }
 
+export class RecipeVisibility {
+    recipeId: number;
+    groupId: number;
+    authenticationLevel: number;
+}
+
 export class User {
     id: number;
     username: string;
     password: string;
     fullname: string;
     email: string;
+}
+
+export class UserGroup {
+    id: number;
+    name: string;
 }
 
 export class ChartFormat {

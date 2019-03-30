@@ -4,17 +4,18 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { RecipeService } from '../../recipe.service';
-import { Recipe } from '../../recipe';
+import { Recipe, UserGroup, RecipeVisibility } from '../../recipe';
 import { Tag } from "../../recipe";
 import { md5 } from "../../md5";
+import * as $AB from 'jquery';
+import * as bootstrap from "bootstrap";
 
 @Component({
   selector: 'app-recipe-details',
   templateUrl: './recipe-details.component.html',
   styleUrls: ['./recipe-details.component.css']
 })
-export class RecipeDetailsComponent implements OnInit
-{
+export class RecipeDetailsComponent implements OnInit {
 
   @Input() recipe: Recipe;
   numberOfDifficultyStars: number[];
@@ -23,24 +24,38 @@ export class RecipeDetailsComponent implements OnInit
   tags: Tag[];
   availableTags: Tag[];
   selectedTag: string;
+  userGroups: UserGroup[];
+  recipeVisibility: RecipeVisibility[];
 
   constructor(private route: ActivatedRoute,
     private recipeService: RecipeService,
     private location: Location,
     private router: Router) { }
 
-  ngOnInit()
-  {
+  ngOnInit() {
     this.getRecipe();
+    this.userGroups = [
+      { id: 1, name: "um" },
+      { id: 2, name: "dois" },
+      { id: 3, name: "tres" },
+      { id: 4, name: "quatro" }
+    ];
 
+    this.recipeVisibility = [
+      { recipeId: 0, groupId: 1, authenticationLevel: 1 },
+      { recipeId: 0, groupId: 2, authenticationLevel: 2 },
+      { recipeId: 0, groupId: 3, authenticationLevel: 1 }
+    ];
+    var pointer = this;
+    $('#visibilityModal').on('shown.bs.modal', function (e) {
+      pointer.initializeVisibilityModal();
+    })
   }
 
-  getRecipe(): void
-  {
+  getRecipe(): void {
 
     this.recipeService.getTags()
-      .subscribe(tags =>
-      {
+      .subscribe(tags => {
         this.tags = tags;
         this.filterAvailableTags();
       });
@@ -62,18 +77,15 @@ export class RecipeDetailsComponent implements OnInit
       };
 
     const id = +this.route.snapshot.paramMap.get('id');
-    if (isNaN(id))
-    {
+    if (isNaN(id)) {
       this.recipe.id = null;
 
       this.editing = true;
       this.newRecipe = true;
     }
-    else
-    {
+    else {
       this.recipeService.getRecipe(id)
-        .subscribe(recipe =>
-        {
+        .subscribe(recipe => {
           this.recipe = recipe;
           this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
           if (!this.recipe.tags)
@@ -93,48 +105,124 @@ export class RecipeDetailsComponent implements OnInit
 
   }
 
-  getTagFromId(tagId): string
-  {
+  getTagFromId(tagId): string {
     return this.recipeService.searchTagById(tagId, this.tags);
   }
 
-  goBack(): void
-  {
+  getGroupFromId(groupVisibility) {
+    return this.recipeService.searchGroupById(groupVisibility.groupId, this.userGroups);
+  }
+
+  initializeVisibilityModal() {
+    for (var i = 0; i < this.recipeVisibility.length; i++) {
+
+      var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.recipeVisibility[i].groupId));
+      var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + this.recipeVisibility[i].groupId));
+      if (this.recipeVisibility[i].authenticationLevel == 2) {
+        visibilityCheckbox.checked = true;
+        editingCheckbox.checked = true;
+        continue;
+      }
+      if (this.recipeVisibility[i].authenticationLevel == 1) {
+        visibilityCheckbox.checked = true;
+        editingCheckbox.checked = false;
+        continue;
+      }
+      visibilityCheckbox.checked = false;
+      editingCheckbox.checked = false;
+
+    }
+  }
+
+  setVisibilityCheckboxes(id) {
+    if (id == 'visibilityAll') {
+      var state = (<HTMLInputElement>document.getElementById('visibilityAll')).checked;
+
+      for (var i = 0; i < this.userGroups.length; i++) {
+        var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.userGroups[i].id));
+        var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + this.userGroups[i].id));
+        visibilityCheckbox.checked = state;
+        if (editingCheckbox.checked) {
+          visibilityCheckbox.checked = true;
+        }
+      }
+      return;
+    }
+
+    if (id == 'editingAll') {
+      var state = (<HTMLInputElement>document.getElementById('editingAll')).checked;
+      (<HTMLInputElement>document.getElementById('visibilityAll')).checked = true;
+      for (var i = 0; i < this.userGroups.length; i++) {
+        if (state == true) {
+          var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.userGroups[i].id));
+          visibilityCheckbox.checked = state;
+        }
+        var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + this.userGroups[i].id));
+        editingCheckbox.checked = state;
+
+      }
+      return;
+    }
+    var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + id));
+    var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + id));
+    if (editingCheckbox.checked) {
+      visibilityCheckbox.checked = true;
+    }
+
+  }
+
+  submitVisibilityChanges() {
+    this.recipeVisibility = [];
+    for (var i = 0; i < this.userGroups.length; i++) {
+      var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.userGroups[i].id));
+      var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + this.userGroups[i].id));
+      var groupVisibility = new RecipeVisibility();
+
+      if (editingCheckbox.checked) {
+        groupVisibility.groupId = this.userGroups[i].id;
+        groupVisibility.recipeId = this.recipe.id;
+        groupVisibility.authenticationLevel = 2;
+        this.recipeVisibility.push(groupVisibility);
+      }
+      else if (visibilityCheckbox.checked) {
+        groupVisibility.groupId = this.userGroups[i].id;
+        groupVisibility.recipeId = this.recipe.id;
+        groupVisibility.authenticationLevel = 1;
+        this.recipeVisibility.push(groupVisibility);
+      }
+    }
+    console.log(this.recipeVisibility);
+  }
+
+  goBack(): void {
     this.location.back();
   }
 
-  toggleEditing(): void
-  {
-    if (this.recipeService.getUserLevel() > 1) 
-    {
+  toggleEditing(): void {
+    if (this.recipeService.getUserLevel() > 1) {
       this.editing = !this.editing;
     }
 
-    else
-    {
+    else {
       window.alert("Você não possui autorização para realizar modificações no banco de dados!");
     }
 
   }
 
-  getImageSrc(index)
-  {
+  getImageSrc(index) {
     return "../../../../backend/uploads/" + this.recipe.photos[index];
   }
 
-  addImage(): void
-  {
+  addImage(): void {
     const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
     const url = 'http://localhost:8000/upload_file.php'
 
     const formData = new FormData()
-    for (let i = 0; i < files.length; i++) 
-    {
+    for (let i = 0; i < files.length; i++) {
       var file = files[i]
       var fileHashedName = md5((file.lastModified + Date.now() + file.size).toString())
       var filename = fileHashedName + this.recipe.photos.length + '.' + file.name.split('.').pop();
-      if (!this.recipe.photos)
-      {
+      if (!this.recipe.photos) {
         this.recipe.photos = [];
       }
       this.recipe.photos.push(filename);
@@ -144,85 +232,68 @@ export class RecipeDetailsComponent implements OnInit
     fetch(url, {
       method: 'POST',
       body: formData,
-    }).then(response =>
-    {
+    }).then(response => {
       console.log(response)
     })
   }
 
-  reuploadImage(imgIndex): void
-  {
+  reuploadImage(imgIndex): void {
 
   }
 
-  deleteImage(imgIndex): void
-  {
+  deleteImage(imgIndex): void {
     // pode usar recipe.photos[imgIndex] para pegar a URL da imagem e retirar do banco de dados
     this.recipe.photos.splice(imgIndex, 1);
   }
 
-  addIngredient(): void
-  {
+  addIngredient(): void {
     if (this.recipe.ingredients)
       this.recipe.ingredients.push({ id: 10, name: "", amount: null, unit: "" });
-    else
-    {
+    else {
       this.recipe.ingredients = [];
       this.recipe.ingredients.push({ id: 10, name: "", amount: null, unit: "" });
     }
   }
 
-  removeIngredient(index: number): void
-  {
+  removeIngredient(index: number): void {
     this.recipe.ingredients.splice(index, 1);
   }
 
-  addDirection(): void
-  {
+  addDirection(): void {
     if (this.recipe.preparation)
       this.recipe.preparation.push("");
-    else
-    {
+    else {
       this.recipe.preparation = [];
       this.recipe.preparation.push("");
     }
 
   }
 
-  removeDirection(index: number): void
-  {
+  removeDirection(index: number): void {
     this.recipe.preparation.splice(index, 1);
   }
 
-  removeTag(index: number): void
-  {
+  removeTag(index: number): void {
     this.recipe.tags.splice(index, 1);
   }
 
-  addTag(): void
-  {
-    if (this.recipe.tags)
-    {
+  addTag(): void {
+    if (this.recipe.tags) {
       this.recipe.tags.push(+this.selectedTag);
       this.filterAvailableTags();
     }
-    else
-    {
+    else {
       this.recipe.tags = [];
       this.recipe.tags.push(+this.selectedTag);
       this.filterAvailableTags();
     }
   }
 
-  filterAvailableTags(): void
-  {
+  filterAvailableTags(): void {
     this.availableTags = JSON.parse(JSON.stringify(this.tags));
-    for (var i = 0; i < this.tags.length; i++)
-    {
-      for (var j = 0; j < this.recipe.tags.length; j++)
-      {
-        if (this.tags[i].id == this.recipe.tags[j])
-        {
+    for (var i = 0; i < this.tags.length; i++) {
+      for (var j = 0; j < this.recipe.tags.length; j++) {
+        if (this.tags[i].id == this.recipe.tags[j]) {
           var index = this.availableTags.map(function (d) { return d.id }).indexOf(this.recipe.tags[j]);
           this.availableTags.splice(index, 1);
         }
@@ -230,14 +301,24 @@ export class RecipeDetailsComponent implements OnInit
     }
   }
 
-  save(): void
-  {
-    if (this.recipeService.getUserLevel() > 0)
+
+
+  save(): void {
+    var element = document.getElementById("recipeNameEditor");
+    if (!this.recipe.name) {
+
+      element.classList.add("is-invalid");
+      window.alert("Por Favor adicione um nome à receita.");
+      return;
+    }
+    else
     {
+      element.classList.remove("is-invalid");
+    }
+    if (this.recipeService.getUserLevel() > 0) {
       this.toggleEditing();
       this.numberOfDifficultyStars = [];
-      for (let i = 0; i < this.recipe.difficulty; i++)
-      {
+      for (let i = 0; i < this.recipe.difficulty; i++) {
         this.numberOfDifficultyStars.push(1);
       }
       if (this.newRecipe)
@@ -246,31 +327,25 @@ export class RecipeDetailsComponent implements OnInit
         this.recipeService.editRecipe(this.recipe);
       this.router.navigateByUrl('recipes/all');
     }
-    else
-    {
+    else {
       window.alert("Você não possui autorização para realizar modificações no banco de dados!");
     }
 
   }
 
-  delete(): void
-  {
-    if (this.recipeService.getUserLevel() > 1)
-    {
-      if (confirm("Você tem certeza que deseja deletar esta receita? Essa ação é irreversível."))
-      {
+  delete(): void {
+    if (this.recipeService.getUserLevel() > 1) {
+      if (confirm("Você tem certeza que deseja deletar esta receita? Essa ação é irreversível.")) {
         this.recipeService.deleteRecipe(this.recipe);
         this.goBack();
       }
     }
-    else
-    {
+    else {
       window.alert("Você não possui autorização para realizar modificações no banco de dados!");
     }
   }
 
-  trackByFn(index: any, item: any)
-  {
+  trackByFn(index: any, item: any) {
     return index;
   }
 }

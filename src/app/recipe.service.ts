@@ -247,7 +247,15 @@ export class RecipeService {
     }
   }
 
-
+  searchGroupById(groupId, groupList): string {
+    if (groupList) {
+      for (var i = 0; i < groupList.length; i++) {
+        if (groupList[i].id == groupId) {
+          return groupList[i].name;
+        }
+      }
+    }
+  }
 
   searchTerm(this: string, value: Recipe, index: number, obj: Recipe[]): Recipe {
 
