@@ -95,6 +95,7 @@ export class NavigationBarComponent implements OnInit
                     this.fullnameSession = user_list[0].fullname;
                     this.emailSession = user_list[0].email;
                     this.usernameSession = user_list[0].username;
+                    this.recipeService.login(user_list[0]);
 
                 } else
                 {

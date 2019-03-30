@@ -18,17 +18,35 @@ import { map } from 'rxjs/operators';
 export class RecipeService {
 
   userLevel = 2;
+    //Session variables
+    isLoggedIn: boolean;
+    userIdSession: number;
+    usernameSession: string;
+    fullnameSession: string;
+    emailSession: string;
 
   constructor(private messageService: MessageService,
     private httpCli: HttpClient) { }
 
+    login(user: User): void
+    {
+        this.userIdSession = user.id;
+        this.usernameSession = user.username;
+        this.fullnameSession = user.fullname;
+        this.emailSession = user.email;
+        this.isLoggedIn = true;
+        console.log("logged in")
+    }
+    logout(): void
+    {
+        this.isLoggedIn = false;
+        console.log("logged out")
+    }
   getRecipes(): Observable<Recipe[]> {
     this.messageService.add('RecipeService: fetched recipes');
 
     var recps = this.httpCli.get<Recipe[]>(
       "http://localhost:8000/get_recipes.php");
-
-
     return recps;
     // return of(RECIPES);
   }
