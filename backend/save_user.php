@@ -8,10 +8,19 @@ if (isset($_GET['user']))
 {
     $obj = json_decode($_GET['user']);
     $sql = <<<EOF
-    INSERT INTO users (username, full_name, email, password) VALUES ('$obj->username','$obj->fullname','$obj->email', '$obj->password');
+    INSERT INTO users (username, full_name, email, password, authentication_level)
+        VALUES (:usr_nm, :full_nm, :mail, :pwd, 0);
 EOF;
+
     $db = connect();
-    $ret = $db->query($sql);
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':usr_nm', $obj->username, SQLITE3_TEXT);
+    $stmt->bindValue(':full_nm', $obj->fullname, SQLITE3_TEXT);
+    $stmt->bindValue(':mail', $obj->email, SQLITE3_TEXT);
+    $stmt->bindValue(':pwd', $obj->password, SQLITE3_TEXT);
+
+
+    $ret = $stmt->execute();
     if(!$ret) {
         echo -1;
         return -1;
@@ -26,11 +35,17 @@ if (isset($_GET['user_edit']))
     $obj = json_decode($_GET['user_edit']);
     $sql = <<<EOF
     UPDATE users 
-    SET full_name = '$obj->fullname', email = '$obj->email', password ='$obj->password'
-    WHERE username = '$obj->username';
+    SET full_name = :full_nm, email = :mail, password = :pwd
+    WHERE username = :usr_nm ;
 EOF;
     $db = connect();
-    $ret = $db->query($sql);
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':full_nm', $obj->fullname, SQLITE3_TEXT);
+    $stmt->bindValue(':mail', $obj->email, SQLITE3_TEXT);
+    $stmt->bindValue(':pwd', $obj->password, SQLITE3_TEXT);
+    $stmt->bindValue(':usr_nm', $obj->username, SQLITE3_TEXT);
+
+    $ret = $stmt->execute();
     if(!$ret) {
         echo -1;
         return -1;
