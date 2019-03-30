@@ -21,9 +21,24 @@ function connect() {
 
 function create_tables() {
     $sql =<<<EOF
+    CREATE TABLE IF NOT EXISTS groups(
+        group_id INTEGER PRIMARY KEY,
+        name TEXT UNIQUE
+    );
+    CREATE TABLE IF NOT EXISTS user_groups (
+        user_group_id INTEGER PRIMARY KEY,
+        user_id INTEGER,
+        group_id INTEGER
+    );
+    CREATE TABLE IF NOT EXISTS recipe_permissions(
+        recipe_permissions_id INTEGER PRIMARY KEY,
+        recipe_id INTEGER,
+        group_id INTEGER,
+        authentication_level INTEGER
+    );
     CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY,
-        username TEXT,
+        username TEXT UNIQUE,
         password TEXT,
         email TEXT,
         full_name TEXT,
@@ -183,7 +198,7 @@ EOF;
 }
 
 // connect();
-// create_tables();
+ create_tables();
 // populate_with_dummy_info();
 // populateTags();
 
