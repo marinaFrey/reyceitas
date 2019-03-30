@@ -28,9 +28,14 @@ export class Tag {
     color: string;
 }
 
+export class Group {
+    id: number;
+    name: string;
+}
+
 export class RecipeVisibility {
-    recipeId: number;
     groupId: number;
+    groupName: string;
     authenticationLevel: number;
 }
 
@@ -40,11 +45,6 @@ export class User {
     password: string;
     fullname: string;
     email: string;
-}
-
-export class UserGroup {
-    id: number;
-    name: string;
 }
 
 export class ChartFormat {

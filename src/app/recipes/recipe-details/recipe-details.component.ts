@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { RecipeService } from '../../recipe.service';
-import { Recipe, UserGroup, RecipeVisibility } from '../../recipe';
+import { Recipe, Group, RecipeVisibility } from '../../recipe';
 import { Tag } from "../../recipe";
 import { md5 } from "../../md5";
 import * as $AB from 'jquery';
@@ -24,8 +24,7 @@ export class RecipeDetailsComponent implements OnInit {
   tags: Tag[];
   availableTags: Tag[];
   selectedTag: string;
-  userGroups: UserGroup[];
-  recipeVisibility: RecipeVisibility[];
+  userGroups: Group[];
 
   constructor(private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -41,11 +40,6 @@ export class RecipeDetailsComponent implements OnInit {
       { id: 4, name: "quatro" }
     ];
 
-    this.recipeVisibility = [
-      { recipeId: 0, groupId: 1, authenticationLevel: 1 },
-      { recipeId: 0, groupId: 2, authenticationLevel: 2 },
-      { recipeId: 0, groupId: 3, authenticationLevel: 1 }
-    ];
     var pointer = this;
     $('#visibilityModal').on('shown.bs.modal', function (e) {
       pointer.initializeVisibilityModal();
@@ -115,24 +109,43 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   initializeVisibilityModal() {
-    for (var i = 0; i < this.recipeVisibility.length; i++) {
-
-      var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.recipeVisibility[i].groupId));
-      var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + this.recipeVisibility[i].groupId));
-      if (this.recipeVisibility[i].authenticationLevel == 2) {
+    if (this.recipe.globalAuthenticationLevel) {
+      var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibilityPublic'));
+      var editingCheckbox = (<HTMLInputElement>document.getElementById('editingPublic'));
+      if (this.recipe.globalAuthenticationLevel == 2) {
         visibilityCheckbox.checked = true;
         editingCheckbox.checked = true;
-        continue;
       }
-      if (this.recipeVisibility[i].authenticationLevel == 1) {
+      else if (this.recipe.globalAuthenticationLevel == 1) {
         visibilityCheckbox.checked = true;
         editingCheckbox.checked = false;
-        continue;
       }
-      visibilityCheckbox.checked = false;
-      editingCheckbox.checked = false;
-
+      else {
+        visibilityCheckbox.checked = false;
+        editingCheckbox.checked = false;
+      }
     }
+    if (this.recipe.groupsAuthenticationLevel) {
+      for (var i = 0; i < this.recipe.groupsAuthenticationLevel.length; i++) {
+
+        var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.recipe.groupsAuthenticationLevel[i].groupId));
+        var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + this.recipe.groupsAuthenticationLevel[i].groupId));
+        if (this.recipe.groupsAuthenticationLevel[i].authenticationLevel == 2) {
+          visibilityCheckbox.checked = true;
+          editingCheckbox.checked = true;
+          continue;
+        }
+        if (this.recipe.groupsAuthenticationLevel[i].authenticationLevel == 1) {
+          visibilityCheckbox.checked = true;
+          editingCheckbox.checked = false;
+          continue;
+        }
+        visibilityCheckbox.checked = false;
+        editingCheckbox.checked = false;
+
+      }
+    }
+
   }
 
   setVisibilityCheckboxes(id) {
@@ -165,7 +178,7 @@ export class RecipeDetailsComponent implements OnInit {
         var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibilityPublic'));
         visibilityCheckbox.checked = state;
       }
-      var editingCheckbox =(<HTMLInputElement>document.getElementById('editingPublic'));
+      var editingCheckbox = (<HTMLInputElement>document.getElementById('editingPublic'));
       editingCheckbox.checked = state;
 
       for (var i = 0; i < this.userGroups.length; i++) {
@@ -198,7 +211,19 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   submitVisibilityChanges() {
-    this.recipeVisibility = [];
+
+    var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibilityPublic'));
+    var editingCheckbox = (<HTMLInputElement>document.getElementById('editingPublic'));
+    this.recipe.globalAuthenticationLevel = 0;
+    if(editingCheckbox.checked)
+    {
+      this.recipe.globalAuthenticationLevel = 2;
+    } else if(visibilityCheckbox.checked)
+    {
+      this.recipe.globalAuthenticationLevel = 1;
+    }
+
+    this.recipe.groupsAuthenticationLevel = [];
     for (var i = 0; i < this.userGroups.length; i++) {
       var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibility' + this.userGroups[i].id));
       var editingCheckbox = (<HTMLInputElement>document.getElementById('editing' + this.userGroups[i].id));
@@ -206,18 +231,16 @@ export class RecipeDetailsComponent implements OnInit {
 
       if (editingCheckbox.checked) {
         groupVisibility.groupId = this.userGroups[i].id;
-        groupVisibility.recipeId = this.recipe.id;
         groupVisibility.authenticationLevel = 2;
-        this.recipeVisibility.push(groupVisibility);
+        this.recipe.groupsAuthenticationLevel.push(groupVisibility);
       }
       else if (visibilityCheckbox.checked) {
         groupVisibility.groupId = this.userGroups[i].id;
-        groupVisibility.recipeId = this.recipe.id;
         groupVisibility.authenticationLevel = 1;
-        this.recipeVisibility.push(groupVisibility);
+        this.recipe.groupsAuthenticationLevel.push(groupVisibility);
       }
     }
-    console.log(this.recipeVisibility);
+
   }
 
   goBack(): void {
