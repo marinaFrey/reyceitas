@@ -4,9 +4,7 @@ require 'connect.php';
 
 function list_all_users() {
     $db = connect();
-    $sql =<<<EOF
-    SELECT * FROM users; 
-EOF;
+    $sql = "SELECT * FROM users";
     $mapIdToData [] = array();
     $ret = $db->query($sql);
 
@@ -30,9 +28,7 @@ EOF;
 }
 function get_user($username) {
     $db = connect();
-    $sql =<<<EOF
-    SELECT * FROM users where username = :usr_nm; 
-EOF;
+    $sql = "SELECT * FROM users where username = :usr_nm" ;
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':usr_nm', $username, SQLITE3_TEXT);
     $ret = $stmt->execute();

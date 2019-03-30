@@ -34,9 +34,11 @@ function create_tables() {
     );
     CREATE TABLE IF NOT EXISTS recipe_permissions(
         recipe_permissions_id INTEGER PRIMARY KEY,
-        recipe_id INTEGER,
-        group_id INTEGER,
-        authentication_level INTEGER
+        recipe_id INTEGER NOT NULL,
+        group_id INTEGER NOT NULL,
+        authentication_level INTEGER,
+        FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE,
+        FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE
     );
     CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY,
@@ -128,15 +130,16 @@ EOF;
 
 function populate_with_dummy_info() {
     $sql =<<<EOF
-    INSERT INTO users (user_id, username, full_name, password) VALUES (42, "testudo", "testy mactesterson", "123");
-    INSERT INTO users (user_id, username, full_name, password) VALUES (1, "testinho", "testinho testado", "1234");
-    INSERT INTO users (user_id, username, full_name, password) VALUES (2, "testículo", "testículo testação", "12345");
+    INSERT INTO users (username, full_name, password) VALUES ("testinho", "testinho testado", "1234");
+    INSERT INTO users (username, full_name, password) VALUES ("testículo", "testículo testação", "12345");
+    INSERT INTO users (username, full_name, password) VALUES ("testando", "testículo testação", "12345");
+
 
     INSERT INTO recipes
         (recipe_id, owner, name, difficulty, n_served, duration, description)
     VALUES
-        (101, 42, "test recipe", 1, 2, '1:00H', 'test'),
-        (102, 42, "test recipe2", 3, 4, '2:00H', 'teste2');
+        (101, 2, "test recipe", 1, 2, '1:00H', 'test'),
+        (102, 2, "test recipe2", 3, 4, '2:00H', 'teste2');
         
 
     INSERT INTO recipe_ingredients
@@ -202,13 +205,13 @@ function populateUserGroups()
 {
 
   $sql =<<<EOF
-INSERT INTO users (user_id, username, full_name, password) VALUES (42, "testudo", "testy mactesterson", "123");
-INSERT INTO users (user_id, username, full_name, password) VALUES (1, "testinho", "testinho testado", "1234");
-INSERT INTO users (user_id, username, full_name, password) VALUES (2, "testículo", "testículo testação", "12345");
 INSERT INTO groups (group_id, name) VALUES (1,"grupinho");
 INSERT INTO groups (group_id, name) VALUES (2,"grupa");
 INSERT INTO user_groups (user_id, group_id) VALUES (2, 2);
 INSERT INTO user_groups (user_id, group_id) VALUES (1, 1);
+INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (101, 1, 1);
+INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (101, 2, 1);
+INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (102, 2, 1);
 EOF;
     $db = connect();
     $ret = $db->exec($sql);
@@ -221,9 +224,9 @@ EOF;
 
 // connect();
 // create_tables();
+// populateTags();
 // populate_with_dummy_info();
 // populateUserGroups();
-// populateTags();
 
 
 ?>
