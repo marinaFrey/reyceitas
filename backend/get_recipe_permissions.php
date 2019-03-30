@@ -36,7 +36,6 @@ function get_public_recipes()
     $sql = "SELECT * FROM recipes";
     $sql.= " WHERE global_authentication_level != 0";
     $stmt= $db->prepare($sql);
-    $stmt->bindValue(':username', $username, SQLITE3_TEXT);
     $ret= $stmt->execute();
 
     $mapIdToData [] = array();
