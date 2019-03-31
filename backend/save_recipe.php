@@ -15,7 +15,7 @@ EOF;
         $db = connect();
         $stmt = $db->prepare($sql);
         // TODO: Change once auth is added.
-        $stmt->bindValue(':owner', $recipe->servings, PDO::PARAM_INT);
+        $stmt->bindValue(':owner', $recipe->userId, PDO::PARAM_INT);
         $stmt->bindValue(':name', $recipe->name, PDO::PARAM_STR);
         $stmt->bindValue(':difficulty', $recipe->difficulty, PDO::PARAM_INT);
         $stmt->bindValue(':n_served', $recipe->servings, PDO::PARAM_INT);
@@ -99,7 +99,21 @@ EOF;
                 echo $stmt->errorInfo();
             }
         }
-        echo $recipe_id;
+        $sql = <<<EOF
+            INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level)
+            VALUES (:recp_id, :group_id, :authentication_level);
+EOF;
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':recp_id', $recipe_id, PDO::PARAM_INT);
+        foreach($recipe->groupsAuthenticationLevel as $group)
+        {
+            $stmt->bindValue(':group_id', $group->groupId, PDO::PARAM_STR);
+            $stmt->bindValue(':authentication_level', $group->authenticationLevel, PDO::PARAM_STR);
+            $ret2 = $stmt->execute();
+            if(!$ret2) {
+                echo $stmt->errorInfo();
+            }
+        }
 
     }
 

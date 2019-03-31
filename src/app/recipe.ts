@@ -3,6 +3,7 @@ export class Recipe {
     name: string;
     photos: string[];
     duration: string;
+    username: string;
     difficulty: number; // 1 to 5
     servings: number;
     description: string;
@@ -45,6 +46,7 @@ export class User {
     password: string;
     fullname: string;
     email: string;
+    authenticationLevel: number;
 }
 
 export class ChartFormat {

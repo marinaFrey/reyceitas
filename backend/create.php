@@ -48,7 +48,7 @@ function create_tables() {
         password TEXT,
         email TEXT,
         full_name TEXT,
-        authentication_level INTEGER
+        authentication_level INTEGER DEFAULT 1
     );
 
     CREATE TABLE IF NOT EXISTS recipes (
@@ -136,6 +136,7 @@ function populate_with_dummy_info() {
     INSERT INTO users (username, full_name, password) VALUES ("testinho", "testinho testado", "1234");
     INSERT INTO users (username, full_name, password) VALUES ("testículo", "testículo testação", "12345");
     INSERT INTO users (username, full_name, password) VALUES ("testando", "testículo testação", "12345");
+    INSERT INTO users (username, full_name, password, authentication_level) VALUES ("root", "root", "81dc9bdb52d04dc20036dbd8313ed055", "2");
 
 
     INSERT INTO recipes

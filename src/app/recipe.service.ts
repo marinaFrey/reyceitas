@@ -17,13 +17,13 @@ import { map } from 'rxjs/operators';
 
 export class RecipeService {
 
-  userLevel = 2;
     //Session variables
     isLoggedIn: boolean;
     userIdSession: number;
     usernameSession: string;
     fullnameSession: string;
     emailSession: string;
+    userLevel: number;
 
   constructor(private messageService: MessageService,
     private httpCli: HttpClient) { }
@@ -34,7 +34,9 @@ export class RecipeService {
         this.usernameSession = user.username;
         this.fullnameSession = user.fullname;
         this.emailSession = user.email;
+        this.userLevel= user.authenticationLevel;
         this.isLoggedIn = true;
+        console.log(user.authenticationLevel);
         console.log("logged in")
     }
     logout(): void
