@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Recipe } from './recipe';
 import { Tag } from './recipe';
 import { User } from './recipe';
-import { ChartFormat } from './recipe';
+import { ChartFormat , RecipeVisibility } from './recipe';
 // import { RECIPES } from './mock-recipes';
 //import { TAGS } from './mock-recipes';
 import { Observable, of } from 'rxjs';
@@ -104,6 +104,24 @@ export class RecipeService {
       console.log("error!", error);
     });
 
+  }
+
+  getGroupsByRecipe(recipeName): Observable<RecipeVisibility[]>
+  {
+    this.messageService.add('RecipeService: fetched recipes');
+
+    var recps = this.httpCli.get<RecipeVisibility[]>(
+      `http://localhost:8000/get_recipe_permissions.php?recipe_name=${recipeName}`);
+    return recps;
+  }
+
+  getGroups() {
+    this.messageService.add('RecipeService: fetched groups');
+
+    var tags = this.httpCli.get<Tag[]>(
+      "http://localhost:8000/get_groups.php");
+
+    return tags;
   }
 
   getTags(): Observable<Tag[]> {

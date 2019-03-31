@@ -33,12 +33,11 @@ export class RecipeDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.getRecipe();
-    this.userGroups = [
-      { id: 1, name: "um" },
-      { id: 2, name: "dois" },
-      { id: 3, name: "tres" },
-      { id: 4, name: "quatro" }
-    ];
+    this.recipeService.getGroups().subscribe(groups => {
+      this.userGroups = groups;
+    })
+
+
 
     var pointer = this;
     $('#visibilityModal').on('shown.bs.modal', function (e) {
@@ -92,6 +91,11 @@ export class RecipeDetailsComponent implements OnInit {
           if (!this.recipe.photos)
             this.recipe.photos = [];
 
+          console.log(this.recipe.groupsAuthenticationLevel);
+          this.recipeService.getGroupsByRecipe(this.recipe.name).subscribe(authGroups => {
+            this.recipe.groupsAuthenticationLevel = authGroups;
+          });
+
         });
 
       this.newRecipe = false;
@@ -106,6 +110,10 @@ export class RecipeDetailsComponent implements OnInit {
 
   getGroupFromId(groupVisibility) {
     return this.recipeService.searchGroupById(groupVisibility.groupId, this.userGroups);
+  }
+
+  getUserNameFromId(id) {
+    
   }
 
   initializeVisibilityModal() {
@@ -215,11 +223,9 @@ export class RecipeDetailsComponent implements OnInit {
     var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibilityPublic'));
     var editingCheckbox = (<HTMLInputElement>document.getElementById('editingPublic'));
     this.recipe.globalAuthenticationLevel = 0;
-    if(editingCheckbox.checked)
-    {
+    if (editingCheckbox.checked) {
       this.recipe.globalAuthenticationLevel = 2;
-    } else if(visibilityCheckbox.checked)
-    {
+    } else if (visibilityCheckbox.checked) {
       this.recipe.globalAuthenticationLevel = 1;
     }
 

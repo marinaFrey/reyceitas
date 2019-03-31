@@ -103,6 +103,10 @@
   }
 
   .recipe-directions ol {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+
       counter-reset: li;
       list-style: none;
       padding: 0;
@@ -157,7 +161,7 @@
       left: -.5em;
       border-left-color: #487bce;
   }
-  .recipe-directions button {
+  .recipe-directions ol button {
     margin:0;
   }
 
