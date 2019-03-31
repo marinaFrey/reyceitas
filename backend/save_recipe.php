@@ -104,7 +104,7 @@ EOF;
             VALUES (:recp_id, :group_id, :authentication_level);
 EOF;
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
+        $stmt->bindValue(':recp_id', $recipe_id, PDO::PARAM_INT);
         foreach($recipe->groupsAuthenticationLevel as $group)
         {
             $stmt->bindValue(':group_id', $group->groupId, PDO::PARAM_STR);
@@ -114,8 +114,6 @@ EOF;
                 echo $stmt->errorInfo();
             }
         }
-
-        echo $recipe_id;
 
     }
 
