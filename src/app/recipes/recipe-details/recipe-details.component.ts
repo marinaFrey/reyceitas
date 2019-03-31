@@ -57,6 +57,7 @@ export class RecipeDetailsComponent implements OnInit {
         name: '',
         photos: [],
         duration: "",
+        username: "",
         difficulty: null,
         servings: null,
         description: '',
@@ -79,6 +80,8 @@ export class RecipeDetailsComponent implements OnInit {
       this.recipeService.getRecipe(id)
         .subscribe(recipe => {
           this.recipe = recipe;
+          this.recipeService.getUsernameById(recipe.userId)
+            .subscribe(username => {this.recipe.username = username})
           this.numberOfDifficultyStars = Array(+this.recipe.difficulty).fill(1);
           if (!this.recipe.tags)
             this.recipe.tags = [];
@@ -111,7 +114,10 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   getUserNameFromId(id) {
-
+    this.recipeService.getUsernameById(id)
+    //.subscribe(username =>
+    //return username;
+    // )
   }
 
   initializeVisibilityModal() {
@@ -375,7 +381,8 @@ export class RecipeDetailsComponent implements OnInit {
       }
       if (this.newRecipe)
       {
-        this.recipe.userId = this.recipeService.getUserId();
+      this.recipe.userId = this.recipeService.getUserId();
+       console.log(this.recipe.userId);
         this.recipeService.saveNewRecipe(this.recipe);
       }
       else
