@@ -258,7 +258,7 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   toggleEditing(): void {
-    if (this.recipeService.getUserLevel() > 1) {
+    if ((this.recipeService.getUserLevel() > 1 || this.recipe.globalAuthenticationLevel > 1)) {
       this.editing = !this.editing;
     }
 
@@ -349,10 +349,14 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   filterAvailableTags(): void {
+    
     this.availableTags = JSON.parse(JSON.stringify(this.tags));
+    console.log(this.availableTags);
+    console.log(this.tags);
+    console.log(this.recipe.tags);
     for (var i = 0; i < this.tags.length; i++) {
       for (var j = 0; j < this.recipe.tags.length; j++) {
-        if (this.tags[i].id == this.recipe.tags[j]) {
+        if (this.tags[i].id.toString() == this.recipe.tags[j].toString()) {
           var index = this.availableTags.map(function (d) { return d.id }).indexOf(this.recipe.tags[j]);
           this.availableTags.splice(index, 1);
         }
@@ -381,8 +385,8 @@ export class RecipeDetailsComponent implements OnInit {
       }
       if (this.newRecipe)
       {
-      this.recipe.userId = this.recipeService.getUserId();
-       console.log(this.recipe.userId);
+        this.recipe.userId = this.recipeService.getUserId();
+        console.log(this.recipe.userId);
         this.recipeService.saveNewRecipe(this.recipe);
       }
       else

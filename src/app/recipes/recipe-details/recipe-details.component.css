@@ -110,6 +110,11 @@
       margin-bottom: 0em;
       text-shadow: 0 1px 0 rgba(255,255,255,.5);
   }
+  /*
+  .recipe-directions ol row{
+    display: table-cell;
+    vertical-align: middle;
+  }*/
   .recipe-directions ol ol {
       margin: 0 0 0 2em;
   }
@@ -158,8 +163,13 @@
       left: -.5em;
       border-left-color: #487bce;
   }
-  .recipe-directions ol button {
-    margin:0;
+  
+  .delete-button {
+    position: absolute;
+    top: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+
   }
 
   input {
