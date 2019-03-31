@@ -151,6 +151,14 @@ export class RecipeService {
 
 
   }
+  getUsernameById(id): Observable<string>{
+    this.messageService.add('RecipeService: fetched users');
+
+    var username = this.httpCli.get<string>(
+      `http://localhost:8000/get_users.php?id=${id}`);
+      console.log(username)
+    return username;
+  }
   getUsers(): Observable<User[]> {
     this.messageService.add('RecipeService: fetched users');
 
