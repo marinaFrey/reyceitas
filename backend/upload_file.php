@@ -11,9 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $all_files = count($_FILES['files']['tmp_name']);
 
         for ($i = 0; $i < $all_files; $i++) {
-            $file_name = $_FILES['files']['name'][$i];
-            $new_file_name = $_POST['filenames'][$i];
-            $file_tmp = $_FILES['files']['tmp_name'][$i];
+            $file_name = basename($_FILES['files']['name'][$i]);
+            $new_file_name = basename($_POST['filenames'][$i]);
+            $file_tmp = ($_FILES['files']['tmp_name'][$i]);
             $file_type = $_FILES['files']['type'][$i];
             $file_size = $_FILES['files']['size'][$i];
             $file_ext = strtolower(end(explode('.', $_FILES['files']['name'][$i])));
