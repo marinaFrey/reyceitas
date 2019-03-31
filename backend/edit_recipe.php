@@ -35,7 +35,8 @@ EOF;
             "DELETE FROM recipe_pictures WHERE src_recipe = :recp_id;",
             "DELETE FROM recipe_ingredients WHERE src_recipe = :recp_id;",
             "DELETE FROM recipe_steps WHERE src_recipe = :recp_id;",
-            "DELETE FROM recipe_tags WHERE src_recipe = :recp_id;"
+            "DELETE FROM recipe_tags WHERE src_recipe = :recp_id;",
+            "DELETE FROM recipe_permissions WHERE recipe_id = :recp_id;"
         );
         foreach($arr_sql_delete as $sql)
         {
@@ -112,6 +113,22 @@ EOF;
             $stmt->bindValue(':tag_id', $tag, PDO::PARAM_INT);
             echo $recipe->id;
             echo $tag;
+            $ret2 = $stmt->execute();
+            if(!$ret2) {
+                echo $stmt->errorInfo();
+            }
+        }
+
+        $sql = <<<EOF
+            INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level)
+            VALUES (:recp_id, :group_id, :authentication_level);
+EOF;
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
+        foreach($recipe->groupsAuthenticationLevel as $group)
+        {
+            $stmt->bindValue(':group_id', $group->groupId, PDO::PARAM_STR);
+            $stmt->bindValue(':authentication_level', $group->authenticationLevel, PDO::PARAM_STR);
             $ret2 = $stmt->execute();
             if(!$ret2) {
                 echo $stmt->errorInfo();

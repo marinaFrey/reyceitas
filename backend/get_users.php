@@ -16,6 +16,7 @@ function list_all_users() {
         $resArrVals[$i]['password']=$row['password'];
         $resArrVals[$i]['email']=$row['email'];
         $resArrVals[$i]['fullname']=$row['full_name'];
+        $resArrVals[$i]['authenticationLevel']=$row['authentication_level'];
         
         // Keep this reference recipe id -> its place in the array.
         //$mapIdToData[$resArrVals[$i]['id']] = $i;
@@ -43,6 +44,7 @@ function get_user($username) {
         $resArrVals[$i]['password']=$row['password'];
         $resArrVals[$i]['email']=$row['email'];
         $resArrVals[$i]['fullname']=$row['full_name'];
+        $resArrVals[$i]['authenticationLevel']=$row['authentication_level'];
         
         $i++;
     }
