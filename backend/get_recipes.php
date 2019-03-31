@@ -141,6 +141,6 @@ EOF;
     echo json_encode($resArrVals);
 }
 
-list_all_recipes();
+//list_all_recipes();
 
 ?>
