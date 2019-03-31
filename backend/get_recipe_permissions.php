@@ -56,6 +56,7 @@ function get_public_recipes()
         $resArrVals[$i]['preparation']= array();
         $resArrVals[$i]['tags']= array();
         $resArrVals[$i]['photos']= array();
+        $resArrVals[$i]['userId']= $row['owner'];
         $resArrVals[$i]['groupsAuthenticationLevel']= array();
         $resArrVals[$i]['globalAuthenticationLevel']=$row['global_authentication_level'];
         $mapIdToData[$resArrVals[$i]['id']] = $i;
@@ -118,6 +119,7 @@ function get_recipes_per_user($username)
             $resArrVals[$i]['preparation']= array();
             $resArrVals[$i]['tags']= array();
             $resArrVals[$i]['photos']= array();
+            $resArrVals[$i]['userId']= $row['owner'];
             $resArrVals[$i]['groupsAuthenticationLevel']= array();
             //$resArrVals[$i]['authenticationLevel']=$row['group_authentication_level'];
             $resArrVals[$i]['globalAuthenticationLevel']=$row['global_authentication_level'];

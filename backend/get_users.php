@@ -28,6 +28,19 @@ function list_all_users() {
         echo json_encode($resArrVals);
     }
 }
+function get_user_by_id($id) {
+    $db = connect();
+    $sql = "SELECT * FROM users where user_id = :id" ;
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+    $ret = $stmt->execute();
+    $ret = $stmt->fetchAll();
+
+    foreach($ret as $row)
+    {
+    echo json_encode($row['username']);
+    }
+}
 function get_user($username) {
     $db = connect();
     $sql = "SELECT * FROM users where username = :usr_nm" ;
@@ -53,8 +66,10 @@ function get_user($username) {
         echo json_encode($resArrVals);
     }
 }
-if ($_GET) {
+if (isset($_GET['username'])) {
     get_user($_GET['username']);
+}elseif (isset($_GET['id'])) {
+    get_user_by_id($_GET['id']);
 } else {
     list_all_users();
 }
