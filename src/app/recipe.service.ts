@@ -305,7 +305,7 @@ export class RecipeService {
 
     return this.getRecipes().pipe(
       map((recs: Recipe[]) => {
-        return recs.find(recipe => recipe.id === id)
+        return recs.find(recipe => recipe.id.toString() == id.toString())
       }));
 
   }
