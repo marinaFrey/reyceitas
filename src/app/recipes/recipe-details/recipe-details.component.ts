@@ -37,8 +37,6 @@ export class RecipeDetailsComponent implements OnInit {
       this.userGroups = groups;
     })
 
-
-
     var pointer = this;
     $('#visibilityModal').on('shown.bs.modal', function (e) {
       pointer.initializeVisibilityModal();
@@ -81,7 +79,7 @@ export class RecipeDetailsComponent implements OnInit {
       this.recipeService.getRecipe(id)
         .subscribe(recipe => {
           this.recipe = recipe;
-          this.numberOfDifficultyStars = Array(this.recipe.difficulty).fill(1);
+          this.numberOfDifficultyStars = Array(+this.recipe.difficulty).fill(1);
           if (!this.recipe.tags)
             this.recipe.tags = [];
           if (!this.recipe.ingredients)
@@ -113,7 +111,7 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   getUserNameFromId(id) {
-    
+
   }
 
   initializeVisibilityModal() {
@@ -376,7 +374,10 @@ export class RecipeDetailsComponent implements OnInit {
         this.numberOfDifficultyStars.push(1);
       }
       if (this.newRecipe)
+      {
+        this.recipe.userId = this.recipeService.getUserId();
         this.recipeService.saveNewRecipe(this.recipe);
+      }
       else
         this.recipeService.editRecipe(this.recipe);
       this.router.navigateByUrl('recipes/all');
