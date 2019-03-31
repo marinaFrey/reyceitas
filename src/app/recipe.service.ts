@@ -351,4 +351,8 @@ export class RecipeService {
   getUserLevel() {
     return this.userLevel;
   }
+
+  getUserId() {
+    return this.userIdSession;
+  }
 }

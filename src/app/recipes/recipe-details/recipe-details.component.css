@@ -103,9 +103,6 @@
   }
 
   .recipe-directions ol {
-    display: flex;
-  align-items: center;
-  justify-content: center;
 
       counter-reset: li;
       list-style: none;
