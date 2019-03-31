@@ -9,11 +9,11 @@
         $sql = "DELETE FROM recipes WHERE recipe_id = :r_id ;";
         $stmt = $db->prepare($sql);
         $r_id = intval($_GET['id']);
-        $stmt->bindValue(':r_id', $r_id, SQLITE3_INTEGER);
+        $stmt->bindValue(':r_id', $r_id, PDO::PARAM_INT);
         $ret = $stmt->execute();
 
         if(!$ret) {
-            echo $db->lastErrorMsg();
+            echo $stmt->errorInfo();
         }
 
     }

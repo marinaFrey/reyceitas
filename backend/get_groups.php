@@ -8,10 +8,12 @@ function list_all_groups()
     $sql = "SELECT * FROM groups";
     $ret = $db->query($sql);
 
-    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC); $i++)
+    $i = 0;
+    foreach($ret as $row)
     {
         $resArrVals[$i]['id']=$row['group_id'];
         $resArrVals[$i]['name']=$row['name'];
+        $i += 1;
     }
     if($i>0)
     {

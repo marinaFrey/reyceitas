@@ -17,17 +17,16 @@ EOF;
 
         $db = connect();
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':recp_nm', $recipe->name, SQLITE3_TEXT);
-        $stmt->bindValue(':recp_lvl', $recipe->difficulty, SQLITE3_INTEGER);
-        $stmt->bindValue(':n_served', $recipe->servings, SQLITE3_INTEGER);
-        $stmt->bindValue(':dur', $recipe->duration, SQLITE3_TEXT);
-        $stmt->bindValue(':descr', $recipe->description, SQLITE3_TEXT);
-        $stmt->bindValue(':recp_id', $recipe->id, SQLITE3_INTEGER);
+        $stmt->bindValue(':recp_nm', $recipe->name, PDO::PARAM_STR);
+        $stmt->bindValue(':recp_lvl', $recipe->difficulty, PDO::PARAM_INT);
+        $stmt->bindValue(':n_served', $recipe->servings, PDO::PARAM_INT);
+        $stmt->bindValue(':dur', $recipe->duration, PDO::PARAM_STR);
+        $stmt->bindValue(':descr', $recipe->description, PDO::PARAM_STR);
+        $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
         $ret = $stmt->execute();
 
-        $ret = $db->exec($sql);
         if(!$ret) {
-            echo $db->lastErrorMsg();
+            echo $stmt->errorInfo();
         }
         
         // Clean the current information.
@@ -41,11 +40,11 @@ EOF;
         foreach($arr_sql_delete as $sql)
         {
             $stmt = $db->prepare($sql);
-            $stmt->bindValue(':recp_id', $recipe->id, SQLITE3_INTEGER);
+            $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
             $ret = $stmt->execute();
-            $ret = $db->exec($sql);
+            
             if(!$ret) {
-                echo $db->lastErrorMsg();
+                echo $stmt->errorInfo();
             }
         }
 
@@ -54,13 +53,13 @@ EOF;
             VALUES (:recp_id, :pic);
 EOF;
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':recp_id', $recipe->id, SQLITE3_INTEGER);
+        $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
         foreach($recipe->photos as $photo)
         {
-            $stmt->bindValue(':pic', $photo, SQLITE3_TEXT);
+            $stmt->bindValue(':pic', $photo, PDO::PARAM_STR);
             $ret2 = $stmt->execute();
             if(!$ret2) {
-                echo $db->lastErrorMsg();
+                echo $stmt->errorInfo();
             }
         }
 
@@ -69,16 +68,17 @@ EOF;
             VALUES (:recp_id, :amount, :unit, :description);
 EOF;
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':recp_id', $recipe->id, SQLITE3_INTEGER);
+        $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
         foreach($recipe->ingredients as $ingredient)
         {
-            $stmt->bindValue(':amount', floatval($ingredient->amount), SQLITE3_FLOAT);
-            $stmt->bindValue(':unit', $ingredient->unit, SQLITE3_TEXT);
-            $stmt->bindValue(':description', $ingredient->name, SQLITE3_TEXT);
+            // No float parameters in PDO.
+            $stmt->bindValue(':amount', $ingredient->amount, PDO::PARAM_STR);
+            $stmt->bindValue(':unit', $ingredient->unit, PDO::PARAM_STR);
+            $stmt->bindValue(':description', $ingredient->name, PDO::PARAM_STR);
 
             $ret2 = $stmt->execute();
             if(!$ret2) {
-                echo $db->lastErrorMsg();
+                echo $stmt->errorInfo();
             }
         }
 
@@ -88,15 +88,15 @@ EOF;
             VALUES (:recp_id, :step_numbr, :description);
 EOF;
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':recp_id', $recipe->id, SQLITE3_INTEGER);
+        $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
         foreach($recipe->preparation as $step)
         {
-            $stmt->bindValue(':step_numbr', $numberOfStep, SQLITE3_INTEGER);
-            $stmt->bindValue(':description', $step, SQLITE3_TEXT);
+            $stmt->bindValue(':step_numbr', $numberOfStep, PDO::PARAM_INT);
+            $stmt->bindValue(':description', $step, PDO::PARAM_STR);
 
             $ret2 = $stmt->execute();
             if(!$ret2) {
-                echo $db->lastErrorMsg();
+                echo $stmt->errorInfo();
             }
             $numberOfStep++;
         }
@@ -106,15 +106,15 @@ EOF;
             VALUES (:recp_id, :tag_id);
 EOF;
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':recp_id', $recipe->id, SQLITE3_INTEGER);
+        $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
         foreach($recipe->tags as $tag)
         {
-            $stmt->bindValue(':tag_id', $tag, SQLITE3_INTEGER);
+            $stmt->bindValue(':tag_id', $tag, PDO::PARAM_INT);
             echo $recipe->id;
             echo $tag;
             $ret2 = $stmt->execute();
             if(!$ret2) {
-                echo $db->lastErrorMsg();
+                echo $stmt->errorInfo();
             }
         }
 

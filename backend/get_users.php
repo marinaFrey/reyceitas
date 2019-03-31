@@ -9,7 +9,8 @@ function list_all_users() {
     $ret = $db->query($sql);
 
     $i=0;
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
+    foreach($ret as $row)
+    {
         $resArrVals[$i]['id']=$row['user_id'];
         $resArrVals[$i]['username']=$row['username'];
         $resArrVals[$i]['password']=$row['password'];
@@ -30,11 +31,13 @@ function get_user($username) {
     $db = connect();
     $sql = "SELECT * FROM users where username = :usr_nm" ;
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':usr_nm', $username, SQLITE3_TEXT);
+    $stmt->bindValue(':usr_nm', $username, PDO::PARAM_STR);
     $ret = $stmt->execute();
+    $ret = $stmt->fetchAll();
 
     $i=0;
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
+    foreach($ret as $row)
+    {
         $resArrVals[$i]['id']=$row['user_id'];
         $resArrVals[$i]['username']=$row['username'];
         $resArrVals[$i]['password']=$row['password'];

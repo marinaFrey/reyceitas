@@ -1,17 +1,19 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-class MyDB extends SQLite3 {
+
+class MyDB extends \PDO {
     function __construct() {
-        $this->open('recipes.db');
+        parent::__construct("sqlite:" . "recipes.db");
         $this->exec('PRAGMA foreign_keys = ON;');
         if(!$this) {
-            echo $this->lastErrorMsg();
+            echo $this->errorInfo();
          } else {
              //echo "Opened database successfully\n";
              //Let's not drop recursive bombs here
          }
     }
 }
+
 
 function connect() {
     $db = new MyDB();
@@ -123,7 +125,7 @@ EOF;
     $db = connect();
     $ret = $db->exec($sql);
     if(!$ret){
-        echo $db->lastErrorMsg();
+        echo $db->errorInfo();
     } else {
         // echo "Table created successfully\n";
     }
@@ -168,7 +170,7 @@ EOF;
     $db = connect();
     $ret = $db->exec($sql);
     if(!$ret) {
-        echo $db->lastErrorMsg();
+        echo $db->errorInfo();
     } else {
         // echo "Records created successfully\n";
     }
@@ -197,7 +199,7 @@ EOF;
     $db = connect();
     $ret = $db->exec($sql);
     if(!$ret) {
-        echo $db->lastErrorMsg();
+        echo $db->errorInfo();
     } else {
         // echo "Records created successfully\n";
     }
@@ -217,7 +219,7 @@ EOF;
     $db = connect();
     $ret = $db->exec($sql);
     if(!$ret) {
-        echo $db->lastErrorMsg();
+        echo $db->errorInfo();
     } else {
         // echo "Records created successfully\n";
     }

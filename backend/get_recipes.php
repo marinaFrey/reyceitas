@@ -13,8 +13,7 @@ function fill_tags_for_recipes(&$mapIdToRecip, &$resArrVals) {
 EOF;
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
-    {
+    foreach($ret as $row) {
         if(array_key_exists($row['src_recipe'],$mapIdToRecip))
         {
             $tag_id = $row["src_tag"];
@@ -32,8 +31,7 @@ function fill_ingredients_for_recipes(&$mapIdToRecip, &$resArrVals) {
 EOF;
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
-    {
+    foreach($ret as $row) {
         if(array_key_exists($row['src_recipe'],$mapIdToRecip))
         {
             $ingred = array( "id" => $row["ingr_id"], "name" => $row["description"],
@@ -52,8 +50,7 @@ function fill_steps_for_recipes(&$mapIdToRecip, &$resArrVals) {
 EOF;
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
-    {
+    foreach($ret as $row) {
         if(array_key_exists($row['src_recipe'],$mapIdToRecip))
         {
             $i_recip = $mapIdToRecip[$row['src_recipe']];
@@ -71,8 +68,7 @@ function fill_photos_for_recipes(&$mapIdToRecip, &$resArrVals) {
 EOF;
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
-    {
+    foreach($ret as $row) {
         if(array_key_exists($row['src_recipe'],$mapIdToRecip))
         {
             $i_recip = $mapIdToRecip[$row['src_recipe']];
@@ -90,7 +86,7 @@ EOF;
     $resArrVals = array();
     $db = connect();
     $ret = $db->query($sql);
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
+    foreach($ret as $row) {
         $tag = array( "id" => $row["tag_id"], "name" => $row["name"],
             "icon" => $row["icon"],"color" => $row["color"]);
         $v = array_push($resArrVals, $tag);
@@ -119,7 +115,7 @@ EOF;
     $ret = $db->query($sql);
     // Find recipes.
     $i_recp=0;
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
+    foreach($ret as $row) {
         $resArrVals[$i_recp]['id']=$row['recipe_id'];
         $resArrVals[$i_recp]['name']=$row['name'];
         $resArrVals[$i_recp]['duration']=$row['duration'];
@@ -145,6 +141,6 @@ EOF;
     echo json_encode($resArrVals);
 }
 
-//list_all_recipes();
+list_all_recipes();
 
 ?>

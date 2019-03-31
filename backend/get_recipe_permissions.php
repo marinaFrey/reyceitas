@@ -12,7 +12,9 @@ function list_all_recipe_permissions()
     $sql.= " INNER JOIN recipes AS r ON rp.recipe_id = r.recipe_id";
     $ret = $db->query($sql);
 
-    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC); $i++)
+
+    $i = 0;
+    foreach($ret as $row)
     {
         $resArrVals[$i]['recipe_permissions_id']=$row['recipe_permissions_id'];
         $resArrVals[$i]['recipe_id']=$row['recipe_id'];
@@ -24,6 +26,7 @@ function list_all_recipe_permissions()
         $resArrVals[$i]['user_name']=$row['username'];
         $resArrVals[$i]['group_id']=$row['group_id'];
         $resArrVals[$i]['group_name']=$row['name'];
+        $i += 1;
     }
     if($i>0)
     {
@@ -36,10 +39,12 @@ function get_public_recipes()
     $sql = "SELECT * FROM recipes";
     $sql.= " WHERE global_authentication_level != 0";
     $stmt= $db->prepare($sql);
-    $ret= $stmt->execute();
+    $ret = $stmt->execute();
+    $ret = $stmt->fetchAll();
 
     $mapIdToData [] = array();
-    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC);)
+    $i = 0;
+    foreach($ret as $row)
     {
         $resArrVals[$i]['id']=$row['recipe_id'];
         $resArrVals[$i]['name']=$row['name'];
@@ -78,11 +83,13 @@ function get_recipes_per_user($username)
     $sql.= " WHERE u.username = :username";
     $sql.= " ORDER BY group_authentication_level desc";
     $stmt= $db->prepare($sql);
-    $stmt->bindValue(':username', $username, SQLITE3_TEXT);
+    $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $ret= $stmt->execute();
+    $ret = $stmt->fetchAll();
 
     $mapIdToData [] = array();
-    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC);)
+    $i = 0;
+    foreach($ret as $row)
     {
         //$resArrVals[$i]['recipe_permissions_id']=$row['recipe_permissions_id'];
         //$resArrVals[$i]['recipe_id']=$row['recipe_id'];
@@ -117,7 +124,7 @@ function get_recipes_per_user($username)
             $mapIdToData[$resArrVals[$i]['id']] = $i;
             $i++;
         }
-
+        $i += 1;
     }
     if($i>0)
     {
@@ -140,14 +147,17 @@ function get_group_per_recipes($recipe_name)
     $sql.= " WHERE recipe_name = :recipe_name";
     $sql.= " ORDER BY group_authentication_level desc";
     $stmt= $db->prepare($sql);
-    $stmt->bindValue(':recipe_name', $recipe_name, SQLITE3_TEXT);
+    $stmt->bindValue(':recipe_name', $recipe_name, PDO::PARAM_STR);
     $ret= $stmt->execute();
+    $ret = $stmt->fetchAll();
 
-    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC);$i++)
+    $i = 0;
+    foreach($ret as $row)
     {
         $resArrVals[$i]['groupId']=$row['group_id'];
         $resArrVals[$i]['groupName']=$row['group_name'];
         $resArrVals[$i]['authenticationLevel']=$row['group_authentication_level'];
+        $i += 1;
     }
     if($i>0)
     {
@@ -164,9 +174,11 @@ function fill_groups_for_recipes(&$mapIdToRecip, &$resArrVals, $username)
     $sql.= " INNER JOIN users AS u ON ug.user_id = u.user_id";
     $sql.= " ORDER BY group_authentication_level desc";
     $stmt= $db->prepare($sql);
-    //$stmt->bindValue(':username', $username, SQLITE3_TEXT);
+    //$stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $ret= $stmt->execute();
-    while($row = $ret->fetchArray(SQLITE3_ASSOC) ) 
+    $ret = $stmt->fetchAll();
+    $i = 0;
+    foreach($ret as $row)
     {
         if(array_key_exists($row['recipe_id'],$mapIdToRecip))
         {
@@ -176,6 +188,7 @@ function fill_groups_for_recipes(&$mapIdToRecip, &$resArrVals, $username)
             $groups['authenticationLevel'] = $row['group_authentication_level'];
             $v = array_push($resArrVals[$i_recip]['groupsAuthenticationLevel'],$groups);
         }
+        $i += 1;
     }
 }
 if (isset($_GET['username'])) {

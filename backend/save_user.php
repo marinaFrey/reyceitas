@@ -14,18 +14,19 @@ EOF;
 
     $db = connect();
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':usr_nm', $obj->username, SQLITE3_TEXT);
-    $stmt->bindValue(':full_nm', $obj->fullname, SQLITE3_TEXT);
-    $stmt->bindValue(':mail', $obj->email, SQLITE3_TEXT);
-    $stmt->bindValue(':pwd', $obj->password, SQLITE3_TEXT);
+    $stmt->bindValue(':usr_nm', $obj->username, PDO::PARAM_STR);
+    $stmt->bindValue(':full_nm', $obj->fullname, PDO::PARAM_STR);
+    $stmt->bindValue(':mail', $obj->email, PDO::PARAM_STR);
+    $stmt->bindValue(':pwd', $obj->password, PDO::PARAM_STR);
 
 
     $ret = $stmt->execute();
     if(!$ret) {
         echo -1;
+        echo $stmt->errorInfo();
         return -1;
     }
-    $last_id = $db->lastInsertRowId();
+    $last_id = $db->lastInsertId();
     echo $last_id;
     return $last_id; 
 }
@@ -40,17 +41,18 @@ if (isset($_GET['user_edit']))
 EOF;
     $db = connect();
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':full_nm', $obj->fullname, SQLITE3_TEXT);
-    $stmt->bindValue(':mail', $obj->email, SQLITE3_TEXT);
-    $stmt->bindValue(':pwd', $obj->password, SQLITE3_TEXT);
-    $stmt->bindValue(':usr_nm', $obj->username, SQLITE3_TEXT);
+    $stmt->bindValue(':full_nm', $obj->fullname, PDO::PARAM_STR);
+    $stmt->bindValue(':mail', $obj->email, PDO::PARAM_STR);
+    $stmt->bindValue(':pwd', $obj->password, PDO::PARAM_STR);
+    $stmt->bindValue(':usr_nm', $obj->username, PDO::PARAM_STR);
 
     $ret = $stmt->execute();
     if(!$ret) {
         echo -1;
+        echo $stmt->errorInfo();
         return -1;
     }
-    $last_id = $db->lastInsertRowId();
+    $last_id = $db->lastInsertId();
     echo $last_id;
     return $last_id; 
 }
@@ -62,7 +64,7 @@ EOF;
 //INSERT INTO users (username, full_name, email, password) VALUES ('$obj->username','$obj->fullName','$obj->email', '$obj->password');
 //EOF;
 //$ret = $db->query($sql);
-//$last_id = $db->lastInsertRowId();
+//$last_id = $db->lastInsertId();
 //echo $last_id;
 //return $ret; 
 ?>

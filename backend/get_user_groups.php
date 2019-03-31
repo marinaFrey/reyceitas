@@ -8,13 +8,16 @@ function list_all_user_groups()
     $sql = "SELECT * FROM user_groups ug INNER JOIN users u ON ug.user_id = u.user_id INNER JOIN groups g ON ug.group_id = g.group_id;";
     $ret = $db->query($sql);
 
-    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC); $i++)
+    $i = 0;
+    foreach($ret as $row)
     {
         $resArrVals[$i]['user_group_id']=$row['user_group_id'];
         $resArrVals[$i]['user_id']=$row['user_id'];
         $resArrVals[$i]['user_name']=$row['username'];
         $resArrVals[$i]['group_id']=$row['group_id'];
         $resArrVals[$i]['group_name']=$row['name'];
+
+        $i += 1;
     }
     if($i>0)
     {
@@ -26,16 +29,20 @@ function get_groups_per_user($username)
     $db = connect();
     $sql = "SELECT * FROM user_groups ug INNER JOIN users u ON ug.user_id = u.user_id INNER JOIN groups g ON ug.group_id = g.group_id WHERE username = :username;";
     $stmt= $db->prepare($sql);
-    $stmt->bindValue(':username', $username, SQLITE3_TEXT);
+    $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $ret= $stmt->execute();
+    $ret = $stmt->fetchAll();
 
-    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC); $i++)
+    $i = 0;
+    foreach($ret as $row)
     {
         $resArrVals[$i]['user_group_id']=$row['user_group_id'];
         $resArrVals[$i]['user_id']=$row['user_id'];
         $resArrVals[$i]['user_name']=$row['username'];
         $resArrVals[$i]['group_id']=$row['group_id'];
         $resArrVals[$i]['group_name']=$row['name'];
+
+        $i += 1;
     }
     if($i>0)
     {
@@ -47,16 +54,20 @@ function get_users_per_group($group_name)
     $db = connect();
     $sql = "SELECT * FROM user_groups ug INNER JOIN users u ON ug.user_id = u.user_id INNER JOIN groups g ON ug.group_id = g.group_id WHERE name = :group_name;";
     $stmt= $db->prepare($sql);
-    $stmt->bindValue(':group_name', $group_name, SQLITE3_TEXT);
+    $stmt->bindValue(':group_name', $group_name, PDO::PARAM_STR);
     $ret= $stmt->execute();
+    $ret = $stmt->fetchAll();
 
-    for($i = 0; $row = $ret->fetchArray(SQLITE3_ASSOC); $i++)
+    $i = 0;
+    foreach($ret as $row)
     {
         $resArrVals[$i]['user_group_id']=$row['user_group_id'];
         $resArrVals[$i]['user_id']=$row['user_id'];
         $resArrVals[$i]['user_name']=$row['username'];
         $resArrVals[$i]['group_id']=$row['group_id'];
         $resArrVals[$i]['group_name']=$row['name'];
+
+        $i += 1;
     }
     if($i>0)
     {

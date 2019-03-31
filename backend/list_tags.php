@@ -9,7 +9,8 @@ EOF;
 
 $resArrVals = array();
 $ret = $db->query($sql);
-while($row = $ret->fetchArray(SQLITE3_ASSOC) ) {
+foreach($ret as $row)
+{
     $tag = array( "id" => $row["tag_id"], "name" => $row["name"],
             "icon" => $row["icon"],"color" => $row["color"]);
     $v = array_push($resArrVals, $tag);
