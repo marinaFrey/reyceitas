@@ -385,13 +385,8 @@ export class RecipeDetailsComponent implements OnInit {
       }
       if (this.newRecipe)
       {
-<<<<<<< HEAD
         this.recipe.userId = this.recipeService.getUserId();
         console.log(this.recipe.userId);
-=======
-      this.recipe.userId = this.recipeService.getUserId();
-       console.log(this.recipe.userId);
->>>>>>> ed52ca7aaf66c674ffed5263d3ae9c636f86dcaf
         this.recipeService.saveNewRecipe(this.recipe);
       }
       else
