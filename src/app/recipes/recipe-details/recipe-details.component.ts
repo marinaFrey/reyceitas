@@ -274,7 +274,7 @@ export class RecipeDetailsComponent implements OnInit {
 
   addImage(): void {
     const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
-    const url = 'http://localhost:8000/upload_file.php'
+    const url = 'https://localhost/backend/upload_file.php'
 
     const formData = new FormData()
     for (let i = 0; i < files.length; i++) {
