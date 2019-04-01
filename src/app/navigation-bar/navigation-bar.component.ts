@@ -12,8 +12,7 @@ import * as bootstrap from "bootstrap";
     styleUrls: ['./navigation-bar.component.css']
 })
 
-export class NavigationBarComponent implements OnInit
-{
+export class NavigationBarComponent implements OnInit {
 
     // acho que eh uma variavel que deveria ser meio "global" ao sistema, mas por enquanto vou deixar ela definida aqui
     // para testar a parte do login
@@ -44,27 +43,22 @@ export class NavigationBarComponent implements OnInit
 
     constructor(private recipeService: RecipeService) { }
 
-    ngOnInit()
-    {
+    ngOnInit() {
     }
 
-    checkField(field,elementId): number
-    {
-        if(!field)
-        {
+    checkField(field, elementId): number {
+        if (!field) {
             var element = document.getElementById(elementId);
             element.classList.add("is-invalid");
             return 0;
         }
-        else
-        {
+        else {
             var element = document.getElementById(elementId);
             element.classList.remove("is-invalid");
             return 1;
         }
     }
-    submitLogin(): void
-    {
+    submitLogin(): void {
         // usar this.username e this.password para autenticação
         if (!this.checkField(this.username, "loginUsername") || !this.checkField(this.password, "loginPassword"))
             return;
@@ -72,13 +66,10 @@ export class NavigationBarComponent implements OnInit
         this.passwordHashed = md5(this.password.toString());
         this.password = null;
         this.recipeService.searchUsers(this.username)
-            .subscribe(user_list =>
-            {
+            .subscribe(user_list => {
                 this.user_list = user_list;
-                if (this.user_list && this.user_list.length > 0) 
-                {
-                    if (this.passwordHashed != this.user_list[0].password)
-                    {
+                if (this.user_list && this.user_list.length > 0) {
+                    if (this.passwordHashed != this.user_list[0].password) {
                         var element = document.getElementById("loginPassword");
                         element.classList.add("is-invalid");
                         console.log("Password does not match");
@@ -97,8 +88,7 @@ export class NavigationBarComponent implements OnInit
                     this.usernameSession = user_list[0].username;
                     this.recipeService.login(user_list[0]);
 
-                } else
-                {
+                } else {
                     var element = document.getElementById("loginUsername");
                     element.classList.add("is-invalid");
                     console.log("User not found");
@@ -107,35 +97,43 @@ export class NavigationBarComponent implements OnInit
             });
         return;
     }
-    submitNewUser(): void
-    {
-        if (!this.checkField(this.usernameConfig, "usernameConfig") 
-        || !this.checkField(this.fullnameConfig, "fullnameConfig")
-        || !this.checkField(this.emailConfig, "emailConfig")
-        || !this.checkField(this.passwordConfig, "passwordConfig")
-        )
-        {
+    submitNewUser(): void {
+        if (!this.checkField(this.usernameConfig, "usernameConfig")
+            || !this.checkField(this.fullnameConfig, "fullnameConfig")
+            || !this.checkField(this.emailConfig, "emailConfig")
+            || !this.checkField(this.passwordConfig, "passwordConfig")
+        ) {
             return;
         }
         this.passwordHashed = md5(this.passwordConfig.toString());
         this.recipeService.searchUsers(this.usernameConfig)
-            .subscribe(user_list =>
-            {
-                this.user_list = user_list;
-                if (this.user_list && this.user_list.length > 0) 
-                {
+            .subscribe(user_list => {
+                this.user_list = user_list;       
+                if (this.user_list && this.user_list.length > 0) {
                     var element = document.getElementById("usernameConfig");
                     element.classList.add("is-invalid");
-                    console.log("Username already taken");
                     return;
                 }
-                if (this.passwordConfig != this.passwordConfirmationConfig) 
-                {
+                if (this.passwordConfig != this.passwordConfirmationConfig) {
                     var element = document.getElementById("passwordConfirmationConfig");
                     element.classList.add("is-invalid");
                     this.passwordConfig = null;
                     this.passwordConfirmationConfig = null;
                     return;
+                }
+                var email = this.emailConfig.split("@");
+                if (email.length < 2) {
+                    var element = document.getElementById("emailConfig");
+                    element.classList.add("is-invalid");
+                    return;
+                }
+                else {
+                    var emailDomain = email[1].split(".");
+                    if (emailDomain.length < 2) {
+                        var element = document.getElementById("emailConfig");
+                        element.classList.add("is-invalid");
+                        return;
+                    }
                 }
                 this.passwordConfig = null;
                 this.passwordConfirmationConfig = null;
@@ -150,47 +148,38 @@ export class NavigationBarComponent implements OnInit
                 //$('#loginModal').modal('hide');
                 //$('#loginModal .close').click();
                 this.recipeService.newUser(this.new_user)
-                    .subscribe(user_id =>
-                    {
+                    .subscribe(user_id => {
                         this.new_user.id = user_id;
-                        if (this.new_user.id != -1)
-                        {
+                        if (this.new_user.id != -1) {
                             console.log("User " + this.new_user.id + " created succesfully");
-                        } else
-                        {
+                        } else {
                             console.log("User creation failed");
                         }
                     });
             });
     }
-    submitChangesInUser(): void
-    {
+    submitChangesInUser(): void {
         if (
-         !this.checkField(this.fullnameConfig, "fullnameConfig")
-        || !this.checkField(this.emailConfig, "emailConfig")
-        || !this.checkField(this.passwordConfig, "passwordConfig")
-        )
-        {
+            !this.checkField(this.fullnameConfig, "fullnameConfig")
+            || !this.checkField(this.emailConfig, "emailConfig")
+            || !this.checkField(this.passwordConfig, "passwordConfig")
+        ) {
             return;
         }
         this.passwordHashed = md5(this.oldPasswordConfig.toString());
         this.oldPasswordConfig = null;
         this.recipeService.searchUsers(this.username)
-            .subscribe(user_list =>
-            {
+            .subscribe(user_list => {
                 this.user_list = user_list;
-                if (this.user_list.length > 0) 
-                {
-                    if (this.passwordHashed != this.user_list[0].password)
-                    {
+                if (this.user_list.length > 0) {
+                    if (this.passwordHashed != this.user_list[0].password) {
                         var element = document.getElementById("oldPasswordConfig");
                         element.classList.add("is-invalid");
                         console.log("Password does not match");
                         return;
                     }
                     console.log("Editing user" + this.user_list[0].id);
-                    if (this.passwordConfig != this.passwordConfirmationConfig) 
-                    {
+                    if (this.passwordConfig != this.passwordConfirmationConfig) {
                         var element = document.getElementById("passwordConfirmationConfig");
                         element.classList.add("is-invalid");
                         this.passwordConfig = null;
@@ -209,28 +198,28 @@ export class NavigationBarComponent implements OnInit
                     $('#loginConfigurationModal .close').click();
 
                     this.recipeService.editUser(this.new_user)
-                        .subscribe(user_id =>
-                        {
+                        .subscribe(user_id => {
                             this.new_user.id = user_id;
-                            if (this.new_user.id != -1)
-                            {
+                            if (this.new_user.id != -1) {
                                 console.log("User " + this.new_user.id + " edited succesfully");
                                 this.fullnameSession = this.new_user.fullname;
                                 this.emailSession = this.new_user.email;
                                 this.usernameSession = this.new_user.username;
-                            } else
-                            {
+                            } else {
                                 console.log("User edit failed");
                             }
                         });
                     return;
-                } else
-                {
+                } else {
                     console.log("User not found");
                     return;
                 }
 
             });
     }
-    
+
+    deleteUserAccount() {
+
+    }
+
 }

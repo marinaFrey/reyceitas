@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Recipe } from './recipe';
 import { Tag } from './recipe';
 import { User } from './recipe';
-import { ChartFormat , RecipeVisibility } from './recipe';
+import { ChartFormat, RecipeVisibility } from './recipe';
 // import { RECIPES } from './mock-recipes';
 //import { TAGS } from './mock-recipes';
 import { Observable, of } from 'rxjs';
@@ -17,38 +17,38 @@ import { map } from 'rxjs/operators';
 
 export class RecipeService {
 
-    //Session variables
-    isLoggedIn: boolean;
-    userIdSession: number;
-    usernameSession: string;
-    fullnameSession: string;
-    emailSession: string;
-    userLevel: number;
+  //Session variables
+  isLoggedIn: boolean;
+  userIdSession: number;
+  usernameSession: string;
+  fullnameSession: string;
+  emailSession: string;
+  userLevel: number;
+  distURL = "https://receitas.fortesrey.net/backend/";
+  testingURL = "http://localhost:8000/";
 
   constructor(private messageService: MessageService,
     private httpCli: HttpClient) { }
 
-    login(user: User): void
-    {
-        this.userIdSession = user.id;
-        this.usernameSession = user.username;
-        this.fullnameSession = user.fullname;
-        this.emailSession = user.email;
-        this.userLevel= user.authenticationLevel;
-        this.isLoggedIn = true;
-        console.log(user.authenticationLevel);
-        console.log("logged in")
-    }
-    logout(): void
-    {
-        this.isLoggedIn = false;
-        console.log("logged out")
-    }
+  login(user: User): void {
+    this.userIdSession = user.id;
+    this.usernameSession = user.username;
+    this.fullnameSession = user.fullname;
+    this.emailSession = user.email;
+    this.userLevel = user.authenticationLevel;
+    this.isLoggedIn = true;
+    console.log(user.authenticationLevel);
+    console.log("logged in")
+  }
+  logout(): void {
+    this.isLoggedIn = false;
+    console.log("logged out")
+  }
   getRecipes(): Observable<Recipe[]> {
     this.messageService.add('RecipeService: fetched recipes');
 
     var recps = this.httpCli.get<Recipe[]>(
-      `http://localhost:8000/get_recipe_permissions.php`);
+      this.testingURL + `get_recipe_permissions.php`);
     return recps;
     // return of(RECIPES);
   }
@@ -56,7 +56,7 @@ export class RecipeService {
     this.messageService.add('RecipeService: fetched recipes');
 
     var recps = this.httpCli.get<Recipe[]>(
-      `http://localhost:8000/get_recipe_permissions.php?username=${username}`);
+      this.testingURL + `get_recipe_permissions.php?username=${username}`);
     return recps;
     // return of(RECIPES);
   }
@@ -67,7 +67,7 @@ export class RecipeService {
     let param: any = { 'recipe': JSON.stringify(recipe) };
     let params = new HttpParams();
     var recps = this.httpCli.get<Recipe[]>(
-      "http://localhost:8000/save_recipe.php", { params: param });
+      this.testingURL + "save_recipe.php", { params: param });
     var t = recps.subscribe((data) => {
       console.log("saved recipe", data);
       return data;
@@ -83,7 +83,7 @@ export class RecipeService {
     let param: any = { 'recipe': JSON.stringify(recipe) };
     let params = new HttpParams();
     var recps = this.httpCli.get<Recipe[]>(
-      "http://localhost:8000/edit_recipe.php", { params: param });
+      this.testingURL + "edit_recipe.php", { params: param });
     var t = recps.subscribe((data) => {
       console.log("edited recipe", data);
     }, (error) => {
@@ -98,7 +98,7 @@ export class RecipeService {
     let param: any = { 'id': recipe.id.toString() };
     let params = new HttpParams();
     var recps = this.httpCli.get<Recipe[]>(
-      "http://localhost:8000/delete_recipe.php", { params: param });
+      this.testingURL + "delete_recipe.php", { params: param });
     var t = recps.subscribe((data) => {
       console.log("deleted recipe");
 
@@ -108,12 +108,11 @@ export class RecipeService {
 
   }
 
-  getGroupsByRecipe(recipeName): Observable<RecipeVisibility[]>
-  {
+  getGroupsByRecipe(recipeName): Observable<RecipeVisibility[]> {
     this.messageService.add('RecipeService: fetched recipes');
 
     var recps = this.httpCli.get<RecipeVisibility[]>(
-      `http://localhost:8000/get_recipe_permissions.php?recipe_name=${recipeName}`);
+      this.testingURL + `get_recipe_permissions.php?recipe_name=${recipeName}`);
     return recps;
   }
 
@@ -121,7 +120,7 @@ export class RecipeService {
     this.messageService.add('RecipeService: fetched groups');
 
     var tags = this.httpCli.get<Tag[]>(
-      "http://localhost:8000/get_groups.php");
+      this.testingURL + "get_groups.php");
 
     return tags;
   }
@@ -130,12 +129,12 @@ export class RecipeService {
     this.messageService.add('RecipeService: fetched tags');
 
     var tags = this.httpCli.get<Tag[]>(
-      "http://localhost:8000/list_tags.php");
+      this.testingURL + "list_tags.php");
 
 
 
     // this.httpCli.get(
-    // "http://localhost:8000/list_tags.php").subscribe((res)=>{
+    // this.testingURL+"list_tags.php").subscribe((res)=>{
     // window.alert("aa");
     // window.alert(JSON.stringify(res));
     // });
@@ -151,26 +150,26 @@ export class RecipeService {
 
 
   }
-  getUsernameById(id): Observable<string>{
+  getUsernameById(id): Observable<string> {
     this.messageService.add('RecipeService: fetched users');
 
     var username = this.httpCli.get<string>(
-      `http://localhost:8000/get_users.php?id=${id}`);
-      console.log(username)
+      this.testingURL + `get_users.php?id=${id}`);
+    console.log(username)
     return username;
   }
   getUsers(): Observable<User[]> {
     this.messageService.add('RecipeService: fetched users');
 
     var users = this.httpCli.get<User[]>(
-      "http://localhost:8000/get_users.php");
+      this.testingURL + "get_users.php");
     return users;
   }
   searchUsers(username: string): Observable<User[]> {
     this.messageService.add('RecipeService: fetched users');
 
     var users = this.httpCli.get<User[]>(
-      `http://localhost:8000/get_users.php?username=${username}`);
+      this.testingURL + `get_users.php?username=${username}`);
     return users;
   }
 
@@ -191,7 +190,7 @@ export class RecipeService {
     var str_json = (JSON.stringify(user).replace(/ /g,'\ '))
     console.log(str_json);
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "http://localhost:8000/save_user.php", false);
+    xmlHttp.open("POST", this.testingURL+"save_user.php", false);
     xmlHttp.setRequestHeader("Content-type", "application/json");
     xmlHttp.send(str_json);
     console.log(xmlHttp.response);
@@ -203,7 +202,7 @@ export class RecipeService {
     let param: any = { 'user_edit': JSON.stringify(user) };
     let params = new HttpParams();
     var user_id;
-    var result = this.httpCli.get<number>("http://localhost:8000/save_user.php", { params: param });
+    var result = this.httpCli.get<number>(this.testingURL + "save_user.php", { params: param });
     return result;
   }
   newUser(user: User): Observable<number> {
@@ -211,7 +210,7 @@ export class RecipeService {
     let param: any = { 'user': JSON.stringify(user) };
     let params = new HttpParams();
     var user_id;
-    var result = this.httpCli.get<number>("http://localhost:8000/save_user.php", { params: param });
+    var result = this.httpCli.get<number>(this.testingURL + "save_user.php", { params: param });
     return result;
   }
 
@@ -364,5 +363,27 @@ export class RecipeService {
 
   getUserId() {
     return this.userIdSession;
+  }
+
+  isUserAllowedToEdit(recipe) {
+    // check if recipe is public for editing
+    if (recipe.globalAuthenticationLevel >= 2 || this.getUserLevel() >= 1) {
+      return true;
+    }
+    // check if user is administrator
+    if (this.getUserLevel() >= 2) {
+      return true;
+    }
+    // test if one of users groups is allowed to edit
+
+
+    return false;
+  }
+
+  isUserAllowedToCreateRecipe() {
+    if (this.getUserLevel() >= 1)
+      return true;
+    else
+      return false;
   }
 }

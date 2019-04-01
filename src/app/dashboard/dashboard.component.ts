@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
       this.router.navigateByUrl('/details/new');
     }
     else {
-      window.alert("Você não possui autorização para realizar modificações no banco de dados!");
+      window.alert("Você não possui autorização para adicionar receitas!");
     }
   }
 

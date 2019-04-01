@@ -81,7 +81,7 @@ export class RecipeDetailsComponent implements OnInit {
         .subscribe(recipe => {
           this.recipe = recipe;
           this.recipeService.getUsernameById(recipe.userId)
-            .subscribe(username => {this.recipe.username = username})
+            .subscribe(username => { this.recipe.username = username })
           this.numberOfDifficultyStars = Array(+this.recipe.difficulty).fill(1);
           if (!this.recipe.tags)
             this.recipe.tags = [];
@@ -258,12 +258,12 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   toggleEditing(): void {
-    if ((this.recipeService.getUserLevel() > 1 || this.recipe.globalAuthenticationLevel > 1)) {
+    console.log(this.recipe.groupsAuthenticationLevel);
+    if (this.recipeService.isUserAllowedToEdit(this.recipe)) {
       this.editing = !this.editing;
     }
-
     else {
-      window.alert("Você não possui autorização para realizar modificações no banco de dados!");
+      window.alert("Você não possui autorização para realizar modificações nessa receita!");
     }
 
   }
@@ -273,32 +273,36 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   addImage(): void {
-    const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
-    const url = 'https://localhost/backend/upload_file.php'
+    if (this.recipeService.isUserAllowedToCreateRecipe()) {
+      const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
+      const url = 'https://receitas.fortesrey.net/backend/upload_file.php'
 
-    const formData = new FormData()
-    for (let i = 0; i < files.length; i++) {
-      var file = files[i]
-      var fileHashedName = md5((file.lastModified + Date.now() + file.size).toString())
-      var filename = fileHashedName + this.recipe.photos.length + '.' + file.name.split('.').pop();
-      if (!this.recipe.photos) {
-        this.recipe.photos = [];
+      const formData = new FormData()
+      for (let i = 0; i < files.length; i++) {
+        var file = files[i]
+        var fileHashedName = md5((file.lastModified + Date.now() + file.size).toString())
+        var filename = fileHashedName + this.recipe.photos.length + '.' + file.name.split('.').pop();
+        if (!this.recipe.photos) {
+          this.recipe.photos = [];
+        }
+        this.recipe.photos.push(filename);
+        formData.append('files[]', file)
+        formData.append('filenames[]', filename)
       }
-      this.recipe.photos.push(filename);
-      formData.append('files[]', file)
-      formData.append('filenames[]', filename)
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+      }).then(response => {
+        console.log(response)
+      })
     }
-    fetch(url, {
-      method: 'POST',
-      body: formData,
-    }).then(response => {
-      console.log(response)
-    })
+
   }
 
+  /*
   reuploadImage(imgIndex): void {
 
-  }
+  }*/
 
   deleteImage(imgIndex): void {
     // pode usar recipe.photos[imgIndex] para pegar a URL da imagem e retirar do banco de dados
@@ -349,7 +353,7 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   filterAvailableTags(): void {
-    
+
     this.availableTags = JSON.parse(JSON.stringify(this.tags));
     console.log(this.availableTags);
     console.log(this.tags);
@@ -377,14 +381,13 @@ export class RecipeDetailsComponent implements OnInit {
     else {
       element.classList.remove("is-invalid");
     }
-    if (this.recipeService.getUserLevel() > 0) {
+    if (this.recipeService.isUserAllowedToCreateRecipe()) {
       this.toggleEditing();
       this.numberOfDifficultyStars = [];
       for (let i = 0; i < this.recipe.difficulty; i++) {
         this.numberOfDifficultyStars.push(1);
       }
-      if (this.newRecipe)
-      {
+      if (this.newRecipe) {
         this.recipe.userId = this.recipeService.getUserId();
         console.log(this.recipe.userId);
         this.recipeService.saveNewRecipe(this.recipe);
@@ -394,20 +397,20 @@ export class RecipeDetailsComponent implements OnInit {
       this.router.navigateByUrl('recipes/all');
     }
     else {
-      window.alert("Você não possui autorização para realizar modificações no banco de dados!");
+      window.alert("Você não possui autorização para adicionar ou editar receitas!");
     }
 
   }
 
   delete(): void {
-    if (this.recipeService.getUserLevel() > 1) {
+    if (this.recipeService.isUserAllowedToEdit(this.recipe)) {
       if (confirm("Você tem certeza que deseja deletar esta receita? Essa ação é irreversível.")) {
         this.recipeService.deleteRecipe(this.recipe);
         this.goBack();
       }
     }
     else {
-      window.alert("Você não possui autorização para realizar modificações no banco de dados!");
+      window.alert("Você não possui autorização para deletar receitas!");
     }
   }
 

@@ -60,8 +60,8 @@
 		<div class="col-md-6 col-xs-12">
 			<div id="custom-search-input">
 				<div class="input-group col-md-12">
-					<input id="barSearch" type="text" class="form-control input-lg" placeholder="Buscar" [(ngModel)]="searchTerm"
-					 onkeydown="if(event.keyCode == 13)document.getElementById('btnSearch').click();" />
+					<input id="barSearch" type="text" class="form-control input-lg" placeholder="Buscar" [(ngModel)]="searchTerm" onkeydown="if(event.keyCode == 13)document.getElementById('btnSearch').click();"
+					/>
 					<span class="input-group-btn">
 						<button id="btnSearch" class="btn btn-primary btn-lg" type="button" [routerLink]="['recipes', searchTerm ]">
 							<i class="glyphicon glyphicon-search"></i>
@@ -144,9 +144,9 @@
 
 				<form class="form col-md-12 center-block">
 					<div class="form-group ">
-						<input id="loginUsername" type="text" required=true class="form-control input-lg" [(ngModel)]="username"
-						 [ngModelOptions]="{standalone: true}" placeholder="Nome de Usuário">
-						 <div class="invalid-feedback">
+						<input id="loginUsername" type="text" required=true class="form-control input-lg" [(ngModel)]="username" [ngModelOptions]="{standalone: true}"
+						 placeholder="Nome de Usuário">
+						<div class="invalid-feedback">
 							Nome de usuário não existe.
 						</div>
 					</div>
@@ -196,62 +196,65 @@
 
 				<form class="form col-md-12 center-block">
 					<div *ngIf="!isLoggedIn" class="form-group">
-						<input id="usernameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="usernameConfig"
-						 [ngModelOptions]="{standalone: true}" placeholder="Nome de Usuário">
+						<input id="usernameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="usernameConfig" [ngModelOptions]="{standalone: true}"
+						 placeholder="Nome de Usuário">
 						<div class="invalid-feedback">
-                            Campo inválido
+							Campo inválido
 						</div>
 					</div>
 					<div *ngIf="isLoggedIn" class="form-group">
 						<strong>{{usernameSession}}</strong>
 					</div>
 					<div class="form-group">
-						<input id="fullnameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="fullnameConfig"
-						 [ngModelOptions]="{standalone: true}" placeholder="Nome Completo">
+						<input id="fullnameConfig" type="text" required=true class="form-control input-lg" [(ngModel)]="fullnameConfig" [ngModelOptions]="{standalone: true}"
+						 placeholder="Nome Completo">
 						<div class="invalid-feedback">
-						    Campo inválido 
+							Campo inválido
 						</div>
 					</div>
 					<div class="form-group">
-						<input id="emailConfig" type="email" required=true class="form-control input-lg" [(ngModel)]="emailConfig"
-						 [ngModelOptions]="{standalone: true}" placeholder="Email">
+						<input id="emailConfig" type="email" required=true class="form-control input-lg" [(ngModel)]="emailConfig" [ngModelOptions]="{standalone: true}"
+						 placeholder="Email">
 						<div class="invalid-feedback">
-						    Campo inválido 
+							Campo inválido
 						</div>
 					</div>
 					<div *ngIf="isLoggedIn" class="form-group">
 						<input id="oldPasswordConfig" type="password" required=true class="form-control input-lg" [(ngModel)]="oldPasswordConfig"
 						 [ngModelOptions]="{standalone: true}" placeholder="Senha Atual">
 						<div class="invalid-feedback">
-						    Senha inválida 
+							Senha inválida
 						</div>
 					</div>
 					<div class="form-group">
-						<input id="passwordConfig" type="password" required=true class="form-control input-lg" [(ngModel)]="passwordConfig"
-						 [ngModelOptions]="{standalone: true}" placeholder="Nova Senha">
+						<input id="passwordConfig" type="password" required=true class="form-control input-lg" [(ngModel)]="passwordConfig" [ngModelOptions]="{standalone: true}"
+						 placeholder="Nova Senha">
 						<div class="invalid-feedback">
-                            Campo inválido
+							Campo inválido
 						</div>
 					</div>
 					<div class="form-group">
 						<input id="passwordConfirmationConfig" type="password" required=true class="form-control input-lg" [(ngModel)]="passwordConfirmationConfig"
 						 [ngModelOptions]="{standalone: true}" placeholder="Confirmar Nova Senha">
 						<div class="invalid-feedback">
-						    Confirmação de senha inválida 
+							Confirmação de senha inválida
 						</div>
 					</div>
 					<div *ngIf="!isLoggedIn" class="form-group">
-						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" (click)="submitNewUser()">Criar
-							Conta</button>
+						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" (click)="submitNewUser()">Criar Conta
+						</button>
 					</div>
 					<div *ngIf="isLoggedIn" class="form-group">
-						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" (click)="submitChangesInUser()">Editar
-							Usuário</button>
+						<button class="btn btn-primary btn-lg btn-block" id="loginConfigSubmitButton" (click)="submitChangesInUser()">Editar Usuário
+						</button>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<div class="col-md-12">
+				<div class="col-md-6">
+					<button class="btn btn-danger float-left" data-dismiss="modal" aria-hidden="true" (click)="deleteUserAccount()" >Deletar Conta</button>
+				</div>
+				<div class="col-md-6">
 					<button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 				</div>
 			</div>

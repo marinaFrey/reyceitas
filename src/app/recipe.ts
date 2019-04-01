@@ -47,6 +47,7 @@ export class User {
     fullname: string;
     email: string;
     authenticationLevel: number;
+    groups: Array<number>;
 }
 
 export class ChartFormat {
