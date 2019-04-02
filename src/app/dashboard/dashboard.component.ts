@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   }
 
   goToNewRecipePage() {
-    if (this.recipeService.getUserLevel() > 0) {
+    if (this.recipeService.isUserAllowedToCreateRecipe()) {
       this.router.navigateByUrl('/details/new');
     }
     else {
