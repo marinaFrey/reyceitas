@@ -49,6 +49,7 @@ function get_user($username) {
     $ret = $stmt->execute();
     $ret = $stmt->fetchAll();
 
+
     $i=0;
     foreach($ret as $row)
     {
@@ -58,9 +59,21 @@ function get_user($username) {
         $resArrVals[$i]['email']=$row['email'];
         $resArrVals[$i]['fullname']=$row['full_name'];
         $resArrVals[$i]['authenticationLevel']=$row['authentication_level'];
-        
+        $resArrVals[$i]['groups'] = array();
+
+        $sql_groups = "SELECT * FROM user_groups where user_id = :usr_id" ;
+        $stmt_groups = $db->prepare($sql_groups);
+        $stmt_groups->bindValue(':usr_id', $row['user_id'], PDO::PARAM_STR);
+        $ret_groups = $stmt_groups->execute();
+        $ret_groups = $stmt_groups->fetchAll();
+        foreach($ret_groups as $row_groups)
+        {
+            $v = array_push($resArrVals[$i]['groups'],$row_groups['group_id']);
+        }
         $i++;
     }
+   
+
     if($i>0)
     {
         echo json_encode($resArrVals);

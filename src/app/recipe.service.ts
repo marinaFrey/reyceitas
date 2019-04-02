@@ -24,6 +24,7 @@ export class RecipeService {
   fullnameSession: string;
   emailSession: string;
   userLevel: number;
+  userGroups: Array<number>;
   distURL = "https://receitas.fortesrey.net/backend/";
   testingURL = "http://localhost:8000/";
 
@@ -36,6 +37,7 @@ export class RecipeService {
     this.fullnameSession = user.fullname;
     this.emailSession = user.email;
     this.userLevel = user.authenticationLevel;
+    this.userGroups = user.groups;
     this.isLoggedIn = true;
     console.log(user.authenticationLevel);
     console.log("logged in")
@@ -375,7 +377,21 @@ export class RecipeService {
       return true;
     }
     // test if one of users groups is allowed to edit
-
+    if (this.userGroups && recipe.groupsAuthenticationLevel) {
+      for (var i = 0; i < this.userGroups.length; i++) {
+        for(var j = 0; j < recipe.groupsAuthenticationLevel.length; j++)
+        {
+          if(this.userGroups[i].toString() == recipe.groupsAuthenticationLevel[j].groupId.toString())
+          {
+            if(recipe.groupsAuthenticationLevel[j].authenticationLevel.toString() == "2")
+            {
+              return true;
+            }
+          }
+        }
+        
+      }
+    }
 
     return false;
   }

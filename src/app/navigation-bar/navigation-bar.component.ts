@@ -86,6 +86,7 @@ export class NavigationBarComponent implements OnInit {
                     this.fullnameSession = user_list[0].fullname;
                     this.emailSession = user_list[0].email;
                     this.usernameSession = user_list[0].username;
+                    //console.log(user_list[0])
                     this.recipeService.login(user_list[0]);
 
                 } else {
@@ -216,6 +217,16 @@ export class NavigationBarComponent implements OnInit {
                 }
 
             });
+    }
+
+    getUserLevelName()
+    {
+        var level = this.recipeService.getUserLevel();
+        if(level == 2)
+            return "Administrador";
+        if(level == 1)
+            return "Usuário com Permissões";
+        return "Usuário sem Permissões";
     }
 
     deleteUserAccount() {
