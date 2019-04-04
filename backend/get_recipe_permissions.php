@@ -81,7 +81,7 @@ function get_recipes_per_user($username)
     $sql.= " INNER JOIN users AS u ON ug.user_id = u.user_id";
     $sql.= " INNER JOIN groups AS g ON ug.group_id = g.group_id";
     $sql.= " INNER JOIN recipes AS r ON rp.recipe_id = r.recipe_id";
-    $sql.= " WHERE u.username = :username";
+    $sql.= " WHERE u.username = :username OR r.owner = :username";
     $sql.= " ORDER BY group_authentication_level desc";
     $stmt= $db->prepare($sql);
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
@@ -126,7 +126,6 @@ function get_recipes_per_user($username)
             $mapIdToData[$resArrVals[$i]['id']] = $i;
             $i++;
         }
-        $i += 1;
     }
     if($i>0)
     {

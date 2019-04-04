@@ -49,16 +49,14 @@ export class RecipeService {
   getRecipes(): Observable<Recipe[]> {
     this.messageService.add('RecipeService: fetched recipes');
 
-    var recps = this.httpCli.get<Recipe[]>(
-      this.testingURL + `get_recipe_permissions.php`);
-    return recps;
-    // return of(RECIPES);
-  }
-  getRecipesPerUser(username: string): Observable<Recipe[]> {
-    this.messageService.add('RecipeService: fetched recipes');
-
-    var recps = this.httpCli.get<Recipe[]>(
-      this.testingURL + `get_recipe_permissions.php?username=${username}`);
+    if(this.isLoggedIn)
+    {
+        var recps = this.httpCli.get<Recipe[]>(
+          this.testingURL + `get_recipe_permissions.php?username=${this.usernameSession}`);
+    }else{
+        var recps = this.httpCli.get<Recipe[]>(
+          this.testingURL + `get_recipe_permissions.php`);
+    }
     return recps;
     // return of(RECIPES);
   }
