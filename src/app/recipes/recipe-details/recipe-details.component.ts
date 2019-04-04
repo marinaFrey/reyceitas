@@ -25,6 +25,7 @@ export class RecipeDetailsComponent implements OnInit {
   availableTags: Tag[];
   selectedTag: string;
   userGroups: Group[];
+  recipeMultiplier: number;
 
   constructor(private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -92,7 +93,11 @@ export class RecipeDetailsComponent implements OnInit {
           if (!this.recipe.photos)
             this.recipe.photos = [];
 
-          console.log(this.recipe.groupsAuthenticationLevel);
+          if (this.recipe.servings)
+            this.recipeMultiplier = this.recipe.servings;
+          else
+            this.recipeMultiplier = 1;
+            
           this.recipeService.getGroupsByRecipe(this.recipe.name).subscribe(authGroups => {
             this.recipe.groupsAuthenticationLevel = authGroups;
           });

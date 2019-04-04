@@ -372,6 +372,11 @@ export class RecipeService {
     if (recipe.globalAuthenticationLevel >= 2 || this.getUserLevel() >= 1) {
       return true;
     }
+    //check if user created this recipe
+    if(recipe.userId == this.getUserId())
+    {
+      return true;
+    }
     // check if user is administrator
     if (this.getUserLevel() >= 2) {
       return true;

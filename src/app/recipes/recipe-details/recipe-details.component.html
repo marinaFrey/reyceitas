@@ -181,7 +181,8 @@
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
                 <input class="form-control" type="number" min="1" *ngIf="editing" [(ngModel)]="recipe.servings" placeholder="n pessoas" ng-disabled="editing">
                 <div *ngIf="!editing">
-                  {{recipe.servings}}
+                  <input class="form-control" type="number" min="0.1" *ngIf="!editing" [(ngModel)]="recipeMultiplier" placeholder="n pessoas"> 
+                  <!--{{recipe.servings}}-->
                 </div>
 
               </div>
@@ -212,7 +213,7 @@
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 text-center">Criada por</div>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
-                  {{recipe.username}}
+                {{recipe.username}}
               </div>
             </div>
 
@@ -255,7 +256,8 @@
           <h3 style="background-color: #f1f1f1;">Ingredientes</h3>
           <dl class="ingredients-list">
             <div *ngFor="let ingredient of recipe.ingredients">
-              <dt>{{ingredient.amount}}</dt>
+              <dt *ngIf="recipe.servings">{{ingredient.amount*recipeMultiplier/recipe.servings}}</dt>
+              <dt *ngIf="!recipe.servings">{{ingredient.amount*recipeMultiplier}}</dt>
               <dd>{{ingredient.unit}} de {{ingredient.name}}</dd>
             </div>
           </dl>
@@ -331,7 +333,7 @@
             <div class="row" *ngFor="let steps of recipe.preparation;let index = index;trackBy:trackByFn">
               <div class=" col-xs-11 col-sm-11 col-md-11">
                 <li>
-                      <textarea class="form-control" [(ngModel)]="recipe.preparation[index]" placeholder="insira o passo"></textarea>             
+                  <textarea class="form-control" [(ngModel)]="recipe.preparation[index]" placeholder="insira o passo"></textarea>
                 </li>
               </div>
               <div class=" col-xs-1 col-sm-1 col-md-1">
