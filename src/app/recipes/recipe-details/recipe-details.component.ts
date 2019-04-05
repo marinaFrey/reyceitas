@@ -97,7 +97,7 @@ export class RecipeDetailsComponent implements OnInit {
             this.recipeMultiplier = this.recipe.servings;
           else
             this.recipeMultiplier = 1;
-            
+
           this.recipeService.getGroupsByRecipe(this.recipe.name).subscribe(authGroups => {
             this.recipe.groupsAuthenticationLevel = authGroups;
           });
@@ -129,18 +129,17 @@ export class RecipeDetailsComponent implements OnInit {
     if (this.recipe.globalAuthenticationLevel) {
       var visibilityCheckbox = (<HTMLInputElement>document.getElementById('visibilityPublic'));
       var editingCheckbox = (<HTMLInputElement>document.getElementById('editingPublic'));
+      visibilityCheckbox.checked = false;
+      editingCheckbox.checked = false;
       if (this.recipe.globalAuthenticationLevel == 2) {
         visibilityCheckbox.checked = true;
         editingCheckbox.checked = true;
       }
-      else if (this.recipe.globalAuthenticationLevel == 1) {
+      if (this.recipe.globalAuthenticationLevel == 1) {
         visibilityCheckbox.checked = true;
         editingCheckbox.checked = false;
       }
-      else {
-        visibilityCheckbox.checked = false;
-        editingCheckbox.checked = false;
-      }
+
     }
     if (this.recipe.groupsAuthenticationLevel) {
       for (var i = 0; i < this.recipe.groupsAuthenticationLevel.length; i++) {
@@ -234,8 +233,11 @@ export class RecipeDetailsComponent implements OnInit {
     this.recipe.globalAuthenticationLevel = 0;
     if (editingCheckbox.checked) {
       this.recipe.globalAuthenticationLevel = 2;
-    } else if (visibilityCheckbox.checked) {
-      this.recipe.globalAuthenticationLevel = 1;
+    }
+    else {
+      if (visibilityCheckbox.checked) {
+        this.recipe.globalAuthenticationLevel = 1;
+      }
     }
 
     this.recipe.groupsAuthenticationLevel = [];
@@ -280,8 +282,8 @@ export class RecipeDetailsComponent implements OnInit {
   addImage(): void {
     if (this.recipeService.isUserAllowedToCreateRecipe()) {
       const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
-      const url = 'https://receitas.fortesrey.net/backend/upload_file.php'
-
+      //const url = 'https://receitas.fortesrey.net/backend/upload_file.php'
+      const url = "http://localhost:8000/upload_file.php";
       const formData = new FormData()
       for (let i = 0; i < files.length; i++) {
         var file = files[i]
@@ -408,7 +410,7 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   delete(): void {
-    if (this.recipeService.isUserAllowedToEdit(this.recipe)) {
+    if (this.isUserAllowedToEdit()) {
       if (confirm("Você tem certeza que deseja deletar esta receita? Essa ação é irreversível.")) {
         this.recipeService.deleteRecipe(this.recipe);
         this.goBack();
@@ -417,6 +419,14 @@ export class RecipeDetailsComponent implements OnInit {
     else {
       window.alert("Você não possui autorização para deletar receitas!");
     }
+  }
+
+  isUserAllowedToEdit() {
+    console.log("gothere",this.recipeService.isUserAllowedToEdit(this.recipe));
+    if (this.recipeService.isUserAllowedToEdit(this.recipe))
+      return true;
+    else
+      return false;
   }
 
   trackByFn(index: any, item: any) {

@@ -3,14 +3,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent} from './dashboard/dashboard.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeDetailsComponent } from './recipes/recipe-details/recipe-details.component';
-import { AdvancedSearchComponent } from './advanced-search/advanced-search.component'
+import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'recipes/:term', component: RecipesComponent },
   { path: 'details/:id', component: RecipeDetailsComponent },
-  { path: 'advancedsearch', component: AdvancedSearchComponent }
+  { path: 'advancedsearch', component: AdvancedSearchComponent },
+  { path: 'admin', component: AdminPanelComponent }
 ];
 
 @NgModule({

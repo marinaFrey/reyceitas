@@ -1,0 +1,299 @@
+<section id="adminPanel">
+
+  <div class="row">
+
+    <!-- First recipe item -->
+    <div class="col-lg-12 col-md-12 col-sm-12 wow fadeIn">
+      <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+        Gerenciar Usuários
+      </h1>
+      <div class="recipe-item text-center">
+        <div class="row">
+          <table class="table table-hover" style="margin:15px">
+            <thead>
+              <tr>
+                <th>Nome de Usuário</th>
+                <th>Nome Completo</th>
+                <th>E-mail</th>
+                <th>Grupos</th>
+                <th>Pode Criar Receitas</th>
+                <th>Admin</th>
+                <th>Editar</th>
+                <th>Excluir</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users;let index = index;trackBy:trackByFn">
+
+                <!-- user -->
+                <td *ngIf=!isEditingUser[index]>{{user.username}}</td>
+                <td *ngIf=!isEditingUser[index]>{{user.fullname}}</td>
+                <td *ngIf=!isEditingUser[index]>{{user.email}}</td>
+                <td *ngIf=!isEditingUser[index]>
+                  <button type="button" class="btn-sm btn-primary" data-toggle="modal" data-target="#groupManagingModal">
+                    <i class="fa fa-users fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+                <td *ngIf=!isEditingUser[index]>
+                  <i *ngIf="user.authenticationLevel == 1 || user.authenticationLevel == 2 " class="fa fa-check fa-lg" aria-hidden="true"></i>
+                  <i *ngIf="user.authenticationLevel == 0" class="fa fa-times fa-lg" aria-hidden="true"></i>
+                </td>
+                <td *ngIf=!isEditingUser[index]>
+                  <i *ngIf="user.authenticationLevel == 2" class="fa fa-check fa-lg" aria-hidden="true"></i>
+                  <i *ngIf="user.authenticationLevel != 2" class="fa fa-times fa-lg" aria-hidden="true"></i>
+                </td>
+                <td *ngIf=!isEditingUser[index]>
+                  <button type="button" class="btn-sm btn-primary" (click)="enableUserEditing(index)">
+                    <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+                <!-- EDITING user -->
+                <td *ngIf=isEditingUser[index]>
+                  <input class="form-control" [(ngModel)]="user.username" placeholder="nome de usuário" ng-disabled="editing">
+                </td>
+                <td *ngIf=isEditingUser[index]>
+                  <input class="form-control" [(ngModel)]="user.fullname" placeholder="nome de usuário" ng-disabled="editing">
+                </td>
+                <td *ngIf=isEditingUser[index]>
+                  <input class="form-control" [(ngModel)]="user.email" placeholder="nome de usuário" ng-disabled="editing">
+                </td>
+                <td *ngIf=isEditingUser[index]>
+                  <button type="button" class="btn-sm btn-primary" data-toggle="modal" data-target="#groupManagingModal">
+                    <i class="fa fa-users fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+                <td *ngIf=isEditingUser[index]>
+                  <input type="checkbox" class="form-check-input" id="normalUser{{user.id}}" (click)="setUserPrivilegesCheckboxes(user.id)">
+                </td>
+                <td *ngIf=isEditingUser[index]>
+                  <input type="checkbox" class="form-check-input" id="adminUser{{user.id}}" (click)="setUserPrivilegesCheckboxes(user.id)">
+                </td>
+                <td *ngIf=isEditingUser[index]>
+                  <button type="button" class="btn-sm btn-success" (click)="saveUser(index, user.id)">
+                    <i class="fa fa-check fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+                <td>
+                  <button type="button" class="btn-sm btn-danger" (click)="deleteUser(user.id)">
+                    <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+
+    <div class="col-lg-4 col-md-12 col-sm-12 wow fadeIn">
+      <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+        Gerenciar Grupos de Usuário
+      </h1>
+      <div class="recipe-item text-center">
+        <div class="row">
+          <table class="table table-hover" style="margin:15px">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Editar</th>
+                <th>Excluir</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let group of groups;let index = index;trackBy:trackByFn">
+                <!-- group -->
+                <td *ngIf=!isEditingGroup[index]>{{group.name}}</td>
+                <td *ngIf=!isEditingGroup[index]>
+                  <button type="button" class="btn-sm btn-primary" (click)="enableGroupEditing(index)">
+                    <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+                <!-- EDITING group -->
+                <td *ngIf=isEditingGroup[index]>
+                  <input class="form-control" [(ngModel)]="group.username" placeholder="nome do grupo" ng-disabled="editing">
+                </td>
+                <td *ngIf=isEditingGroup[index]>
+                  <button type="button" class="btn-sm btn-success" (click)="saveGroup(index, group.id)">
+                    <i class="fa fa-check fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+                <td>
+                  <button type="button" class="btn-sm btn-danger" (click)="deleteGroup(group.id)">
+                    <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <button type="button" class="btn-sm btn-success" (click)="addNewGroup()" style="float:left; margin-left:25px;">
+            <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-lg-8 col-md-12 col-sm-12 wow fadeIn">
+      <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+        Gerenciar Categorias
+      </h1>
+      <div class="recipe-item text-center">
+        <div class="row">
+          <table class="table table-hover" style="margin:15px">
+            <thead>
+              <tr>
+                <th>Ícone</th>
+                <th>Nome</th>
+                <th>Referência</th>
+                <th>Cor</th>
+                <th>Editar</th>
+                <th>Excluir</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tag of tags;let index = index;trackBy:trackByFn">
+                <td>
+                  <i class="fa {{tag.icon}} fa-lg" aria-hidden="true" [ngStyle]="{'color': tag.color}"></i>
+                </td>
+
+                <!-- tags -->
+
+                <td *ngIf=!isEditingTag[index]>{{tag.name}}</td>
+                <td *ngIf=!isEditingTag[index]>{{tag.icon}}</td>
+                <td *ngIf=!isEditingTag[index]>
+                  <button type="button" class="btn-sm btn-primary">
+                    <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+                <td *ngIf=!isEditingTag[index]>
+                  <button type="button" class="btn-sm btn-primary" (click)="enableTagEditing(index)">
+                    <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+                <!-- EDITING tags -->
+                <td *ngIf=isEditingTag[index]>
+                  <input class="form-control" [(ngModel)]="tag.name" placeholder="nome da tag" ng-disabled="editing">
+                </td>
+                <td *ngIf=isEditingTag[index]>
+                  <input class="form-control" [(ngModel)]="tag.icon" placeholder="referência da tag" ng-disabled="editing">
+                </td>
+                <td *ngIf=isEditingTag[index]>
+                  <button type="button" class="btn-sm btn-primary">
+                    <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+                <td *ngIf=isEditingTag[index]>
+                  <button type="button" class="btn-sm btn-success" (click)="saveTag(index, tag.id)">
+                    <i class="fa fa-check fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+                <td>
+                  <button type="button" class="btn-sm btn-danger" (click)="deleteTag(tag.id)">
+                    <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+            <button type="button" class="btn-sm btn-success" (click)="addNewGroup()" style="float:left; margin-left:25px;">
+              <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+            </button>
+          </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <button class="btn btn-success" (click)="save()" style="float:right">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        Salvar
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+<!--group managing modal-->
+<div id="groupManagingModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header center-block col-md-12 col-sm-12 col-xs-12 text-center">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h1 class="text-center">Gerenciar Grupos</h1>
+      </div>
+      <div class="modal-body">
+
+        <form class="form col-md-12 center-block">
+
+          <div *ngIf="userGroups">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nome do Grupo</th>
+                  <th class="recipe-info">
+                    <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="visibilityAll" (click)="setVisibilityCheckboxes('visibilityAll')">
+                  </th>
+                  <th class="recipe-info">
+                    <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="editingAll" (click)="setVisibilityCheckboxes('editingAll')">
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <td style="background-color: #ececec">Público</td>
+                <td class="recipe-info" style="background-color: #ececec">
+                  <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                  <input type="checkbox" class="form-check-input" id="visibilityPublic" (click)="setVisibilityCheckboxes('visibilityPublic')">
+                </td>
+                <td class="recipe-info" style="background-color: #ececec">
+                  <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                  <input type="checkbox" class="form-check-input" id="editingPublic" (click)="setVisibilityCheckboxes('editingPublic')">
+                </td>
+                <tr *ngFor="let group of userGroups;let index = index;trackBy:trackByFn">
+                  <td>{{group.name}}</td>
+                  <td class="recipe-info">
+                    <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="visibility{{group.id}}" (click)="setVisibilityCheckboxes(group.id)">
+                  </td>
+                  <td class="recipe-info">
+                    <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="editing{{group.id}}" (click)="setVisibilityCheckboxes(group.id)">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-primary btn-lg btn-block" data-dismiss="modal" (click)="submitVisibilityChanges()">Salvar</button>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <div class="col-md-12">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

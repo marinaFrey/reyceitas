@@ -17,6 +17,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
 import {HttpClientModule} from '@angular/common/http';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {HttpClientModule} from '@angular/common/http';
     DashboardComponent,
     MessagesComponent,
     NavigationBarComponent,
-    AdvancedSearchComponent
+    AdvancedSearchComponent,
+    AdminPanelComponent
   ],
   imports: [
     AlertModule.forRoot(),

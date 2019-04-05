@@ -1,0 +1,41 @@
+#adminPanel {
+    background-color: #f1f1f1;
+    padding-top: 12px;
+    padding-bottom: 24px;
+    padding-left: 12px;
+    padding-right:12px;
+  }
+  #items h2 {
+    color: #333;
+    font-family: 'Dancing Script', cursive;
+    font-size: 4em;
+    margin-bottom: 12px;
+  }
+  #items h3 {
+    margin-top: 12px;
+    font-size: 3em;
+    color: #666;
+  }
+
+  canvas {
+      padding: 20px;
+  }
+
+  .recipe-item {
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    background-color: white;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.15);
+    -moz-box-shadow: 0 1px 0 rgba(0,0,0,.15);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left:10px;
+    margin-right:10px;
+    border-radius: 5px; /* 5px rounded corners */
+  }
+  .recipe-item img {
+    width: 100%;
+    height: auto;
+  }
+  .recipe-item:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }

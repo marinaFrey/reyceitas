@@ -36,7 +36,7 @@
               A receita precisa ter um nome para ser salva.
             </div>
           </div>
-          <div class="col-md-6 col-sm-6 col-xs-6">
+          <div class="col-md-6 col-sm-6 col-xs-6" [ngIf]="isUserAllowedToEdit()">
             <button *ngIf="!newRecipe" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
               <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
             </button>
@@ -193,7 +193,7 @@
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
                 <i class="fa fa-eye" aria-hidden="true"></i>
               </div>
-              <div class="col-md-6 col-sm-6 col-xs-6 text-center">Visibilidade</div>
+              <div class="col-md-6 col-sm-6 col-xs-6 text-center">Controle de Acesso</div>
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#visibilityModal">
                   <i class="fa fa-pencil-alt" style="color:white;"></i>
@@ -357,7 +357,7 @@
     <div *ngIf="!editing" class="row wow slideInUp">
       <div class="col-12">
         <div class="recipe-directions">
-          <h3>Tags</h3>
+          <h3>Categorias</h3>
           <ol *ngIf="tags && tags.length">
             <button class="btn btn-light" *ngFor="let tag of recipe.tags" routerLink="/recipes/{{tag}}">
               {{getTagFromId(tag)}}
@@ -372,7 +372,7 @@
     <div *ngIf="editing" class="row wow slideInUp">
       <div class="col-12">
         <div class="recipe-directions">
-          <h3>Tags</h3>
+          <h3>Categorias</h3>
           <ol>
             <a *ngIf="recipe.tags">
               <button class="btn btn-light" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn">
@@ -406,7 +406,7 @@
           Cancelar
         </button>
 
-        <button class="btn btn-success" (click)="save()">
+        <button class="btn btn-success" (click)="save()" >
           <i class="fa fa-check" aria-hidden="true"></i>
           Salvar
         </button>
