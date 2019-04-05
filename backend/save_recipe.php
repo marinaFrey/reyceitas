@@ -9,8 +9,8 @@
         //echo json_encode($recipe->name);
         
         $sql = <<<EOF
-            INSERT INTO recipes (owner, name, difficulty, n_served, duration, description)
-            VALUES (:owner, :name, :difficulty, :n_served, :duration, :description);
+            INSERT INTO recipes (owner, name, difficulty, n_served, duration, description, global_authentication_level)
+            VALUES (:owner, :name, :difficulty, :n_served, :duration, :description, :global_authentication_level);
 EOF;
         $db = connect();
         $stmt = $db->prepare($sql);
@@ -20,7 +20,8 @@ EOF;
         $stmt->bindValue(':difficulty', $recipe->difficulty, PDO::PARAM_INT);
         $stmt->bindValue(':n_served', $recipe->servings, PDO::PARAM_INT);
         $stmt->bindValue(':duration', $recipe->duration, PDO::PARAM_STR);
-        $stmt->bindValue(':description', $recipe->duration, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $recipe->description, PDO::PARAM_STR);
+        $stmt->bindValue(':global_authentication_level', $recipe->globalAuthenticationLevel, PDO::PARAM_INT);
 
         $ret = $stmt->execute();
         if(!$ret) {

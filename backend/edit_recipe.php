@@ -11,7 +11,7 @@
         $sql = <<<EOF
             UPDATE recipes
             SET name = :recp_nm, difficulty = :recp_lvl, n_served = :n_served,
-                duration = :dur, description = :descr
+                duration = :dur, description = :descr, global_authentication_level = :global_authentication_level
             WHERE recipe_id = :recp_id;
 EOF;
 
@@ -23,6 +23,7 @@ EOF;
         $stmt->bindValue(':dur', $recipe->duration, PDO::PARAM_STR);
         $stmt->bindValue(':descr', $recipe->description, PDO::PARAM_STR);
         $stmt->bindValue(':recp_id', $recipe->id, PDO::PARAM_INT);
+        $stmt->bindValue(':global_authentication_level', $recipe->globalAuthenticationLevel, PDO::PARAM_INT);
         $ret = $stmt->execute();
 
         if(!$ret) {
