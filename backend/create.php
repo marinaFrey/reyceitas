@@ -20,92 +20,8 @@ function connect() {
     return $db;
 }
 
-function logDBErrors($db, $ret) {
-    if($ret === false) {
-        $err = $db->errorInfo();
-        if($err[0] !== '00000') {
-            echo "Query ran fine, but to no effect. \n";
-        }else if($err[0] === '01000') {
-            echo "Warning:\n";
-        } else {
-            echo "ERROR!\n";
-        }
-        print_r( $err );
-    }
-}
-
-
-function createUserDBModel()
-{
-
-  $sql =<<<EOF
-  PRAGMA foreign_keys = OFF;
-
-  CREATE TABLE "users" (
-      "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL CHECK ("id" >= 0),
-      "email" VARCHAR(249) NOT NULL,
-      "password" VARCHAR(255) NOT NULL,
-      "username" VARCHAR(100) DEFAULT NULL,
-      "status" INTEGER NOT NULL CHECK ("status" >= 0) DEFAULT "0",
-      "verified" INTEGER NOT NULL CHECK ("verified" >= 0) DEFAULT "0",
-      "resettable" INTEGER NOT NULL CHECK ("resettable" >= 0) DEFAULT "1",
-      "roles_mask" INTEGER NOT NULL CHECK ("roles_mask" >= 0) DEFAULT "0",
-      "registered" INTEGER NOT NULL CHECK ("registered" >= 0),
-      "last_login" INTEGER CHECK ("last_login" >= 0) DEFAULT NULL,
-      "force_logout" INTEGER NOT NULL CHECK ("force_logout" >= 0) DEFAULT "0",
-      CONSTRAINT "email" UNIQUE ("email")
-  );
-  
-  CREATE TABLE "users_confirmations" (
-      "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL CHECK ("id" >= 0),
-      "user_id" INTEGER NOT NULL CHECK ("user_id" >= 0),
-      "email" VARCHAR(249) NOT NULL,
-      "selector" VARCHAR(16) NOT NULL,
-      "token" VARCHAR(255) NOT NULL,
-      "expires" INTEGER NOT NULL CHECK ("expires" >= 0),
-      CONSTRAINT "selector" UNIQUE ("selector")
-  );
-  CREATE INDEX "users_confirmations.email_expires" ON "users_confirmations" ("email", "expires");
-  CREATE INDEX "users_confirmations.user_id" ON "users_confirmations" ("user_id");
-  
-  CREATE TABLE "users_remembered" (
-      "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL CHECK ("id" >= 0),
-      "user" INTEGER NOT NULL CHECK ("user" >= 0),
-      "selector" VARCHAR(24) NOT NULL,
-      "token" VARCHAR(255) NOT NULL,
-      "expires" INTEGER NOT NULL CHECK ("expires" >= 0),
-      CONSTRAINT "selector" UNIQUE ("selector")
-  );
-  CREATE INDEX "users_remembered.user" ON "users_remembered" ("user");
-  
-  CREATE TABLE "users_resets" (
-      "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL CHECK ("id" >= 0),
-      "user" INTEGER NOT NULL CHECK ("user" >= 0),
-      "selector" VARCHAR(20) NOT NULL,
-      "token" VARCHAR(255) NOT NULL,
-      "expires" INTEGER NOT NULL CHECK ("expires" >= 0),
-      CONSTRAINT "selector" UNIQUE ("selector")
-  );
-  CREATE INDEX "users_resets.user_expires" ON "users_resets" ("user", "expires");
-  
-  CREATE TABLE "users_throttling" (
-      "bucket" VARCHAR(44) PRIMARY KEY NOT NULL,
-      "tokens" REAL NOT NULL CHECK ("tokens" >= 0),
-      "replenished_at" INTEGER NOT NULL CHECK ("replenished_at" >= 0),
-      "expires_at" INTEGER NOT NULL CHECK ("expires_at" >= 0)
-  );
-  CREATE INDEX "users_throttling.expires_at" ON "users_throttling" ("expires_at");
-EOF;
-    $db = connect();
-    $ret = $db->exec($sql);
-    logDBErrors($db, $ret);
-}
-
 
 function create_tables() {
-
-    createUserDBModel();
-
     $sql =<<<EOF
     CREATE TABLE IF NOT EXISTS groups(
         group_id INTEGER PRIMARY KEY,
@@ -126,6 +42,14 @@ function create_tables() {
         FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE,
         FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE
     );
+    CREATE TABLE IF NOT EXISTS users (
+        user_id INTEGER PRIMARY KEY,
+        username TEXT UNIQUE,
+        password TEXT,
+        email TEXT,
+        full_name TEXT,
+        authentication_level INTEGER DEFAULT 1
+    );
 
     CREATE TABLE IF NOT EXISTS recipes (
         recipe_id INTEGER PRIMARY KEY,
@@ -138,7 +62,7 @@ function create_tables() {
         description TEXT,
         global_authentication_level INTEGER DEFAULT 1,
         
-        FOREIGN KEY (owner) REFERENCES users(id)
+        FOREIGN KEY (owner) REFERENCES users(user_id)
     );
 
 
@@ -167,7 +91,7 @@ function create_tables() {
         contributor_id INTEGER NOT NULL,
         permission_level INTEGER NOT NULL,
         
-        FOREIGN KEY (contributor_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (contributor_id) REFERENCES users(user_id) ON DELETE CASCADE,
         FOREIGN KEY (src_recipe) REFERENCES recipes(recipe_id) ON DELETE CASCADE
     );
 
@@ -200,47 +124,21 @@ function create_tables() {
 EOF;
     $db = connect();
     $ret = $db->exec($sql);
-    logDBErrors($db, $ret);
-}
-
-require __DIR__ . '/vendor/autoload.php';
-
-function register_user($auth, $mail, $pass, $usrname) 
-{
-    try {
-        $userId = $auth->registerWithUniqueUsername($mail, $pass, $usrname);
-        echo 'We have signed up a new user with the ID ' . $userId;
-        return $userId;
-    }
-    catch (\Delight\Auth\InvalidEmailException $e) {
-        die('Invalid email address');
-    }
-    catch (\Delight\Auth\InvalidPasswordException $e) {
-        die('Invalid password');
-    }
-    catch (\Delight\Auth\UserAlreadyExistsException $e) {
-        die('User already exists');
-    }
-    catch (\Delight\Auth\TooManyRequestsException $e) {
-        die('Too many requests');
-    }
-    catch(\Delight\Auth\DuplicateUsernameException $e) {
-        die('username already exists');
+    if(!$ret){
+        echo $db->errorInfo();
+    } else {
+        // echo "Table created successfully\n";
     }
 }
-
-
 
 function populate_with_dummy_info() {
-    $db = connect();
-    $auth = new \Delight\Auth\Auth($db);
-
-
-    register_user($auth, "t@b1.com", "1234", "testinho");
-    register_user($auth, "t@b2.com", "12345", "testículo");
-    register_user($auth, "t@b3.com", "12345", "testando");
-
     $sql =<<<EOF
+    INSERT INTO users (username, full_name, password) VALUES ("testinho", "testinho testado", "1234");
+    INSERT INTO users (username, full_name, password) VALUES ("testículo", "testículo testação", "12345");
+    INSERT INTO users (username, full_name, password) VALUES ("testando", "testículo testação", "12345");
+    INSERT INTO users (username, full_name, password, authentication_level) VALUES ("root", "root", "81dc9bdb52d04dc20036dbd8313ed055", "2");
+
+
     INSERT INTO recipes
         (recipe_id, owner, name, difficulty, n_served, duration, description)
     VALUES
@@ -270,7 +168,7 @@ function populate_with_dummy_info() {
     
     INSERT INTO recipe_tags VALUES (101, 42);
 EOF;
-    
+    $db = connect();
     $ret = $db->exec($sql);
     if(!$ret) {
         echo $db->errorInfo();
@@ -328,14 +226,11 @@ EOF;
     }
 }
 
-
-
-
 // connect();
-//  create_tables();
-//  populateTags();
-//  populate_with_dummy_info();
-//  populateUserGroups();
+ create_tables();
+ populateTags();
+ populate_with_dummy_info();
+ populateUserGroups();
 
 
 ?>

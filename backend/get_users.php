@@ -11,12 +11,12 @@ function list_all_users() {
     $i=0;
     foreach($ret as $row)
     {
-        $resArrVals[$i]['id']=$row['id'];
+        $resArrVals[$i]['id']=$row['user_id'];
         $resArrVals[$i]['username']=$row['username'];
         $resArrVals[$i]['password']=$row['password'];
         $resArrVals[$i]['email']=$row['email'];
-        $resArrVals[$i]['fullname']=$row['username'];
-        $resArrVals[$i]['authenticationLevel']= 1; //$row['authentication_level'];
+        $resArrVals[$i]['fullname']=$row['full_name'];
+        $resArrVals[$i]['authenticationLevel']=$row['authentication_level'];
         
         // Keep this reference recipe id -> its place in the array.
         //$mapIdToData[$resArrVals[$i]['id']] = $i;
@@ -30,7 +30,7 @@ function list_all_users() {
 }
 function get_user_by_id($id) {
     $db = connect();
-    $sql = "SELECT * FROM users where id = :id" ;
+    $sql = "SELECT * FROM users where user_id = :id" ;
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':id', $id, PDO::PARAM_STR);
     $ret = $stmt->execute();
@@ -53,12 +53,12 @@ function get_user($username) {
     $i=0;
     foreach($ret as $row)
     {
-        $resArrVals[$i]['id']=$row['id'];
+        $resArrVals[$i]['id']=$row['user_id'];
         $resArrVals[$i]['username']=$row['username'];
         $resArrVals[$i]['password']=$row['password'];
         $resArrVals[$i]['email']=$row['email'];
-        $resArrVals[$i]['fullname']= $row['username']; // $row['full_name'];
-        $resArrVals[$i]['authenticationLevel']= 1;//$row['authentication_level'];
+        $resArrVals[$i]['fullname']=$row['full_name'];
+        $resArrVals[$i]['authenticationLevel']=$row['authentication_level'];
         $resArrVals[$i]['groups'] = array();
 
         $sql_groups = "SELECT * FROM user_groups where user_id = :usr_id" ;
