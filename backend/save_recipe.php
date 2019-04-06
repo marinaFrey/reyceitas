@@ -6,7 +6,7 @@
     if (isset($_GET['recipe']))
     {
         $recipe = json_decode($_GET['recipe']);
-        //echo json_encode($recipe->name);
+        
         
         $sql = <<<EOF
             INSERT INTO recipes (owner, name, difficulty, n_served, duration, description, global_authentication_level)
