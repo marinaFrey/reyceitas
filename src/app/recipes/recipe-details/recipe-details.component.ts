@@ -20,6 +20,7 @@ export class RecipeDetailsComponent implements OnInit {
   @Input() recipe: Recipe;
   numberOfDifficultyStars: number[];
   editing: boolean;
+  userAllowedToEdit = false;
   newRecipe: boolean;
   tags: Tag[];
   availableTags: Tag[];
@@ -101,12 +102,16 @@ export class RecipeDetailsComponent implements OnInit {
           this.recipeService.getGroupsByRecipe(this.recipe.name).subscribe(authGroups => {
             this.recipe.groupsAuthenticationLevel = authGroups;
           });
+          this.userAllowedToEdit = this.isUserAllowedToEdit();
 
         });
 
       this.newRecipe = false;
       this.editing = false;
+
+
     }
+
 
   }
 
@@ -265,7 +270,7 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   toggleEditing(): void {
-    console.log(this.recipe.groupsAuthenticationLevel);
+    console.log(this.recipeService.isUserAllowedToEdit(this.recipe));
     if (this.recipeService.isUserAllowedToEdit(this.recipe)) {
       this.editing = !this.editing;
     }
@@ -277,6 +282,18 @@ export class RecipeDetailsComponent implements OnInit {
 
   getImageSrc(index) {
     return "../../../../backend/uploads/" + this.recipe.photos[index];
+  }
+
+  setImageAsFirst(index) {
+    var newPhotoList = [];
+    newPhotoList.push(this.recipe.photos[index]);
+    for (var i = 0; i < this.recipe.photos.length; i++) {
+      if (i != index)
+        newPhotoList.push(this.recipe.photos[i]);
+      //(<HTMLInputElement>document.getElementById('primaryImageRadio'+i)).checked = false;
+    }
+    this.recipe.photos = newPhotoList;
+
   }
 
   addImage(): void {
@@ -422,7 +439,7 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   isUserAllowedToEdit() {
-    console.log("gothere",this.recipeService.isUserAllowedToEdit(this.recipe));
+    console.log("gothere", this.recipeService.isUserAllowedToEdit(this.recipe));
     if (this.recipeService.isUserAllowedToEdit(this.recipe))
       return true;
     else

@@ -366,6 +366,7 @@ export class RecipeService {
   }
 
   isUserAllowedToEdit(recipe) {
+    console.log(recipe);
     // check if recipe is public for editing
     if (recipe.globalAuthenticationLevel >= 2 || this.getUserLevel() >= 1) {
       return true;

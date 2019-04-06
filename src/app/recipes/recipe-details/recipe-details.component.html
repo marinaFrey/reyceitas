@@ -18,10 +18,10 @@
     <div class="row">
       <!-- Title -->
       <h2 *ngIf="!editing">{{recipe.name}}
-        <button type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
+        <button *ngIf="userAllowedToEdit" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
           <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
         </button>
-        <button type="button" class="btn-lg btn-danger" (click)="delete()">
+        <button *ngIf="userAllowedToEdit" type="button" class="btn-lg btn-danger" (click)="delete()">
           <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
         </button>
       </h2>
@@ -36,7 +36,7 @@
               A receita precisa ter um nome para ser salva.
             </div>
           </div>
-          <div class="col-md-6 col-sm-6 col-xs-6" [ngIf]="isUserAllowedToEdit()">
+          <div class="col-md-6 col-sm-6 col-xs-6">
             <button *ngIf="!newRecipe" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
               <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
             </button>
@@ -85,6 +85,12 @@
             <h3>Imagens</h3>
 
             <div class="row" *ngFor="let photo of recipe.photos;let index = index;trackBy:trackByFn">
+              <div class="col-md-2 col-sm-2 col-xs-2 text-center">
+                <button *ngIf="index!=0" class="btn btn-primary" (click)="setImageAsFirst(index)">
+                  <i class="fa fa-sort-amount-up" style="color:white" aria-hidden="true"></i>
+                </button>
+                <!--<input id="primaryImageRadio{{index}}" type="radio" name="primaryImage" (click)="setImageAsFirst(index)">-->
+              </div>
               <div class="col-md-2 col-sm-2 col-xs-2 text-center">
                 <img class="thumbnail-image" [src]="getImageSrc(index)">
               </div>
@@ -181,7 +187,7 @@
               <div class="col-md-4 col-sm-4 col-xs-4 text-center">
                 <input class="form-control" type="number" min="1" *ngIf="editing" [(ngModel)]="recipe.servings" placeholder="n pessoas" ng-disabled="editing">
                 <div *ngIf="!editing">
-                  <input class="form-control" type="number" min="0.1" *ngIf="!editing" [(ngModel)]="recipeMultiplier" placeholder="n pessoas"> 
+                  <input class="form-control" type="number" min="0.1" *ngIf="!editing" [(ngModel)]="recipeMultiplier" placeholder="n pessoas">
                   <!--{{recipe.servings}}-->
                 </div>
 
@@ -228,9 +234,9 @@
       <div class="col-12">
         <div class="recipe-directions">
           <h3>Descrição</h3>
-          <ol>
+          <div class="angular-with-newlines">
             {{recipe.description}}
-          </ol>
+          </div>
         </div>
 
       </div>
@@ -406,7 +412,7 @@
           Cancelar
         </button>
 
-        <button class="btn btn-success" (click)="save()" >
+        <button class="btn btn-success" (click)="save()">
           <i class="fa fa-check" aria-hidden="true"></i>
           Salvar
         </button>

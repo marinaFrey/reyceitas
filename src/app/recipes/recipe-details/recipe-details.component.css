@@ -197,6 +197,10 @@
   .thumbnail-image {
     height:50px;
   }
+
+  .angular-with-newlines {
+    white-space: pre-wrap;
+    }
 /*
   button {
     margin-top: 20px;
