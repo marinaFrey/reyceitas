@@ -218,11 +218,14 @@ function populateUserGroups()
   $sql =<<<EOF
 INSERT INTO groups (group_id, name) VALUES (1,"grupinho");
 INSERT INTO groups (group_id, name) VALUES (2,"grupa");
+INSERT INTO groups (group_id, name) VALUES (3,"grupasso");
+INSERT INTO user_groups (user_id, group_id) VALUES (2, 3);
 INSERT INTO user_groups (user_id, group_id) VALUES (2, 2);
 INSERT INTO user_groups (user_id, group_id) VALUES (1, 1);
 INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (101, 1, 1);
 INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (101, 2, 1);
 INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (102, 2, 1);
+INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (102, 3, 2);
 INSERT INTO user_favourites (user_id, recipe_id) VALUES (2, 102);
 INSERT INTO user_favourites (user_id, recipe_id) VALUES (1, 101);
 EOF;

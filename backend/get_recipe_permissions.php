@@ -195,6 +195,47 @@ function get_group_per_recipes($recipe_name)
         echo json_encode($resArrVals);
     }
 }
+function get_permission_per_user_recipe($recp_id,$usr_id)
+{
+    $db = connect();
+    $sql = "SELECT *, r.name AS recipe_name, rp.authentication_level AS group_authentication_level FROM recipe_permissions AS rp";
+    $sql.= " INNER JOIN user_groups AS ug ON rp.group_id = ug.group_id";
+    $sql.= " INNER JOIN users AS u ON ug.user_id = u.user_id";
+    $sql.= " INNER JOIN groups AS g ON ug.group_id = g.group_id";
+    $sql.= " INNER JOIN recipes AS r ON rp.recipe_id = r.recipe_id";
+    $sql.= " WHERE u.user_id = :usr_id AND r.recipe_id = :recp_id" ;
+    $sql.= " ORDER BY group_authentication_level desc";
+    $stmt= $db->prepare($sql);
+    $stmt->bindValue(':usr_id', $usr_id, PDO::PARAM_INT);
+    $stmt->bindValue(':recp_id', $recp_id, PDO::PARAM_INT);
+    $ret= $stmt->execute();
+    $ret = $stmt->fetchAll();
+    $permission = 0;
+    foreach($ret as $row)
+    {
+        if($row['group_authentication_level'] > $permission)
+        {
+            $permission = $row['group_authentication_level'];
+        }
+    }
+    $sql = "SELECT * FROM recipes";
+    $sql.= " WHERE recipe_id = :recp_id" ;
+    $stmt= $db->prepare($sql);
+    $stmt->bindValue(':recp_id', $recp_id, PDO::PARAM_INT);
+    $ret= $stmt->execute();
+    $ret = $stmt->fetchAll();
+    if($ret[0]['global_authentication_level'] > $permission)
+    {
+        $permission = $ret[0]['global_authentication_level'];
+    }
+    if($ret[0]['owner'] == $usr_id)
+    {
+        $permission = 2; 
+    }
+    //echo $permission;
+    return $permission;
+
+}
 function fill_groups_for_recipes(&$mapIdToRecip, &$resArrVals, $username) 
 {
     $db = connect();
@@ -222,7 +263,9 @@ function fill_groups_for_recipes(&$mapIdToRecip, &$resArrVals, $username)
         $i += 1;
     }
 }
-if (isset($_GET['username'])) {
+if (isset($_GET['usr_id']) && isset($_GET['recp_id'])) {
+    get_permission_per_user_recipe($_GET['recp_id'],$_GET['usr_id']);
+}elseif (isset($_GET['username'])) {
     get_recipes_per_user($_GET['username']);
 } elseif (isset($_GET['recipe_name'])) {
     get_group_per_recipes($_GET['recipe_name']);
