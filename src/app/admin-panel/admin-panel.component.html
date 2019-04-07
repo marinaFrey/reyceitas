@@ -126,7 +126,7 @@
                 </td>
 
                 <td>
-                  <button type="button" class="btn-sm btn-danger" (click)="deleteGroup(group.id)">
+                  <button type="button" class="btn-sm btn-danger" (click)="deleteGroup(index)">
                     <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
                   </button>
                 </td>
@@ -154,9 +154,10 @@
             <thead>
               <tr>
                 <th>Ícone</th>
+                <th>Cor</th>
                 <th>Nome</th>
                 <th>Referência</th>
-                <th>Cor</th>
+                
                 <th>Editar</th>
                 <th>Excluir</th>
               </tr>
@@ -166,16 +167,18 @@
                 <td>
                   <i class="fa {{tag.icon}} fa-lg" aria-hidden="true" [ngStyle]="{'color': tag.color}"></i>
                 </td>
+                <td>
+                  <div>
+                      <div class= "color-picker{{index}}"></div>
+                  </div>
+                    
+                </td>
 
                 <!-- tags -->
 
                 <td *ngIf=!isEditingTag[index]>{{tag.name}}</td>
                 <td *ngIf=!isEditingTag[index]>{{tag.icon}}</td>
-                <td *ngIf=!isEditingTag[index]>
-                  <button type="button" class="btn-sm btn-primary">
-                    <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
-                  </button>
-                </td>
+                
                 <td *ngIf=!isEditingTag[index]>
                   <button type="button" class="btn-sm btn-primary" (click)="enableTagEditing(index)">
                     <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
@@ -188,11 +191,6 @@
                 </td>
                 <td *ngIf=isEditingTag[index]>
                   <input class="form-control" [(ngModel)]="tag.icon" placeholder="referência da tag" ng-disabled="editing">
-                </td>
-                <td *ngIf=isEditingTag[index]>
-                  <button type="button" class="btn-sm btn-primary">
-                    <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
-                  </button>
                 </td>
                 <td *ngIf=isEditingTag[index]>
                   <button type="button" class="btn-sm btn-success" (click)="saveTag(index, tag.id)">
@@ -210,7 +208,7 @@
           </table>
         </div>
         <div class="row">
-            <button type="button" class="btn-sm btn-success" (click)="addNewGroup()" style="float:left; margin-left:25px;">
+            <button type="button" class="btn-sm btn-success" (click)="addNewTag()" style="float:left; margin-left:25px;">
               <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
             </button>
           </div>
@@ -220,11 +218,12 @@
   </div>
 
   <div class="row">
-    <div class="col-12">
+    <div class="color-picker">
+      <!--
       <button class="btn btn-success" (click)="save()" style="float:right">
         <i class="fa fa-check" aria-hidden="true"></i>
         Salvar
-      </button>
+      </button>-->
     </div>
 
   </div>
