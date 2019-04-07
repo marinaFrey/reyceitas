@@ -17,17 +17,24 @@
   <div class="container">
     <div class="row">
       <!-- Title -->
-      <h2 *ngIf="!editing">{{recipe.name}}
-        <button *ngIf="userAllowedToEdit" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
-          <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
-        </button>
-        <button *ngIf="userAllowedToEdit" type="button" class="btn-lg btn-danger" (click)="delete()">
-          <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
-        </button>
-      </h2>
+      <div *ngIf="!editing" class="col-md-10 col-sm-12 col-xs-10">
+        <div class="row">
+          <h2>{{recipe.name}}</h2>
+          <div class="col-md-3 col-sm-6 col-xs-6" style="padding:20px; margin-bottom:10px;">
+
+            <button *ngIf="recipe.isFavourite" type="button" class="btn-lg btn-warning" (click)="toggleFavorite()">
+              <i class="fa fa-star fa-lg" aria-hidden="true"></i>
+            </button>
+            <button *ngIf="!recipe.isFavourite" type="button" class="btn-lg btn-normal" (click)="toggleFavorite()">
+              <i class="fa fa-star fa-lg" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
 
       <!-- EDITING Title -->
-      <div *ngIf="editing" class="col">
+      <div *ngIf="editing" class="col-md-10 col-sm-12 col-xs-12">
         <h1 class="row">
           <div class="col-md-6 col-sm-6 col-xs-6">
             <input class="form-control" *ngIf="editing" [(ngModel)]="recipe.name" placeholder="nome da receita" ng-disabled="editing"
@@ -36,6 +43,7 @@
               A receita precisa ter um nome para ser salva.
             </div>
           </div>
+          <!--
           <div class="col-md-6 col-sm-6 col-xs-6">
             <button *ngIf="!newRecipe" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
               <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
@@ -43,11 +51,22 @@
             <button *ngIf="!newRecipe" type="button" class="btn-lg btn-danger" (click)="toggleEditing()">
               <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
             </button>
-          </div>
+          </div>-->
 
         </h1>
       </div>
 
+
+      <div class="col-md-1 col-sm-6 col-xs-6" style="padding:20px; margin-bottom:10px;">
+        <button *ngIf="userAllowedToEdit" type="button" class="btn-lg btn-primary" (click)="toggleEditing()">
+          <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="col-md-1 col-sm-6 col-xs-6" style="padding:20px; margin-bottom:10px;">
+        <button *ngIf="userAllowedToEdit" type="button" class="btn-lg btn-danger" (click)="delete()">
+          <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
 
     <div class="row ">

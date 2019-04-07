@@ -13,6 +13,7 @@ export class Recipe {
     userId: number;
     globalAuthenticationLevel: number;
     groupsAuthenticationLevel: RecipeVisibility[];
+    isFavourite: boolean;
 }
 
 export class Ingredient {

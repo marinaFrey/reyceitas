@@ -68,7 +68,8 @@ export class RecipeDetailsComponent implements OnInit {
         tags: [],
         userId: null,
         globalAuthenticationLevel: 0,
-        groupsAuthenticationLevel: []
+        groupsAuthenticationLevel: [],
+        isFavourite: false
       };
 
     const id = +this.route.snapshot.paramMap.get('id');
@@ -278,6 +279,12 @@ export class RecipeDetailsComponent implements OnInit {
       window.alert("Você não possui autorização para realizar modificações nessa receita!");
     }
 
+  }
+
+  toggleFavorite()
+  {
+    this.recipe.isFavourite = !this.recipe.isFavourite;
+    // fazer chamada ao banco e alterar se eh favorito ou nao
   }
 
   getImageSrc(index) {
