@@ -161,9 +161,10 @@ export class AdminPanelComponent implements OnInit {
     // save group
   }
 
-  saveTag(index, tagId) {
+  saveTag(index, tag) {
     this.isEditingTag[index] = false;
     this.tagColors[index].disable();
+    this.recipeService.addTag(tag);
     // save tag
   }
 

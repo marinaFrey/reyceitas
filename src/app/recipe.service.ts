@@ -151,6 +151,13 @@ export class RecipeService {
 
 
   }
+  addTag(tag:<Tag>)
+  {
+    console.log("Adding tag") 
+    var tagJson = JSON.stringify(tag);
+    this.httpCli.get<string[]>(
+      this.testingURL + `tags.php?add_tag=${tagJson}`).subscribe();
+  }
 
   getFavourites(username): Observable<string[]>
   {
