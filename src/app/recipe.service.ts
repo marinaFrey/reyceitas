@@ -150,6 +150,17 @@ export class RecipeService {
 
 
   }
+
+  getFavourites(username)
+  {
+    this.messageService.add('RecipeService: fetched favourites');
+
+    var favs = this.httpCli.get<string[]>(
+      this.testingURL + `favourites.php?username=${username}`);
+
+    return favs;
+  }
+
   getUsernameById(id): Observable<string> {
     this.messageService.add('RecipeService: fetched users');
 
@@ -406,4 +417,6 @@ export class RecipeService {
     else
       return false;
   }
+
+  
 }

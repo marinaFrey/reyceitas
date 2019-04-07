@@ -27,6 +27,7 @@ export class RecipeDetailsComponent implements OnInit {
   selectedTag: string;
   userGroups: Group[];
   recipeMultiplier: number;
+  isFavourite: boolean;
 
   constructor(private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -68,8 +69,7 @@ export class RecipeDetailsComponent implements OnInit {
         tags: [],
         userId: null,
         globalAuthenticationLevel: 0,
-        groupsAuthenticationLevel: [],
-        isFavourite: false
+        groupsAuthenticationLevel: []
       };
 
     const id = +this.route.snapshot.paramMap.get('id');
@@ -283,7 +283,7 @@ export class RecipeDetailsComponent implements OnInit {
 
   toggleFavorite()
   {
-    this.recipe.isFavourite = !this.recipe.isFavourite;
+    //this.recipe.isFavourite = !this.recipe.isFavourite;
     // fazer chamada ao banco e alterar se eh favorito ou nao
   }
 
