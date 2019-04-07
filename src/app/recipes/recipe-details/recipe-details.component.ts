@@ -109,11 +109,17 @@ export class RecipeDetailsComponent implements OnInit {
 
       this.newRecipe = false;
       this.editing = false;
+      this.updateFavourite();
 
 
     }
 
 
+  }
+  updateFavourite()
+  {
+      this.recipeService.isFavourite(this.recipe.id,this.recipeService.usernameSession)
+        .subscribe(isFav => {this.isFavourite = isFav; })
   }
 
   getTagFromId(tagId): string {
@@ -284,7 +290,12 @@ export class RecipeDetailsComponent implements OnInit {
   toggleFavorite()
   {
     //this.recipe.isFavourite = !this.recipe.isFavourite;
-    // fazer chamada ao banco e alterar se eh favorito ou nao
+
+      if(this.isFavourite)
+        this.recipeService.rmFavourite(this.recipeService.userIdSession,this.recipe.id);
+      else
+        this.recipeService.addFavourite(this.recipeService.userIdSession,this.recipe.id);
+      this.updateFavourite();
   }
 
   getImageSrc(index) {

@@ -76,8 +76,46 @@ function save_user_favourites($user_id, $favourites)
     }
 
 }
+function rm_user_favourite($user_id, $favourite)
+{
+    //favourites.php?user_id=1&favourite=101
+    $db = connect();
+
+    $sql = "DELETE FROM user_favourites WHERE user_id = :usr_id AND recipe_id = :recp_id;";
+    $stmt= $db->prepare($sql);
+    $stmt->bindValue(':usr_id', $user_id, PDO::PARAM_INT);
+    $fav = json_decode($favourite);
+    $stmt->bindValue(':recp_id', $fav, PDO::PARAM_INT);
+    $ret = $stmt->execute();
+    if(!$ret) 
+    {
+        echo json_encode($stmt->errorInfo());
+    }
+
+}
+function add_user_favourite($user_id, $favourite)
+{
+    //favourites.php?user_id=1&favourite=101
+    $db = connect();
+
+    $sql = "INSERT INTO user_favourites (user_id, recipe_id) VALUES (:usr_id, :recp_id);";
+    $stmt= $db->prepare($sql);
+    $stmt->bindValue(':usr_id', $user_id, PDO::PARAM_INT);
+    $fav = json_decode($favourite);
+    $stmt->bindValue(':recp_id', $fav, PDO::PARAM_INT);
+    $ret = $stmt->execute();
+    if(!$ret) 
+    {
+        echo json_encode($stmt->errorInfo());
+    }
+
+}
 if (isset($_GET['user_id']) && isset($_GET['favourites'])) {
     save_user_favourites($_GET['user_id'],$_GET['favourites']);
+} elseif (isset($_GET['user_id']) && isset($_GET['add_favourite'])) {
+    add_user_favourite($_GET['user_id'],$_GET['add_favourite']);
+} elseif (isset($_GET['user_id']) && isset($_GET['rm_favourite'])) {
+    rm_user_favourite($_GET['user_id'],$_GET['rm_favourite']);
 } elseif (isset($_GET['username'])) {
     get_favourites_per_user($_GET['username']);
 } else {

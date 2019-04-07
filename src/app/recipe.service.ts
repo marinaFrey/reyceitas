@@ -6,6 +6,7 @@ import { ChartFormat, RecipeVisibility } from './recipe';
 // import { RECIPES } from './mock-recipes';
 //import { TAGS } from './mock-recipes';
 import { Observable, of } from 'rxjs';
+import {Subject} from 'rxjs/Subject';
 import { MessageService } from './message.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -151,7 +152,7 @@ export class RecipeService {
 
   }
 
-  getFavourites(username)
+  getFavourites(username): Observable<string[]>
   {
     this.messageService.add('RecipeService: fetched favourites');
 
@@ -159,6 +160,25 @@ export class RecipeService {
       this.testingURL + `favourites.php?username=${username}`);
 
     return favs;
+  }
+  addFavourite(userId,recipeId)
+  {
+    this.messageService.add('RecipeService: add favourite');
+    this.httpCli.get(
+        this.testingURL + `favourites.php?user_id=${userId}&add_favourite=${recipeId}`).subscribe()
+  }
+  rmFavourite(userId,recipeId)
+  {
+    this.messageService.add('RecipeService: rm favourite');
+    this.httpCli.get<string[]>(
+        this.testingURL + `favourites.php?user_id=${userId}&rm_favourite=${recipeId}`).subscribe()
+  }
+  isFavourite(recipeId,username): Observable<boolean>
+  {
+      var isFav = new Subject<boolean>()
+          this.getFavourites(username)
+          .subscribe(favs => { isFav.next((favs!=null) && (favs.includes(recipeId)); })
+          return isFav;
   }
 
   getUsernameById(id): Observable<string> {
