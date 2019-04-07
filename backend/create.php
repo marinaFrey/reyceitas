@@ -6,7 +6,7 @@ class MyDB extends \PDO {
         parent::__construct("sqlite:" . "recipes.db");
         $this->exec('PRAGMA foreign_keys = ON;');
         if(!$this) {
-            echo $this->errorInfo();
+            echo json_encode($db->errorInfo());
          } else {
              //echo "Opened database successfully\n";
              //Let's not drop recursive bombs here
@@ -26,6 +26,13 @@ function create_tables() {
     CREATE TABLE IF NOT EXISTS groups(
         group_id INTEGER PRIMARY KEY,
         name TEXT UNIQUE
+    );
+    CREATE TABLE IF NOT EXISTS user_favourites (
+        user_favourites_id INTEGER PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        recipe_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+        FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE
     );
     CREATE TABLE IF NOT EXISTS user_groups (
         user_group_id INTEGER PRIMARY KEY,
@@ -125,7 +132,7 @@ EOF;
     $db = connect();
     $ret = $db->exec($sql);
     if(!$ret){
-        echo $db->errorInfo();
+        echo json_encode($db->errorInfo());
     } else {
         // echo "Table created successfully\n";
     }
@@ -171,7 +178,7 @@ EOF;
     $db = connect();
     $ret = $db->exec($sql);
     if(!$ret) {
-        echo $db->errorInfo();
+        echo json_encode($db->errorInfo());
     } else {
         // echo "Records created successfully\n";
     }
@@ -200,7 +207,7 @@ EOF;
     $db = connect();
     $ret = $db->exec($sql);
     if(!$ret) {
-        echo $db->errorInfo();
+        echo json_encode($db->errorInfo());
     } else {
         // echo "Records created successfully\n";
     }
@@ -211,16 +218,21 @@ function populateUserGroups()
   $sql =<<<EOF
 INSERT INTO groups (group_id, name) VALUES (1,"grupinho");
 INSERT INTO groups (group_id, name) VALUES (2,"grupa");
+INSERT INTO groups (group_id, name) VALUES (3,"grupasso");
+INSERT INTO user_groups (user_id, group_id) VALUES (2, 3);
 INSERT INTO user_groups (user_id, group_id) VALUES (2, 2);
 INSERT INTO user_groups (user_id, group_id) VALUES (1, 1);
 INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (101, 1, 1);
 INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (101, 2, 1);
 INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (102, 2, 1);
+INSERT INTO recipe_permissions (recipe_id, group_id, authentication_level) VALUES (102, 3, 2);
+INSERT INTO user_favourites (user_id, recipe_id) VALUES (2, 102);
+INSERT INTO user_favourites (user_id, recipe_id) VALUES (1, 101);
 EOF;
     $db = connect();
     $ret = $db->exec($sql);
     if(!$ret) {
-        echo $db->errorInfo();
+        echo json_encode($db->errorInfo());
     } else {
         // echo "Records created successfully\n";
     }
