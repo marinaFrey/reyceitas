@@ -11,10 +11,14 @@ import Pickr from '@simonwep/pickr/dist/pickr.min.js';
 export class AdminPanelComponent implements OnInit {
 
   users: User[];
+  usersTemp: User[];
+  userGroupEditingIndexReference: number;
   isEditingUser: Array<boolean>;
   groups: Group[];
+  groupsTemp: Group[];
   isEditingGroup: Array<boolean>;
   tags: Tag[];
+  tagsTemp: Tag[];
   tagColors: Pickr[];
   isEditingTag: Array<boolean>;
 
@@ -23,28 +27,42 @@ export class AdminPanelComponent implements OnInit {
 
   ngOnInit() {
     // checar se usuario eh admin
-    var pointer = this;
+    
+    this.getUsersFromDatabase();
+    this.getGroupsFromDatabase();
+    this.getTagsFromDatabase();
+  }
+
+  getUsersFromDatabase() {
     this.recipeService.getUsers()
-      .subscribe(users => {
-        this.users = users;
-        this.isEditingUser = this.populateArray(this.users, this.isEditingUser);
-      });
+    .subscribe(users => {
+      this.users = users;
+      this.usersTemp =  JSON.parse(JSON.stringify(this.users));//this.users.slice();
+      this.isEditingUser = this.populateArray(this.users, this.isEditingUser);
+    });
 
+  }
+
+  getGroupsFromDatabase() {
     this.recipeService.getGroups()
-      .subscribe(groups => {
-        this.groups = groups;
-        this.isEditingGroup = this.populateArray(this.groups, this.isEditingGroup);
-      });
+    .subscribe(groups => {
+      this.groups = groups;
+      this.groupsTemp = JSON.parse(JSON.stringify(this.groups));//this.groups.slice();
+      this.isEditingGroup = this.populateArray(this.groups, this.isEditingGroup);
+    });
+  }
 
+  getTagsFromDatabase() {
+    var pointer = this;
     this.recipeService.getTags()
       .subscribe(tags => {
         this.tags = tags;
+        this.tagsTemp = JSON.parse(JSON.stringify(this.tags));//this.tags.slice();
         this.isEditingTag = this.populateArray(this.tags, this.isEditingTag);
         setTimeout(function () {
           pointer.createColorPickers();
-        }, 500);
+        }, 10);
       });
-
   }
 
   createColorPickers() {
@@ -77,9 +95,9 @@ export class AdminPanelComponent implements OnInit {
       this.tagColors[i].disable();
       var pointer = this;
       this.tagColors[i].on('save', (...args) => {
-        pointer.tags[args[1].options.index].color = args[0].toHEX().toString();
+        pointer.tagsTemp[args[1].options.index].color = args[0].toHEX().toString();
+        //pointer.tags[args[1].options.index].color = args[0].toHEX().toString();
       });
-      console.log(this.tags[i].color, this.tagColors[i].getColor().toHEX().toString());
     }
   }
 
@@ -96,7 +114,7 @@ export class AdminPanelComponent implements OnInit {
     var g = new Group();
     g.id = null;
     g.name = "Novo Grupo"
-    this.groups.push(g);
+    this.groupsTemp.push(g);
     this.isEditingGroup[this.groups.length - 1] = true;
   }
 
@@ -104,16 +122,16 @@ export class AdminPanelComponent implements OnInit {
     var t = new Tag();
     t.id = null;
     t.name = null;
-    t.color = "white";
+    t.color = "grey";
     t.icon = null;
 
-    this.tags.push(t);
-    var index = (this.tags.length - 1);
+    this.tagsTemp.push(t);
+    var index = (this.tagsTemp.length - 1);
     var pointer = this;
     this.isEditingTag[index] = true;
     setTimeout(function () {
       pointer.tagColors[index] = Pickr.create({
-        el: '.color-picker'+(index),
+        el: '.color-picker' + (index),
         default: "grey",
         index: index,
         components: {
@@ -121,7 +139,7 @@ export class AdminPanelComponent implements OnInit {
           preview: true,
           opacity: true,
           hue: true,
-  
+
           // Input / output Options
           interaction: {
             hex: true,
@@ -135,15 +153,42 @@ export class AdminPanelComponent implements OnInit {
           }
         }
       });
-    }, 500);
+      pointer.tagColors[index].on('save', (...args) => {
+        pointer.tagsTemp[args[1].options.index].color = args[0].toHEX().toString();
+        //pointer.tags[args[1].options.index].color = args[0].toHEX().toString();
+      });
+    }, 10);
   }
 
   enableUserEditing(index) {
     this.isEditingUser[index] = true;
   }
 
+  cancelUserEditing(index) {
+    this.isEditingUser[index] = false;
+    this.usersTemp[index] = JSON.parse(JSON.stringify(this.users[index]));
+  }
+
+  openUserGroupsEditingModal(index) {
+    this.userGroupEditingIndexReference = index;
+    $('#groupManagingModal').modal('show');
+    var pointer = this;
+    setTimeout(function () {
+      for (var i = 0; i < pointer.groups.length; i++) {
+        var participationCheckbox = (<HTMLInputElement>document.getElementById('participation' + pointer.groups[i].id));
+        participationCheckbox.checked = false;
+      }
+    }, 10);
+
+  }
+
   enableGroupEditing(index) {
     this.isEditingGroup[index] = true;
+  }
+
+  cancelGroupEditing(index) {
+    this.isEditingGroup[index] = false;
+    this.groupsTemp[index] = JSON.parse(JSON.stringify(this.groups[index]));
   }
 
   enableTagEditing(index) {
@@ -151,20 +196,46 @@ export class AdminPanelComponent implements OnInit {
     this.tagColors[index].enable();
   }
 
+  cancelTagEditing(index) {
+    this.isEditingTag[index] = false;
+    
+    var copy = JSON.parse(JSON.stringify(this.tags[index]));
+    this.tagsTemp[index].id = copy.id;
+    this.tagsTemp[index].name = copy.name;
+    this.tagsTemp[index].icon = copy.icon;
+    this.tagsTemp[index].color = copy.color;
+    this.tagColors[index].setColor(copy.color);
+    this.tagColors[index].disable();
+
+  }
+
   saveUser(index, userId) {
     this.isEditingUser[index] = false;
+    this.users[index] = JSON.parse(JSON.stringify(this.usersTemp[index]));
     // save user
+
+  }
+
+  saveUserGroups() {
+    for (var i = 0; i < this.groups.length; i++) {
+      var participationCheckbox = (<HTMLInputElement>document.getElementById('participation' + i));
+    }
+    console.log("changing groups for user " + this.users[this.userGroupEditingIndexReference].username);
   }
 
   saveGroup(index, groupId) {
     this.isEditingGroup[index] = false;
+    this.groups[index] = JSON.parse(JSON.stringify(this.groupsTemp[index]));
     // save group
+
   }
 
   saveTag(index, tagId) {
     this.isEditingTag[index] = false;
     this.tagColors[index].disable();
+    this.tags[index] = JSON.parse(JSON.stringify(this.tagsTemp[index]));
     // save tag
+
   }
 
   setUserPrivilegesCheckboxes(userId) {
