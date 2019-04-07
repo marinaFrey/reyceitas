@@ -37,11 +37,12 @@ function get_favourites_per_user($username)
     $i = 0;
     foreach($ret as $row)
     {
-        $resArrVals[$i]['user_favourites_id']=$row['user_favourites_id'];
-        $resArrVals[$i]['user_id']=$row['user_id'];
-        $resArrVals[$i]['user_name']=$row['username'];
-        $resArrVals[$i]['recipe_id']=$row['recipe_id'];
-        $resArrVals[$i]['recipe_name']=$row['name'];
+        //$resArrVals[$i]['user_favourites_id']=$row['user_favourites_id'];
+        //$resArrVals[$i]['user_id']=$row['user_id'];
+        //$resArrVals[$i]['user_name']=$row['username'];
+        //$resArrVals[$i]['recipe_id']=$row['recipe_id'];
+        //$resArrVals[$i]['recipe_name']=$row['name'];
+        $resArrVals[$i]=$row['recipe_id'];
 
         $i += 1;
     }
