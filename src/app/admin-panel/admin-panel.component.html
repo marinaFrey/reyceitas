@@ -7,9 +7,9 @@
       <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
         Gerenciar Usuários
       </h1>
-      <div class="recipe-item text-center">
+      <div class="recipe-item">
         <div class="row">
-          <table class="table table-hover" style="margin:15px">
+          <table class="table table-hover" style="margin:30px">
             <thead>
               <tr>
                 <th>Nome de Usuário</th>
@@ -23,14 +23,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let user of users;let index = index;trackBy:trackByFn">
+              <tr *ngFor="let user of usersTemp;let index = index;trackBy:trackByFn">
 
                 <!-- user -->
                 <td *ngIf=!isEditingUser[index]>{{user.username}}</td>
                 <td *ngIf=!isEditingUser[index]>{{user.fullname}}</td>
                 <td *ngIf=!isEditingUser[index]>{{user.email}}</td>
                 <td *ngIf=!isEditingUser[index]>
-                  <button type="button" class="btn-sm btn-primary" data-toggle="modal" data-target="#groupManagingModal">
+                  <button type="button" class="btn-sm btn-primary" (click)="openUserGroupsEditingModal(index)">
                     <i class="fa fa-users fa-lg" aria-hidden="true"></i>
                   </button>
                 </td>
@@ -59,7 +59,7 @@
                   <input class="form-control" [(ngModel)]="user.email" placeholder="nome de usuário" ng-disabled="editing">
                 </td>
                 <td *ngIf=isEditingUser[index]>
-                  <button type="button" class="btn-sm btn-primary" data-toggle="modal" data-target="#groupManagingModal">
+                  <button type="button" class="btn-sm btn-primary" (click)="openUserGroupsEditingModal(index)">
                     <i class="fa fa-users fa-lg" aria-hidden="true"></i>
                   </button>
                 </td>
@@ -70,6 +70,9 @@
                   <input type="checkbox" class="form-check-input" id="adminUser{{user.id}}" (click)="setUserPrivilegesCheckboxes(user.id)">
                 </td>
                 <td *ngIf=isEditingUser[index]>
+                  <button type="button" class="btn-sm btn-warning" (click)="cancelUserEditing(index)">
+                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                  </button>
                   <button type="button" class="btn-sm btn-success" (click)="saveUser(index, user.id)">
                     <i class="fa fa-check fa-lg" aria-hidden="true"></i>
                   </button>
@@ -95,9 +98,9 @@
       <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
         Gerenciar Grupos de Usuário
       </h1>
-      <div class="recipe-item text-center">
+      <div class="recipe-item">
         <div class="row">
-          <table class="table table-hover" style="margin:15px">
+          <table class="table table-hover" style="margin:30px">
             <thead>
               <tr>
                 <th>Nome</th>
@@ -106,7 +109,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let group of groups;let index = index;trackBy:trackByFn">
+              <tr *ngFor="let group of groupsTemp;let index = index;trackBy:trackByFn">
                 <!-- group -->
                 <td *ngIf=!isEditingGroup[index]>{{group.name}}</td>
                 <td *ngIf=!isEditingGroup[index]>
@@ -117,9 +120,12 @@
 
                 <!-- EDITING group -->
                 <td *ngIf=isEditingGroup[index]>
-                  <input class="form-control" [(ngModel)]="group.username" placeholder="nome do grupo" ng-disabled="editing">
+                  <input class="form-control" [(ngModel)]="group.name" placeholder="nome do grupo" ng-disabled="editing">
                 </td>
                 <td *ngIf=isEditingGroup[index]>
+                    <button type="button" class="btn-sm btn-warning" (click)="cancelGroupEditing(index)">
+                        <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                      </button>
                   <button type="button" class="btn-sm btn-success" (click)="saveGroup(index, group.id)">
                     <i class="fa fa-check fa-lg" aria-hidden="true"></i>
                   </button>
@@ -136,7 +142,7 @@
           </table>
         </div>
         <div class="row">
-          <button type="button" class="btn-sm btn-success" (click)="addNewGroup()" style="float:left; margin-left:25px;">
+          <button type="button" class="btn-sm btn-success" (click)="addNewGroup()" style="float:left; margin:30px;">
             <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
           </button>
         </div>
@@ -148,37 +154,37 @@
       <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
         Gerenciar Categorias
       </h1>
-      <div class="recipe-item text-center">
+      <div class="recipe-item">
         <div class="row">
-          <table class="table table-hover" style="margin:15px">
+          <table class="table table-hover" style="margin:30px">
             <thead>
               <tr>
                 <th>Ícone</th>
                 <th>Cor</th>
                 <th>Nome</th>
                 <th>Referência</th>
-                
+
                 <th>Editar</th>
                 <th>Excluir</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let tag of tags;let index = index;trackBy:trackByFn">
+              <tr *ngFor="let tag of tagsTemp;let index = index;">
                 <td>
                   <i class="fa {{tag.icon}} fa-lg" aria-hidden="true" [ngStyle]="{'color': tag.color}"></i>
                 </td>
                 <td>
                   <div>
-                      <div class= "color-picker{{index}}"></div>
+                    <div class="color-picker{{index}}"></div>
                   </div>
-                    
+
                 </td>
 
                 <!-- tags -->
 
                 <td *ngIf=!isEditingTag[index]>{{tag.name}}</td>
                 <td *ngIf=!isEditingTag[index]>{{tag.icon}}</td>
-                
+
                 <td *ngIf=!isEditingTag[index]>
                   <button type="button" class="btn-sm btn-primary" (click)="enableTagEditing(index)">
                     <i class="fa fa-pencil-alt fa-lg" aria-hidden="true"></i>
@@ -193,6 +199,9 @@
                   <input class="form-control" [(ngModel)]="tag.icon" placeholder="referência da tag" ng-disabled="editing">
                 </td>
                 <td *ngIf=isEditingTag[index]>
+                  <button type="button" class="btn-sm btn-warning" (click)="cancelTagEditing(index)">
+                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                  </button>
                   <button type="button" class="btn-sm btn-success" (click)="saveTag(index, tag)">
                     <i class="fa fa-check fa-lg" aria-hidden="true"></i>
                   </button>
@@ -208,10 +217,10 @@
           </table>
         </div>
         <div class="row">
-            <button type="button" class="btn-sm btn-success" (click)="addNewTag()" style="float:left; margin-left:25px;">
-              <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
-            </button>
-          </div>
+          <button type="button" class="btn-sm btn-success" (click)="addNewTag()" style="float:left; margin:30px;">
+            <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -242,40 +251,23 @@
 
         <form class="form col-md-12 center-block">
 
-          <div *ngIf="userGroups">
+          <div *ngIf="groups">
             <table class="table table-hover">
               <thead>
                 <tr>
                   <th>Nome do Grupo</th>
                   <th class="recipe-info">
-                    <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
+                    <i class="fab fa-slideshare fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
                     <input type="checkbox" class="form-check-input" id="visibilityAll" (click)="setVisibilityCheckboxes('visibilityAll')">
-                  </th>
-                  <th class="recipe-info">
-                    <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
-                    <input type="checkbox" class="form-check-input" id="editingAll" (click)="setVisibilityCheckboxes('editingAll')">
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <td style="background-color: #ececec">Público</td>
-                <td class="recipe-info" style="background-color: #ececec">
-                  <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
-                  <input type="checkbox" class="form-check-input" id="visibilityPublic" (click)="setVisibilityCheckboxes('visibilityPublic')">
-                </td>
-                <td class="recipe-info" style="background-color: #ececec">
-                  <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
-                  <input type="checkbox" class="form-check-input" id="editingPublic" (click)="setVisibilityCheckboxes('editingPublic')">
-                </td>
-                <tr *ngFor="let group of userGroups;let index = index;trackBy:trackByFn">
+                <tr *ngFor="let group of groups;let index = index;trackBy:trackByFn">
                   <td>{{group.name}}</td>
                   <td class="recipe-info">
-                    <i class="fa fa-eye fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
-                    <input type="checkbox" class="form-check-input" id="visibility{{group.id}}" (click)="setVisibilityCheckboxes(group.id)">
-                  </td>
-                  <td class="recipe-info">
-                    <i class="fa fa-pencil-alt fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
-                    <input type="checkbox" class="form-check-input" id="editing{{group.id}}" (click)="setVisibilityCheckboxes(group.id)">
+                    <i class="fab fa-slideshare" aria-hidden="true" style="margin-right:10px;"></i>
+                    <input type="checkbox" class="form-check-input" id="participation{{group.id}}" (click)="setVisibilityCheckboxes(group.id)">
                   </td>
                 </tr>
               </tbody>
@@ -283,7 +275,7 @@
           </div>
 
           <div class="form-group">
-            <button class="btn btn-primary btn-lg btn-block" data-dismiss="modal" (click)="submitVisibilityChanges()">Salvar</button>
+            <button class="btn btn-primary btn-lg btn-block" data-dismiss="modal" (click)="saveUserGroups()">Salvar</button>
           </div>
         </form>
 

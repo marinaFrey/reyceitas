@@ -24,16 +24,13 @@ function list_all_tags()
         echo json_encode($resArrVals);
     }
 }
-function rm_user_favourite($user_id, $favourite)
+function rm_tag($tag_id)
 {
-    //favourites.php?user_id=1&favourite=101
     $db = connect();
-
-    $sql = "DELETE FROM user_favourites WHERE user_id = :usr_id AND recipe_id = :recp_id;";
+    echo $tag_id;
+    $sql = "DELETE FROM tags WHERE tag_id = :tag_id;"; 
     $stmt= $db->prepare($sql);
-    $stmt->bindValue(':usr_id', $user_id, PDO::PARAM_INT);
-    $fav = json_decode($favourite);
-    $stmt->bindValue(':recp_id', $fav, PDO::PARAM_INT);
+    $stmt->bindValue(':tag_id', $tag_id, PDO::PARAM_INT);
     $ret = $stmt->execute();
     if(!$ret) 
     {

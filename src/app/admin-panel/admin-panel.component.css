@@ -22,14 +22,10 @@
   }
 
   .recipe-item {
-    margin-bottom: 24px;
-    padding-bottom: 12px;
     background-color: white;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.15);
     -moz-box-shadow: 0 1px 0 rgba(0,0,0,.15);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    margin-left:10px;
-    margin-right:10px;
     border-radius: 5px; /* 5px rounded corners */
   }
   .recipe-item img {

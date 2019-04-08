@@ -151,10 +151,15 @@ export class RecipeService {
 
 
   }
+  rmTag(tagId)
+  {
+    this.httpCli.get<string[]>(
+      this.testingURL + `tags.php?rm_tag_id=${tagId}`).subscribe();
+  }
   addTag(tag:<Tag>)
   {
-    console.log("Adding tag") 
-    var tagJson = JSON.stringify(tag);
+    var tagJson = JSON.stringify(tag).replace(/#/g,'%23');
+    console.log(tagJson);
     this.httpCli.get<string[]>(
       this.testingURL + `tags.php?add_tag=${tagJson}`).subscribe();
   }
