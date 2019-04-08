@@ -227,6 +227,10 @@ export class AdminPanelComponent implements OnInit {
     this.isEditingGroup[index] = false;
     this.groups[index] = JSON.parse(JSON.stringify(this.groupsTemp[index]));
     // save group
+    if(this.groups[index].id == null)
+      this.recipeService.addGroup(this.groups[index]);
+    else
+      this.recipeService.editGroup(this.groups[index]);
 
   }
 
@@ -238,7 +242,7 @@ export class AdminPanelComponent implements OnInit {
     if(this.tags[index].id == null)
       this.recipeService.addTag(tag);
     else
-      this.recipeService.editTag(this.tags[index].id,tag);
+      this.recipeService.editTag(tag);
 
   }
 
@@ -253,8 +257,11 @@ export class AdminPanelComponent implements OnInit {
   deleteGroup(index) {
 
     if (this.groups[index].id == null) {
-      this.groups.splice(index, 1)
+        this.groups.splice(index, 1)
+    } else {
+        this.recipeService.rmGroup(this.groups[index].id);
     }
+
   }
 
   deleteTag(tagId) {

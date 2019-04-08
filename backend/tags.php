@@ -56,13 +56,13 @@ function add_tag($tagJson)
     }
 
 }
-function edit_tag($tagId,$tagJson)
+function edit_tag($tagJson)
 {
     $db = connect();
     $tag = json_decode($tagJson);
     $sql = "UPDATE tags SET name = :name, icon = :icon, color = :color WHERE tag_id = :tag_id;";
     $stmt= $db->prepare($sql);
-    $stmt->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
+    $stmt->bindValue(':tag_id', $tag->id, PDO::PARAM_INT);
     $stmt->bindValue(':name', $tag->name, PDO::PARAM_STR);
     $stmt->bindValue(':icon', $tag->icon, PDO::PARAM_STR);
     $stmt->bindValue(':color', $tag->color, PDO::PARAM_STR);
@@ -74,8 +74,8 @@ function edit_tag($tagId,$tagJson)
 }
 if (isset($_GET['add_tag'])) {
     add_tag($_GET['add_tag']);
-} elseif (isset($_GET['edit_tag_id']) && isset($_GET['tag'])) {
-    edit_tag($_GET['edit_tag_id'],$_GET['tag']);
+} elseif (isset($_GET['edit_tag'])){
+    edit_tag($_GET['edit_tag']);
 } elseif (isset($_GET['rm_tag_id'])){
     rm_tag($_GET['rm_tag_id']);
 } else {
