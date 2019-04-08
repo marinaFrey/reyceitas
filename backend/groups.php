@@ -24,7 +24,6 @@ function list_all_groups()
 function rm_group($group_id)
 {
     $db = connect();
-    echo $group_id;
     $sql = "DELETE FROM groups WHERE group_id = :group_id;"; 
     $stmt= $db->prepare($sql);
     $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
@@ -40,7 +39,6 @@ function add_group($groupJson)
     $db = connect();
 
     $group = json_decode($groupJson);
-    echo $groupJson;
     $sql = "INSERT INTO groups (name) VALUES (:name);";
     $stmt= $db->prepare($sql);
     $stmt->bindValue(':name', $group->name, PDO::PARAM_STR);
