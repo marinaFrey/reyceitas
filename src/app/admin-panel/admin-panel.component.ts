@@ -237,6 +237,8 @@ export class AdminPanelComponent implements OnInit {
     console.log(this.tags[index]);
     if(this.tags[index].id == null)
       this.recipeService.addTag(tag);
+    else
+      this.recipeService.editTag(this.tags[index].id,tag);
 
   }
 

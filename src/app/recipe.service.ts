@@ -156,7 +156,14 @@ export class RecipeService {
     this.httpCli.get<string[]>(
       this.testingURL + `tags.php?rm_tag_id=${tagId}`).subscribe();
   }
-  addTag(tag:<Tag>)
+  editTag(tagId, tag)
+  {
+    var tagJson = JSON.stringify(tag).replace(/#/g,'%23');
+    console.log(tagJson);
+    this.httpCli.get<string[]>(
+        this.testingURL + `tags.php?edit_tag_id=${tagId}&tag=${tagJson}`).subscribe();
+  }
+  addTag(tag)
   {
     var tagJson = JSON.stringify(tag).replace(/#/g,'%23');
     console.log(tagJson);
@@ -189,7 +196,7 @@ export class RecipeService {
   {
       var isFav = new Subject<boolean>()
           this.getFavourites(username)
-          .subscribe(favs => { isFav.next((favs!=null) && (favs.includes(recipeId)); }))
+          .subscribe(favs => { isFav.next((favs!=null) && (favs.includes(recipeId))); }))
           return isFav;
   }
 
