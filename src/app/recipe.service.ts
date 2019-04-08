@@ -227,6 +227,20 @@ export class RecipeService {
           .subscribe(favs => { isFav.next((favs!=null) && (favs.includes(recipeId))); })
           return isFav;
   }
+  getUserGroups(userId): Observable<string[]>
+  {
+    this.messageService.add('RecipeService: fetched favourites');
+    var ugroups = this.httpCli.get<string[]>(
+      this.testingURL + `user_groups.php?get_groups_user=${userId}`);
+    return ugroups;
+  }
+  setUserGroups(userId, userGroups)
+  {
+    this.httpCli.get(
+        this.testingURL + `user_groups.php?set_groups_user=${userId}&groups=${userGroups}`).subscribe();
+  }
+  
+
 
   getUsernameById(id): Observable<string> {
     this.messageService.add('RecipeService: fetched users');
