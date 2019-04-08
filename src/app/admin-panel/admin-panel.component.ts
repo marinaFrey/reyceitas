@@ -234,7 +234,6 @@ export class AdminPanelComponent implements OnInit {
     this.isEditingTag[index] = false;
     this.tagColors[index].disable();
     this.tags[index] = JSON.parse(JSON.stringify(this.tagsTemp[index]));
-    console.log(this.tags[index]);
     if(this.tags[index].id == null)
       this.recipeService.addTag(tag);
     else
@@ -246,18 +245,20 @@ export class AdminPanelComponent implements OnInit {
 
   }
 
-  deleteUser(userId) {
+  deleteUser(index, userId) {
     this.createColorPickers();
   }
 
   deleteGroup(index) {
 
-    if (this.groups[index].id == null) {
-      this.groups.splice(index, 1)
-    }
+    this.groups.splice(index, 1);
+    this.groupsTemp.splice(index, 1);
+    
   }
 
-  deleteTag(tagId) {
+  deleteTag(index, tagId) {
+    this.tags.splice(index, 1);
+    this.tagsTemp.splice(index, 1);
     this.recipeService.rmTag(tagId);
 
   }

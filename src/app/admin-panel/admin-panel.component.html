@@ -171,7 +171,7 @@
             <tbody>
               <tr *ngFor="let tag of tagsTemp;let index = index;">
                 <td>
-                  <i class="fa {{tag.icon}} fa-lg" aria-hidden="true" [ngStyle]="{'color': tag.color}"></i>
+                  <i class="{{tag.icon}} fa-lg" aria-hidden="true" [ngStyle]="{'color': tag.color}"></i>
                 </td>
                 <td>
                   <div>
@@ -208,7 +208,7 @@
                 </td>
 
                 <td>
-                  <button type="button" class="btn-sm btn-danger" (click)="deleteTag(tag.id)">
+                  <button type="button" class="btn-sm btn-danger" (click)="deleteTag(index, tag.id)">
                     <i class="fa fa-trash-alt fa-lg" aria-hidden="true"></i>
                   </button>
                 </td>
