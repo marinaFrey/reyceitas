@@ -209,7 +209,7 @@ export class AdminPanelComponent implements OnInit {
 
   }
 
-  saveUser(index, userId) {
+  saveUser(index, user) {
     this.isEditingUser[index] = false;
     this.users[index] = JSON.parse(JSON.stringify(this.usersTemp[index]));
     // save user
@@ -223,7 +223,7 @@ export class AdminPanelComponent implements OnInit {
     console.log("changing groups for user " + this.users[this.userGroupEditingIndexReference].username);
   }
 
-  saveGroup(index, groupId) {
+  saveGroup(index, group) {
     this.isEditingGroup[index] = false;
     this.groups[index] = JSON.parse(JSON.stringify(this.groupsTemp[index]));
     // save group
@@ -234,8 +234,9 @@ export class AdminPanelComponent implements OnInit {
     this.isEditingTag[index] = false;
     this.tagColors[index].disable();
     this.tags[index] = JSON.parse(JSON.stringify(this.tagsTemp[index]));
-    this.recipeService.addTag(tag);
-    // save tag
+    console.log(this.tags[index]);
+    if(this.tags[index].id == null)
+      this.recipeService.addTag(tag);
 
   }
 
