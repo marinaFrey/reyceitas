@@ -27,7 +27,7 @@ export class AdminPanelComponent implements OnInit {
 
   ngOnInit() {
     // checar se usuario eh admin
-    
+
     this.getUsersFromDatabase();
     this.getGroupsFromDatabase();
     this.getTagsFromDatabase();
@@ -35,21 +35,21 @@ export class AdminPanelComponent implements OnInit {
 
   getUsersFromDatabase() {
     this.recipeService.getUsers()
-    .subscribe(users => {
-      this.users = users;
-      this.usersTemp =  JSON.parse(JSON.stringify(this.users));//this.users.slice();
-      this.isEditingUser = this.populateArray(this.users, this.isEditingUser);
-    });
+      .subscribe(users => {
+        this.users = users;
+        this.usersTemp = JSON.parse(JSON.stringify(this.users));//this.users.slice();
+        this.isEditingUser = this.populateArray(this.users, this.isEditingUser);
+      });
 
   }
 
   getGroupsFromDatabase() {
     this.recipeService.getGroups()
-    .subscribe(groups => {
-      this.groups = groups;
-      this.groupsTemp = JSON.parse(JSON.stringify(this.groups));//this.groups.slice();
-      this.isEditingGroup = this.populateArray(this.groups, this.isEditingGroup);
-    });
+      .subscribe(groups => {
+        this.groups = groups;
+        this.groupsTemp = JSON.parse(JSON.stringify(this.groups));//this.groups.slice();
+        this.isEditingGroup = this.populateArray(this.groups, this.isEditingGroup);
+      });
   }
 
   getTagsFromDatabase() {
@@ -115,7 +115,8 @@ export class AdminPanelComponent implements OnInit {
     g.id = null;
     g.name = "Novo Grupo"
     this.groupsTemp.push(g);
-    this.isEditingGroup[this.groups.length - 1] = true;
+    this.groups.push(g);
+    this.isEditingGroup[this.groupsTemp.length - 1] = true;
   }
 
   addNewTag() {
@@ -187,8 +188,14 @@ export class AdminPanelComponent implements OnInit {
   }
 
   cancelGroupEditing(index) {
+    if (this.groupsTemp[index].id == null) {
+      this.groups.splice(index, 1);
+      this.groupsTemp.splice(index, 1);
+      return;
+    }
     this.isEditingGroup[index] = false;
     this.groupsTemp[index] = JSON.parse(JSON.stringify(this.groups[index]));
+    
   }
 
   enableTagEditing(index) {
@@ -198,7 +205,7 @@ export class AdminPanelComponent implements OnInit {
 
   cancelTagEditing(index) {
     this.isEditingTag[index] = false;
-    
+
     var copy = JSON.parse(JSON.stringify(this.tags[index]));
     this.tagsTemp[index].id = copy.id;
     this.tagsTemp[index].name = copy.name;
@@ -227,7 +234,7 @@ export class AdminPanelComponent implements OnInit {
     this.isEditingGroup[index] = false;
     this.groups[index] = JSON.parse(JSON.stringify(this.groupsTemp[index]));
     // save group
-    if(this.groups[index].id == null)
+    if (this.groups[index].id == null)
       this.recipeService.addGroup(this.groups[index]);
     else
       this.recipeService.editGroup(this.groups[index]);
@@ -238,7 +245,7 @@ export class AdminPanelComponent implements OnInit {
     this.isEditingTag[index] = false;
     this.tagColors[index].disable();
     this.tags[index] = JSON.parse(JSON.stringify(this.tagsTemp[index]));
-    if(this.tags[index].id == null)
+    if (this.tags[index].id == null)
       this.recipeService.addTag(tag);
     else
       this.recipeService.editTag(tag);
@@ -257,11 +264,11 @@ export class AdminPanelComponent implements OnInit {
 
     this.groups.splice(index, 1);
     this.groupsTemp.splice(index, 1);
-    
+
     if (this.groups[index].id == null) {
-        this.groups.splice(index, 1)
+      this.groups.splice(index, 1)
     } else {
-        this.recipeService.rmGroup(this.groups[index].id);
+      this.recipeService.rmGroup(this.groups[index].id);
     }
 
   }
