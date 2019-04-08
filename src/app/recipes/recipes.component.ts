@@ -34,6 +34,7 @@ export class RecipesComponent implements OnInit
     this.getRecipes(); 
     this.recipeFavourite = [];
     this.recipeOwned= [];
+    this.recipes= [];
   }
 
   getImageSrc(index, recipe)
