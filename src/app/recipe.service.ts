@@ -190,6 +190,13 @@ export class RecipeService {
       this.testingURL + `tags.php?add_tag=${tagJson}`).subscribe();
   }
 
+  getOwnedRecipes(username): Observable<string[]>
+  {
+    var favs = this.httpCli.get<string[]>(
+      this.testingURL + `get_recipe_permissions.php?get_owned_recipes_per_user=${username}`);
+
+    return favs;
+  }
   getFavourites(username): Observable<string[]>
   {
     this.messageService.add('RecipeService: fetched favourites');

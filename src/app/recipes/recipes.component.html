@@ -8,8 +8,8 @@
     <div class="row">
 
       <!-- First recipe item -->
-      <div *ngFor="let recipe of recipes" class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
-        <div class="recipe-item text-center" >
+      <div *ngFor="let recipe of recipes;let index = index;" class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+        <div *ngIf="((term == &quot;all&quot;)||((term == &quot;favs&quot;)&&(recipeFavourite[index]))||((term == &quot;owned&quot;)&&(recipeOwned[index])))" class="recipe-item text-center" >
           <div style="height: 178px; overflow: hidden;">
               <a routerLink="/details/{{recipe.id}}" class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
                 <img *ngIf="recipe.photos && recipe.photos.length" [src]="getImageSrc(0, recipe)" alt="foto da receita"  />

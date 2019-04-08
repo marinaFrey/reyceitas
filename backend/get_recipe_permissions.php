@@ -73,6 +73,28 @@ function get_public_recipes()
         echo json_encode($resArrVals);
     }
 }
+function get_owned_recipes_per_user($username) 
+{
+    $db = connect();
+    $sql = "SELECT *, r.name AS recipe_name FROM recipes AS r" ;
+    $sql.= " INNER JOIN users AS u ON u.user_id = r.owner";
+    $sql.= " WHERE u.username = :username";
+    $stmt= $db->prepare($sql);
+    $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+    $ret= $stmt->execute();
+    $ret = $stmt->fetchAll();
+
+    $i=0;
+    foreach($ret as $row)
+    {
+        $resArrVals[$i]=$row['recipe_id'];
+        $i++;
+    }
+    if($i>0)
+    {
+        echo json_encode($resArrVals);
+    }
+}
 function get_recipes_per_user($username) 
 {
     $db = connect();
@@ -267,6 +289,8 @@ if (isset($_GET['usr_id']) && isset($_GET['recp_id'])) {
     get_permission_per_user_recipe($_GET['recp_id'],$_GET['usr_id']);
 }elseif (isset($_GET['username'])) {
     get_recipes_per_user($_GET['username']);
+}elseif (isset($_GET['owned_recipes_username'])) {
+    get_owned_recipes_per_user($_GET['owned_recipes_username']);
 } elseif (isset($_GET['recipe_name'])) {
     get_group_per_recipes($_GET['recipe_name']);
 } else {
