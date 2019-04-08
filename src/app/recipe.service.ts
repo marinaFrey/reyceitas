@@ -196,7 +196,7 @@ export class RecipeService {
   {
       var isFav = new Subject<boolean>()
           this.getFavourites(username)
-          .subscribe(favs => { isFav.next((favs!=null) && (favs.includes(recipeId))); }))
+          .subscribe(favs => { isFav.next((favs!=null) && (favs.includes(recipeId))); })
           return isFav;
   }
 
