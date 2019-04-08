@@ -151,17 +151,36 @@ export class RecipeService {
 
 
   }
+  rmGroup(groupId)
+  {
+    this.httpCli.get<string[]>(
+      this.testingURL + `groups.php?rm_group_id=${groupId}`).subscribe();
+  }
+  editGroup(group)
+  {
+    var groupJson = JSON.stringify(group).replace(/#/g,'%23');
+    console.log(groupJson)
+    this.httpCli.get<string[]>(
+        this.testingURL + `groups.php?edit_group=${groupJson}`).subscribe();
+  }
+  addGroup(group)
+  {
+    var groupJson = JSON.stringify(group).replace(/#/g,'%23');
+    console.log(groupJson);
+    this.httpCli.get<string[]>(
+      this.testingURL + `groups.php?add_group=${groupJson}`).subscribe();
+  }
   rmTag(tagId)
   {
     this.httpCli.get<string[]>(
       this.testingURL + `tags.php?rm_tag_id=${tagId}`).subscribe();
   }
-  editTag(tagId, tag)
+  editTag(tag)
   {
     var tagJson = JSON.stringify(tag).replace(/#/g,'%23');
-    console.log(tagJson);
+    console.log(tagJson)
     this.httpCli.get<string[]>(
-        this.testingURL + `tags.php?edit_tag_id=${tagId}&tag=${tagJson}`).subscribe();
+        this.testingURL + `tags.php?edit_tag=${tagJson}`).subscribe();
   }
   addTag(tag)
   {
