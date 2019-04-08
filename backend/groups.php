@@ -48,6 +48,10 @@ function add_group($groupJson)
     if(!$ret) 
     {
         echo json_encode($stmt->errorInfo());
+    } else {
+        $last_id = $db->lastInsertId();
+        echo $last_id;
+        return $last_id; 
     }
 
 }

@@ -167,8 +167,9 @@ export class RecipeService {
   {
     var groupJson = JSON.stringify(group).replace(/#/g,'%23');
     console.log(groupJson);
-    this.httpCli.get<string[]>(
-      this.testingURL + `groups.php?add_group=${groupJson}`).subscribe();
+    var new_group = this.httpCli.get<number>(
+      this.testingURL + `groups.php?add_group=${groupJson}`)
+    return new_group;
   }
   rmTag(tagId)
   {
@@ -209,8 +210,9 @@ export class RecipeService {
   addFavourite(userId,recipeId)
   {
     this.messageService.add('RecipeService: add favourite');
-    this.httpCli.get(
-        this.testingURL + `favourites.php?user_id=${userId}&add_favourite=${recipeId}`).subscribe()
+    var new_fav = this.httpCli.get<number>(
+        this.testingURL + `favourites.php?user_id=${userId}&add_favourite=${recipeId}`)
+    return new_fav;
   }
   rmFavourite(userId,recipeId)
   {

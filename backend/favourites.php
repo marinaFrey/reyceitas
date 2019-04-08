@@ -107,6 +107,10 @@ function add_user_favourite($user_id, $favourite)
     if(!$ret) 
     {
         echo json_encode($stmt->errorInfo());
+    } else {
+        $last_id = $db->lastInsertId();
+        echo $last_id;
+        return $last_id; 
     }
 
 }
