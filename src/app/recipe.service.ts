@@ -210,9 +210,8 @@ export class RecipeService {
   addFavourite(userId,recipeId)
   {
     this.messageService.add('RecipeService: add favourite');
-    var new_fav = this.httpCli.get<number>(
-        this.testingURL + `favourites.php?user_id=${userId}&add_favourite=${recipeId}`)
-    return new_fav;
+    this.httpCli.get<number>(
+        this.testingURL + `favourites.php?user_id=${userId}&add_favourite=${recipeId}`).subscribe();
   }
   rmFavourite(userId,recipeId)
   {
@@ -424,6 +423,7 @@ export class RecipeService {
 
     return this.getRecipes().pipe(
       map((recs: Recipe[]) => {
+      console.log(recs)
         return recs.find(recipe => recipe.id.toString() == id.toString())
       }));
 

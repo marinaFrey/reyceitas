@@ -99,6 +99,7 @@ export class RecipeDetailsComponent implements OnInit {
             this.recipeMultiplier = this.recipe.servings;
           else
             this.recipeMultiplier = 1;
+            console.log(this.recipe)
 
           this.recipeService.getGroupsByRecipe(this.recipe.name).subscribe(authGroups => {
             this.recipe.groupsAuthenticationLevel = authGroups;
@@ -292,9 +293,11 @@ export class RecipeDetailsComponent implements OnInit {
     //this.recipe.isFavourite = !this.recipe.isFavourite;
 
       if(this.isFavourite)
-        this.recipeService.rmFavourite(this.recipeService.userIdSession,this.recipe.id);
-      else
-        this.recipeService.addFavourite(this.recipeService.userIdSession,this.recipe.id);
+      {
+        this.recipeService.rmFavourite(this.recipeService.userIdSession,this.recipe.id)
+      }else{
+        this.recipeService.addFavourite(this.recipeService.userIdSession,this.recipe.id)
+      }
       this.updateFavourite();
   }
 
