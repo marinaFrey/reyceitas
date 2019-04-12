@@ -372,6 +372,17 @@ export class RecipeService {
     }
   }
 
+  searchTagIconById(tagId, tagList): string {
+    if (tagList) {
+      for (var i = 0; i < tagList.length; i++) {
+        if (tagList[i].id == tagId) {
+          return tagList[i].icon;
+        }
+      }
+    }
+  }
+
+
   searchGroupById(groupId, groupList): string {
     if (groupList) {
       for (var i = 0; i < groupList.length; i++) {

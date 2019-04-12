@@ -48,11 +48,7 @@ export class RecipeDetailsComponent implements OnInit {
 
   getRecipe(): void {
 
-    this.recipeService.getTags()
-      .subscribe(tags => {
-        this.tags = tags;
-        this.filterAvailableTags();
-      });
+
 
     this.recipe =
       {
@@ -94,12 +90,16 @@ export class RecipeDetailsComponent implements OnInit {
             this.recipe.preparation = [];
           if (!this.recipe.photos)
             this.recipe.photos = [];
-
           if (this.recipe.servings)
             this.recipeMultiplier = this.recipe.servings;
           else
             this.recipeMultiplier = 1;
-            console.log(this.recipe)
+          this.recipeService.getTags()
+            .subscribe(tags => {
+              this.tags = tags;
+              this.filterAvailableTags();
+              console.log(this.availableTags);
+            });
 
           this.recipeService.getGroupsByRecipe(this.recipe.name).subscribe(authGroups => {
             this.recipe.groupsAuthenticationLevel = authGroups;
@@ -114,14 +114,17 @@ export class RecipeDetailsComponent implements OnInit {
 
 
   }
-  updateFavourite()
-  {
-      this.recipeService.isFavourite(this.recipe.id,this.recipeService.usernameSession)
-        .subscribe(isFav => {this.isFavourite = isFav; })
+  updateFavourite() {
+    this.recipeService.isFavourite(this.recipe.id, this.recipeService.usernameSession)
+      .subscribe(isFav => { this.isFavourite = isFav; })
   }
 
   getTagFromId(tagId): string {
     return this.recipeService.searchTagById(tagId, this.tags);
+  }
+
+  getTagIconFromId(tagId): string {
+    return this.recipeService.searchTagIconById(tagId, this.tags);
   }
 
   getGroupFromId(groupVisibility) {
@@ -285,17 +288,15 @@ export class RecipeDetailsComponent implements OnInit {
 
   }
 
-  toggleFavorite()
-  {
+  toggleFavorite() {
     //this.recipe.isFavourite = !this.recipe.isFavourite;
 
-      if(this.isFavourite)
-      {
-        this.recipeService.rmFavourite(this.recipeService.userIdSession,this.recipe.id)
-      }else{
-        this.recipeService.addFavourite(this.recipeService.userIdSession,this.recipe.id)
-      }
-      this.updateFavourite();
+    if (this.isFavourite) {
+      this.recipeService.rmFavourite(this.recipeService.userIdSession, this.recipe.id)
+    } else {
+      this.recipeService.addFavourite(this.recipeService.userIdSession, this.recipe.id)
+    }
+    this.updateFavourite();
   }
 
   getImageSrc(index) {
@@ -380,6 +381,7 @@ export class RecipeDetailsComponent implements OnInit {
 
   removeTag(index: number): void {
     this.recipe.tags.splice(index, 1);
+    this.filterAvailableTags();
   }
 
   addTag(): void {
@@ -397,13 +399,10 @@ export class RecipeDetailsComponent implements OnInit {
   filterAvailableTags(): void {
 
     this.availableTags = JSON.parse(JSON.stringify(this.tags));
-    console.log(this.availableTags);
-    console.log(this.tags);
-    console.log(this.recipe.tags);
     for (var i = 0; i < this.tags.length; i++) {
       for (var j = 0; j < this.recipe.tags.length; j++) {
         if (this.tags[i].id.toString() == this.recipe.tags[j].toString()) {
-          var index = this.availableTags.map(function (d) { return d.id }).indexOf(this.recipe.tags[j]);
+          var index = this.availableTags.map(function (d) { return +d.id }).indexOf(+this.recipe.tags[j]);
           this.availableTags.splice(index, 1);
         }
       }

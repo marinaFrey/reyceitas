@@ -9,7 +9,7 @@
     font-size: 4em;
     margin-bottom: 12px;
   }
-  #items h3 {
+  #icons-dash h3 {
     margin-top: 12px;
     font-size: 3em;
     color: #666;
@@ -37,3 +37,13 @@
   .recipe-item:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
   }
+
+  .recipe-item .row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .recipe-item h3 {
+    margin: 0
+  }
+

@@ -58,7 +58,6 @@ export class RecipesComponent implements OnInit {
       //this.recipeOwned[i] = ((own_recipes != null) && own_recipes.includes(this.recipes[i].id.toString()))
       this.recipeViews[i].isOwned = ((own_recipes != null) && own_recipes.includes(this.recipeViews[i].recipe.id.toString()));
     }
-    console.log(this.recipeViews);
   }
 
   filterFavouriteRecipes() {

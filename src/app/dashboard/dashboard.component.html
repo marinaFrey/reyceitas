@@ -35,6 +35,7 @@
         </div>
       </div>
     </div>
+    <!--
     <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
         <div class="recipe-item text-center">
           <div class="row" routerLink="/recipes/favs">
@@ -50,7 +51,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     <!--
     <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
       <div class="recipe-item text-center">
@@ -75,7 +76,7 @@
 
     <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn" *ngFor="let tag of tags;" routerLink="/recipes/{{tag.id}}">
       <div class="recipe-item">
-        <div class="row">
+        <div id="icons-dash" class="row">
           <h3 class="col-md-12 col-sm-12 col-xs-12 text-center" [ngStyle]="{'color': tag.color}" unselectable="on" onselectstart="return false;"
             onmousedown="return false;">
             <i class="{{tag.icon}} fa-fw" aria-hidden="true"></i>
@@ -97,44 +98,71 @@
     </div>
 
     <div class="col-lg-3 col-md-3 col-sm-12 wow fadeIn">
+
+
+      
+      <div class="recipe-item text-center">
+          <div class="row" routerLink="/recipes/favs">
+            <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+              <h1 style="color: #dfc013; vertical-align: middle;">
+                <i class="fa fa-star fa-fw " aria-hidden="true"></i>
+              </h1>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;" >
+                Ver Favoritos
+              </h3>
+            </div>
+          </div>
+        </div>
+
+      <div class="recipe-item text-center">
+          <div class="row" routerLink="/recipes/owned">
+            <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+              <h1 style="color: #417be7; vertical-align: middle;">
+                <i class="fas fa-user-tag fa-fw " aria-hidden="true"></i>
+              </h1>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;" >
+                  Minhas Receitas
+              </h3>
+            </div>
+          </div>
+        </div>
+
+
+
+      <div class="recipe-item text-center">
+          <div class="row" routerLink="/admin">
+            <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+              <h1 style="color: #5a45d3; vertical-align: middle;">
+                <i class="fas fa-users-cog fa-fw " aria-hidden="true"></i>
+              </h1>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;" >
+                  Painel de Administração
+              </h3>
+            </div>
+          </div>
+        </div>
+
       <div class="recipe-item text-center" (click)='goToNewRecipePage()' unselectable="on" onselectstart="return false;" onmousedown="return false;">
 
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h1 style="color: rgb(28, 207, 67); vertical-align: middle;" >
-              <i class="fa fa-plus-circle fa-fw " aria-hidden="true"></i>
+            <h1 style="color: rgb(28, 207, 67); vertical-align: middle;">
+              <i class="fa fa-plus-circle fa-2x " aria-hidden="true"></i>
             </h1>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h4 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+            <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
               Adicionar Receita
-            </h4>
-          </div>
-        </div>
-
-      </div>
-      <div class="recipe-item text-center" routerLink="/admin" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-
-        <div class="row" routerLink="/recipes/owned">
-          <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h4 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-              Minhas Receitas
-            </h4>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="recipe-item text-center" routerLink="/admin" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-
-        <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h4 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-              Painel de Administração
-            </h4>
+            </h3>
           </div>
         </div>
 

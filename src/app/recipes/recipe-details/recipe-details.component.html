@@ -384,7 +384,8 @@
         <div class="recipe-directions">
           <h3>Categorias</h3>
           <ol *ngIf="tags && tags.length">
-            <button class="btn btn-light" *ngFor="let tag of recipe.tags" routerLink="/recipes/{{tag}}">
+            <button class="btn btn-light" *ngFor="let tag of recipe.tags" routerLink="/recipes/{{tag}}" style="color:#818181">
+              <i class="{{getTagIconFromId(tag)}}" aria-hidden="true" style="margin-right:5px"></i>
               {{getTagFromId(tag)}}
               <!--{{tags[tag].name}}-->
             </button>
@@ -400,23 +401,19 @@
           <h3>Categorias</h3>
           <ol>
             <a *ngIf="recipe.tags">
-              <button class="btn btn-light" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn">
+              <button class="btn btn-light" *ngFor="let tag of recipe.tags;let index = index;trackBy:trackByFn" style="color:#818181">
+                  <i class="{{getTagIconFromId(tag)}}" aria-hidden="true" style="margin-right:5px"></i>
                 {{getTagFromId(tag)}}
                 <!--{{tags[tag].name}}-->
                 <i class="fa fa-times fa-fw " aria-hidden="true" (click)="removeTag(index)"></i>
               </button>
             </a>
 
-            <select [(ngModel)]="selectedTag">
-              <option *ngFor="let tagOption of availableTags" [ngValue]="tagOption.id">
+            <select [(ngModel)]="selectedTag" (change)="addTag()">
+              <option *ngFor="let tagOption of availableTags" [ngValue]="tagOption.id"  >
                 {{tagOption.name}}
               </option>
             </select>
-
-            <button class="btn btn-success " (click)="addTag()">
-              <i class="fa fa-check" aria-hidden="true"></i>
-            </button>
-
           </ol>
         </div>
       </div>
