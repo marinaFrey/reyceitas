@@ -191,19 +191,19 @@ export class RecipeService {
       this.testingURL + `tags.php?add_tag=${tagJson}`).subscribe();
   }
 
-  getOwnedRecipes(username): Observable<string[]>
+  getOwnedRecipes(): Observable<string[]>
   {
     var favs = this.httpCli.get<string[]>(
-      this.testingURL + `get_recipe_permissions.php?get_owned_recipes_per_user=${username}`);
+      this.testingURL + `get_recipe_permissions.php?get_owned_recipes_per_user=${this.userIdSession}`);
 
     return favs;
   }
-  getFavourites(username): Observable<string[]>
+  getFavourites(): Observable<string[]>
   {
     this.messageService.add('RecipeService: fetched favourites');
 
     var favs = this.httpCli.get<string[]>(
-      this.testingURL + `favourites.php?username=${username}`);
+      this.testingURL + `favourites.php?username=${this.usernameSession}`);
 
     return favs;
   }
