@@ -105,14 +105,11 @@ export class RecipeDetailsComponent implements OnInit {
             this.recipe.groupsAuthenticationLevel = authGroups;
           });
           this.userAllowedToEdit = this.isUserAllowedToEdit();
-
+          this.updateFavourite();
         });
 
       this.newRecipe = false;
       this.editing = false;
-      this.updateFavourite();
-
-
     }
 
 

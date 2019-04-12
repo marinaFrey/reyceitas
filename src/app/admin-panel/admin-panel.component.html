@@ -109,7 +109,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let group of groupsTemp;let index = index;trackBy:trackByFn">
+              <tr *ngFor="let group of groupsTemp;let index = index;">
                 <!-- group -->
                 <td *ngIf=!isEditingGroup[index]>{{group.name}}</td>
                 <td *ngIf=!isEditingGroup[index]>
@@ -258,7 +258,7 @@
                   <th>Nome do Grupo</th>
                   <th class="recipe-info">
                     <i class="fab fa-slideshare fa-fw " aria-hidden="true" style="margin-right:10px;"></i>
-                    <input type="checkbox" class="form-check-input" id="visibilityAll" (click)="setVisibilityCheckboxes('visibilityAll')">
+                    <input type="checkbox" class="form-check-input" id="participationAll" (click)="selectAllGroupsParticipationCheckboxes('participationAll')">
                   </th>
                 </tr>
               </thead>
@@ -267,7 +267,7 @@
                   <td>{{group.name}}</td>
                   <td class="recipe-info">
                     <i class="fab fa-slideshare" aria-hidden="true" style="margin-right:10px;"></i>
-                    <input type="checkbox" class="form-check-input" id="participation{{group.id}}" (click)="setVisibilityCheckboxes(group.id)">
+                    <input type="checkbox" class="form-check-input" id="participation{{group.id}}">
                   </td>
                 </tr>
               </tbody>

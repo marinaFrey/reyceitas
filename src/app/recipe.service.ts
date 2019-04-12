@@ -194,8 +194,7 @@ export class RecipeService {
   getOwnedRecipes(): Observable<string[]>
   {
     var favs = this.httpCli.get<string[]>(
-      this.testingURL + `get_recipe_permissions.php?get_owned_recipes_per_user=${this.userIdSession}`);
-
+      this.testingURL + `get_recipe_permissions.php?owned_recipes_per_user_id=${this.userIdSession}`);
     return favs;
   }
   getFavourites(): Observable<string[]>
@@ -222,7 +221,7 @@ export class RecipeService {
   isFavourite(recipeId,username): Observable<boolean>
   {
       var isFav = new Subject<boolean>()
-          this.getFavourites(username)
+          this.getFavourites()
           .subscribe(favs => { isFav.next((favs!=null) && (favs.includes(recipeId))); })
           return isFav;
   }

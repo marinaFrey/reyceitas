@@ -182,18 +182,23 @@ function populateTags()
   $sql =<<<EOF
     INSERT INTO tags 
     VALUES 
-    (42, "Favoritos", "fa-star", "#dfc013"),
-    (43, "Bebidas", "fa-coffee", "#915721"),
-    (44, "Sobremesas", "fa-birthday-cake", "#dd73d8"),
-    (45, "Vegetariano", "fa-feather-alt", "#72ce6f"),
-    (46, "Refeições", "fa-utensils", "#777777"),
-    (47, "Sopas", "fa-utensil-spoon", "#6fcebe"),
-    (48, "Lanches", "fa-cookie-bite", "#926d4b"),
-    (49, "Peixes", "fa-fish", "#6f98ce"),
-    (50, "Aves", "fa-crow", "#ce926f"),
-    (51, "Porco", "fa-piggy-bank", "#ce926f"),
-    (52, "Carne vermelha", "fa-chess-knight", "#ce926f"),
-    (53, "Saudável", "fa-apple-alt", "#9dce6f");
+    (42, "Favoritos", "fa fa-star", "#dfc013"),
+    (43, "Bebidas", "fa fa-coffee", "#915721"),
+    (44, "Sobremesas", "fa fa-birthday-cake", "#dd73d8"),
+    (45, "Vegetariano", "fa fa-feather-alt", "#72ce6f"),
+    (46, "Refeições", "fa fa-utensils", "#777777"),
+    (47, "Sopas", "fa fa-utensil-spoon", "#6fcebe"),
+    (48, "Lanches", "fa fa-cookie-bite", "#926d4b"),
+    (49, "Peixes", "fa fa-fish", "#6f98ce"),
+    (50, "Aves", "fa fa-crow", "#ce926f"),
+    (51, "Porco", "fa fa-piggy-bank", "#ce926f"),
+    (52, "Carne vermelha", "fas fa-horse", "#ce926f"),
+    (53, "Saudável", "fa fa-apple-alt", "#9dce6f"),
+    (54, "Oriental", "fas fa-torii-gate", "#CE6161"),
+    (55, "Hambúrger", "fas fa-hamburger", "#915721"),
+    (56, "Pizza", "fas fa-pizza-slice", "#915721"),
+    (57, "Pão", "fas fa-bread-slice", "#915721"),
+    (58, "Apimentada", "fas fa-pepper-hot", "#CE6161");
 
 EOF;
     $db = connect();

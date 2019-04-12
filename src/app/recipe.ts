@@ -15,6 +15,12 @@ export class Recipe {
     groupsAuthenticationLevel: RecipeVisibility[];
 }
 
+export class RecipeView {
+    recipe: Recipe;
+    isFavourite: boolean;
+    isOwned: boolean;
+  }
+
 export class Ingredient {
     id: number;
     name: string;

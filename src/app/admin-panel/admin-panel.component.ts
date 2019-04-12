@@ -127,6 +127,7 @@ export class AdminPanelComponent implements OnInit {
     t.icon = null;
 
     this.tagsTemp.push(t);
+    this.tags.push(t);
     var index = (this.tagsTemp.length - 1);
     var pointer = this;
     this.isEditingTag[index] = true;
@@ -173,13 +174,33 @@ export class AdminPanelComponent implements OnInit {
   openUserGroupsEditingModal(index) {
     this.userGroupEditingIndexReference = index;
     $('#groupManagingModal').modal('show');
-    var pointer = this;
-    setTimeout(function () {
-      for (var i = 0; i < pointer.groups.length; i++) {
-        var participationCheckbox = (<HTMLInputElement>document.getElementById('participation' + pointer.groups[i].id));
+    this.recipeService.getUserGroups(this.users[this.userGroupEditingIndexReference].id).subscribe(usrGroups => {
+      var userGroups = usrGroups;
+      for (var i = 0; i < this.groups.length; i++) {
+        var participationCheckbox = (<HTMLInputElement>document.getElementById('participation' + this.groups[i].id));
         participationCheckbox.checked = false;
+        if (userGroups && userGroups.length > 0) {
+          for (var j = 0; j < userGroups.length; j++) {
+            if (this.groups[i].id.toString() == userGroups[j].toString())
+              participationCheckbox.checked = true;
+          }
+        }
+
       }
-    }, 10);
+    });
+
+
+  }
+
+  selectAllGroupsParticipationCheckboxes(allId) {
+    var participationCheckbox = (<HTMLInputElement>document.getElementById(allId));
+    var value = false;
+    if (participationCheckbox.checked)
+      value = true;
+    for (var i = 0; i < this.groups.length; i++) {
+      var participationCheckbox = (<HTMLInputElement>document.getElementById('participation' + this.groups[i].id));
+      participationCheckbox.checked = value;
+    }
 
   }
 
@@ -191,11 +212,12 @@ export class AdminPanelComponent implements OnInit {
     if (this.groupsTemp[index].id == null) {
       this.groups.splice(index, 1);
       this.groupsTemp.splice(index, 1);
+      this.isEditingGroup.splice(index, 1);
       return;
     }
     this.isEditingGroup[index] = false;
     this.groupsTemp[index] = JSON.parse(JSON.stringify(this.groups[index]));
-    
+
   }
 
   enableTagEditing(index) {
@@ -224,18 +246,25 @@ export class AdminPanelComponent implements OnInit {
   }
 
   saveUserGroups() {
+    console.log(this.groups, this.users[this.userGroupEditingIndexReference])
+    var userGroups = [];
     for (var i = 0; i < this.groups.length; i++) {
-      var participationCheckbox = (<HTMLInputElement>document.getElementById('participation' + i));
+      var participationCheckbox = (<HTMLInputElement>document.getElementById('participation' + this.groups[i].id));
+      if (participationCheckbox.checked)
+        userGroups.push(this.groups[i].id);
     }
+    this.recipeService.setUserGroups(this.users[this.userGroupEditingIndexReference].id, JSON.stringify(userGroups));
     console.log("changing groups for user " + this.users[this.userGroupEditingIndexReference].username);
+    console.log(userGroups);
   }
 
   saveGroup(index, group) {
     this.isEditingGroup[index] = false;
     this.groups[index] = JSON.parse(JSON.stringify(this.groupsTemp[index]));
     // save group
-    if (this.groups[index].id == null)
-      this.recipeService.addGroup(this.groups[index]);
+    if (this.groups[index].id == null) {
+      this.recipeService.addGroup(this.groups[index]).subscribe(id => this.groups[index].id = id);
+    }
     else
       this.recipeService.editGroup(this.groups[index]);
 
@@ -261,21 +290,21 @@ export class AdminPanelComponent implements OnInit {
   }
 
   deleteGroup(index) {
-
-    this.groups.splice(index, 1);
-    this.groupsTemp.splice(index, 1);
-
     if (this.groups[index].id == null) {
       this.groups.splice(index, 1)
     } else {
       this.recipeService.rmGroup(this.groups[index].id);
     }
+    this.groups.splice(index, 1);
+    this.groupsTemp.splice(index, 1);
+    this.isEditingGroup.splice(index, 1);
 
   }
 
   deleteTag(index, tagId) {
     this.tags.splice(index, 1);
     this.tagsTemp.splice(index, 1);
+    this.isEditingTag.splice(index, 1);
     this.recipeService.rmTag(tagId);
 
   }
