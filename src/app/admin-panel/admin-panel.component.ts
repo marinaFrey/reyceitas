@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../recipe.service';
 import { User, Group, Tag } from '../recipe';
-import Pickr from '@simonwep/pickr/dist/pickr.min.js';
+//import '@simonwep/pickr/dist/pickr.min.css';
+//import Pickr from '@simonwep/pickr/dist/pickr.min';
 
 @Component({
   selector: 'app-admin-panel',
@@ -19,6 +20,7 @@ export class AdminPanelComponent implements OnInit {
   isEditingGroup: Array<boolean>;
   tags: Tag[];
   tagsTemp: Tag[];
+  //@ts-ignore
   tagColors: Pickr[];
   isEditingTag: Array<boolean>;
 
@@ -73,6 +75,8 @@ export class AdminPanelComponent implements OnInit {
         el: elem,
         default: this.tags[i].color,
         index: i,
+        theme: 'classic',
+
         components: {
           // Main components
           preview: true,
@@ -95,7 +99,7 @@ export class AdminPanelComponent implements OnInit {
       this.tagColors[i].disable();
       var pointer = this;
       this.tagColors[i].on('save', (...args) => {
-        pointer.tagsTemp[args[1].options.index].color = args[0].toHEX().toString();
+        pointer.tagsTemp[args[1].options.index].color = args[0].toHEXA().toString();
         //pointer.tags[args[1].options.index].color = args[0].toHEX().toString();
       });
     }
@@ -136,6 +140,7 @@ export class AdminPanelComponent implements OnInit {
         el: '.color-picker' + (index),
         default: "grey",
         index: index,
+        theme: 'classic',
         components: {
           // Main components
           preview: true,
@@ -156,7 +161,7 @@ export class AdminPanelComponent implements OnInit {
         }
       });
       pointer.tagColors[index].on('save', (...args) => {
-        pointer.tagsTemp[args[1].options.index].color = args[0].toHEX().toString();
+        pointer.tagsTemp[args[1].options.index].color = args[0].toHEXA().toString();
         //pointer.tags[args[1].options.index].color = args[0].toHEX().toString();
       });
     }, 10);

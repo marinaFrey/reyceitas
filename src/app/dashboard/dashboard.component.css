@@ -29,6 +29,7 @@
     margin-left:10px;
     margin-right:10px;
     border-radius: 5px; /* 5px rounded corners */
+    cursor: pointer;
   }
   .recipe-item img {
     width: 100%;
@@ -46,4 +47,3 @@
   .recipe-item h3 {
     margin: 0
   }
-
