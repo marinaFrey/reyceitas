@@ -246,6 +246,19 @@ export class AdminPanelComponent implements OnInit {
   saveUser(index, user) {
     this.isEditingUser[index] = false;
     this.users[index] = JSON.parse(JSON.stringify(this.usersTemp[index]));
+    console.log("Saving User: ")
+    console.log(this.users[index])
+    this.recipeService.editUser(this.users[index]);
+                    this.recipeService.editUser(this.users[index])
+                        .subscribe(user_id => {
+                            this.users[index].id = user_id;
+                            if (this.users[index].id != -1) {
+                                console.log("User " + this.users[index].id + " edited succesfully");
+                            } else {
+                                console.log("User edit failed");
+                            }
+                        });
+
     // save user
 
   }
