@@ -287,13 +287,16 @@ export class RecipeService {
 
     return 0;
     }*/
-  editUser(user: User): Observable<number> {
+  editUser(user: User): Observable<number>{
     this.messageService.add('RecipeService: edit user');
     let param: any = { 'user_edit': JSON.stringify(user) };
     let params = new HttpParams();
+    //var userJson = JSON.stringify(user);
     var user_id;
     var result = this.httpCli.get<number>(this.testingURL + "save_user.php", { params: param });
-    return result;
+        return result;
+        //this.httpCli.get<number>(
+        //    this.testingURL + `save_user.php?user_edit=${userJson}`).subscribe();
   }
   newUser(user: User): Observable<number> {
     this.messageService.add('RecipeService: new user');
