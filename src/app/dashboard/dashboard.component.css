@@ -1,14 +1,8 @@
 #items {
     background-color: #f1f1f1;
-    padding-top: 12px;
-    padding-bottom: 24px;
+    padding: 24px;
   }
-  #items h2 {
-    color: #333;
-    font-family: 'Dancing Script', cursive;
-    font-size: 4em;
-    margin-bottom: 12px;
-  }
+
   #icons-dash h3 {
     margin-top: 12px;
     font-size: 3em;
@@ -26,8 +20,6 @@
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.15);
     -moz-box-shadow: 0 1px 0 rgba(0,0,0,.15);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    margin-left:10px;
-    margin-right:10px;
     border-radius: 5px; /* 5px rounded corners */
     cursor: pointer;
   }
@@ -47,3 +39,38 @@
   .recipe-item h3 {
     margin: 0
   }
+
+  .recipeDisplayCarousel 
+  {
+    padding: 24px;
+  }
+  /* equal card height */
+.row-equal > div[class*='col-'] {
+  display: flex;
+  flex: 1 0 auto;
+}
+
+.row-equal .card {
+ width: 100%;
+}
+
+/* ensure equal card height inside carousel */
+.carousel-inner>.row-equal.active, 
+.carousel-inner>.row-equal.next, 
+.carousel-inner>.row-equal.prev {
+  display: flex;
+}
+
+/* prevent flicker during transition */
+.carousel-inner>.row-equal.active.left, 
+.carousel-inner>.row-equal.active.right {
+  opacity: 0.5;
+  display: flex;
+}
+
+
+/* control image height */
+.card-img-top-250 {
+  max-height: 250px;
+  overflow:hidden;
+}
