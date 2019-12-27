@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../recipe.service';
+import { UserService } from '../user.service';
 import { User } from "../recipe";
-import { md5 } from "../md5";
 import * as $AB from 'jquery';
 import * as bootstrap from "bootstrap";
 
@@ -41,7 +41,7 @@ export class NavigationBarComponent implements OnInit {
     new_user: User;
 
 
-    constructor(private recipeService: RecipeService) { }
+    constructor(private recipeService: RecipeService, private userService : UserService) { }
 
     ngOnInit() {
     }
@@ -63,41 +63,52 @@ export class NavigationBarComponent implements OnInit {
         if (!this.checkField(this.username, "loginUsername") || !this.checkField(this.password, "loginPassword"))
             return;
 
-        this.passwordHashed = md5(this.password.toString());
-        this.password = null;
-        this.recipeService.searchUsers(this.username)
-            .subscribe(user_list => {
-                this.user_list = user_list;
-                if (this.user_list && this.user_list.length > 0) {
-                    if (this.passwordHashed != this.user_list[0].password) {
-                        var element = document.getElementById("loginPassword");
-                        element.classList.add("is-invalid");
-                        console.log("Password does not match");
-                        return;
-                    }
-                    $('#loginModal').modal('hide');
-                    $('#loginModal .close').click();
-                    var element = document.getElementById("loginUsername");
-                    element.classList.remove("is-invalid");
-                    var element = document.getElementById("loginPassword");
-                    element.classList.remove("is-invalid");
-                    console.log("User " + this.username + " authenticated");
-                    this.isLoggedIn = true;
-                    this.fullnameSession = user_list[0].fullname;
-                    this.emailSession = user_list[0].email;
-                    this.usernameSession = user_list[0].username;
-                    //console.log(user_list[0])
-                    this.recipeService.login(user_list[0]);
+        this.userService.login(this.username, this.password).subscribe(
+            user => {
+                // All went fine, user was logged.
+                $('#loginModal').modal('hide');
+                $('#loginModal .close').click();
+                var element = document.getElementById("loginUsername");
+                element.classList.remove("is-invalid");
+                var element = document.getElementById("loginPassword");
+                element.classList.remove("is-invalid");
+                console.log("User " + this.username + " authenticated");
+                console.log(user);
+                this.isLoggedIn = true;
+                this.fullnameSession = user.fullname;
+                this.emailSession = user.email;
+                this.usernameSession = user.username;
+                this.recipeService.login(user);
 
-                } else {
+                // Print cookies
+                var theCookies = document.cookie.split(';');
+                var aString = '';
+                for (var i = 0 ; i <= theCookies.length; i++) {
+                    aString  = theCookies[i] + "\n";
+                    console.log(aString);
+                }
+
+            },
+            err => {
+                // Something went wrong, handle what.
+                if(err.status == 404) {
+                    // User does not exist.
                     var element = document.getElementById("loginUsername");
                     element.classList.add("is-invalid");
                     console.log("User not found");
-                    return;
+                } else if(err.status == 401) {
+                    // Wrong password.
+                    var element = document.getElementById("loginPassword");
+                    element.classList.add("is-invalid");
+                    console.log("Password does not match");
+                } else {
+                    console.log(err.status);
                 }
-            });
+            }
+        )
         return;
     }
+
     submitNewUser(): void {
         if (!this.checkField(this.usernameConfig, "usernameConfig")
             || !this.checkField(this.fullnameConfig, "fullnameConfig")
@@ -106,7 +117,7 @@ export class NavigationBarComponent implements OnInit {
         ) {
             return;
         }
-        this.passwordHashed = md5(this.passwordConfig.toString());
+        this.passwordHashed = this.passwordConfig.toString();
         this.recipeService.searchUsers(this.usernameConfig)
             .subscribe(user_list => {
                 this.user_list = user_list;       
@@ -167,7 +178,7 @@ export class NavigationBarComponent implements OnInit {
         ) {
             return;
         }
-        this.passwordHashed = md5(this.oldPasswordConfig.toString());
+        this.passwordHashed = this.oldPasswordConfig.toString();
         this.oldPasswordConfig = null;
         this.recipeService.searchUsers(this.username)
             .subscribe(user_list => {

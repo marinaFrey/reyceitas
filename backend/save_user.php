@@ -12,12 +12,14 @@ if (isset($_GET['user']))
         VALUES (:usr_nm, :full_nm, :mail, :pwd, 0);
 EOF;
 
+    $hash = password_hash($obj->password,  PASSWORD_BCRYPT);
+    
     $db = connect();
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':usr_nm', $obj->username, PDO::PARAM_STR);
     $stmt->bindValue(':full_nm', $obj->fullname, PDO::PARAM_STR);
     $stmt->bindValue(':mail', $obj->email, PDO::PARAM_STR);
-    $stmt->bindValue(':pwd', $obj->password, PDO::PARAM_STR);
+    $stmt->bindValue(':pwd', $hash, PDO::PARAM_STR);
 
 
     $ret = $stmt->execute();

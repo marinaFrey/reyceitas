@@ -134,18 +134,26 @@ EOF;
     if(!$ret){
         echo json_encode($db->errorInfo());
     } else {
-        // echo "Table created successfully\n";
+        echo "Table created successfully\n";
     }
 }
 
 function populate_with_dummy_info() {
-    $sql =<<<EOF
-    INSERT INTO users (username, full_name, password) VALUES ("testinho", "testinho testado", "1234");
-    INSERT INTO users (username, full_name, password) VALUES ("testículo", "testículo testação", "12345");
-    INSERT INTO users (username, full_name, password) VALUES ("testando", "testículo testação", "12345");
-    INSERT INTO users (username, full_name, password, authentication_level) VALUES ("root", "root", "81dc9bdb52d04dc20036dbd8313ed055", "2");
+    // Add some users.
+    $sql = 'INSERT INTO users (username, full_name, password) VALUES ("testinho", "testinho testado", "';
+    $sql .= password_hash('1234',  PASSWORD_BCRYPT) . '");';
+    
+    $sql .= 'INSERT INTO users (username, full_name, password) VALUES ("testículo", "testículo testação", "';
+    $sql .= password_hash('12345',  PASSWORD_BCRYPT) . '");';
+    
+    $sql .= 'INSERT INTO users (username, full_name, password) VALUES ("testando", "testículo testação", "';
+    $sql .= password_hash('12345',  PASSWORD_BCRYPT) . '");';
 
-
+    $sql .= 'INSERT INTO users (username, full_name, password, authentication_level) VALUES ("root", "root", "';
+    $sql .= password_hash('1234',  PASSWORD_BCRYPT) . '", "2");';
+    
+    // Add all the other group information.
+    $sql .= <<<EOF
     INSERT INTO recipes
         (recipe_id, owner, name, difficulty, n_served, duration, description)
     VALUES
@@ -180,7 +188,7 @@ EOF;
     if(!$ret) {
         echo json_encode($db->errorInfo());
     } else {
-        // echo "Records created successfully\n";
+        echo "User Records created successfully\n";
     }
 }
 
@@ -209,7 +217,7 @@ EOF;
     if(!$ret) {
         echo json_encode($db->errorInfo());
     } else {
-        // echo "Records created successfully\n";
+        echo "Tags created successfully\n";
     }
 }
 function populateUserGroups()
@@ -234,7 +242,7 @@ EOF;
     if(!$ret) {
         echo json_encode($db->errorInfo());
     } else {
-        // echo "Records created successfully\n";
+        echo "Group info created successfully\n";
     }
 }
 
