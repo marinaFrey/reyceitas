@@ -1,42 +1,216 @@
 <section id="items">
-
-  <div class="row">
-
-    <!-- First recipe item -->
-    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row" routerLink="/advancedsearch">
-          <div class="col-md-3 col-sm-3 col-xs-3 text-right">
-            <h1 style="color: #7d6fce; vertical-align: middle;">
-              <i class="fa fa-search-plus fa-fw " aria-hidden="true"></i>
-            </h1>
+  <!-- SE USUARIO NAO ESTA LOGADO NAO MOSTRA COISAS DE ADMIN -->
+  <div *ngIf="!isLoggedIn">
+    <!-- LINHA DOS BOTOES INICIAIS -->
+    <div class="row">
+      <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+        <div class="recipe-item text-center">
+          <div class="row" routerLink="/advancedsearch">
+            <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+              <h1 style="color: #7d6fce; vertical-align: middle;">
+                <i class="fa fa-search-plus fa-fw " aria-hidden="true"></i>
+              </h1>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                Busca Avançada
+              </h3>
+            </div>
           </div>
-          <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-            <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-              Busca Avançada
-            </h1>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+        <div class="recipe-item text-center">
+          <div class="row" routerLink="/recipes/all">
+            <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+              <h1 style="color: #487bce; vertical-align: middle;">
+                <i class="fa fa-folder-open fa-fw " aria-hidden="true"></i>
+              </h1>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                Ver Receitas
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+        <div class="recipe-item text-center">
+          <div class="row" routerLink="/recipes/all">
+            <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+              <h1 style="color: #48a4ce; vertical-align: middle;">
+                <i class="fa fa-info-circle fa-fw " aria-hidden="true"></i>
+              </h1>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                Sobre o Site
+              </h3>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row" routerLink="/recipes/all">
-          <div class="col-md-3 col-sm-3 col-xs-3 text-right">
-            <h1 style="color: #487bce; vertical-align: middle;">
-              <i class="fa fa-folder-open fa-fw " aria-hidden="true"></i>
-            </h1>
+    <!-- CARROSSEL COM AS RECEITAS -->
+    <section class="carousel slide" data-ride="carousel" id="postsCarousel1">
+      <div class="container">
+        <div class="row">
+          <a class="btn btn-outline-secondary prev" title="go back" (click)="prev()">
+            <i class="fa fa-lg fa-chevron-left"></i>
+          </a>
+          <a class="btn btn-outline-secondary next" title="more" (click)="next()">
+            <i class="fa fa-lg fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+      <div *ngIf="recipes && recipes.length" class="recipeDisplayCarousel p-t-0 m-t-2 carousel-inner">
+        <div *ngFor='let in of recipeCarouselCounter(recipes.length) ;let x = index' class="row row-equal item m-t-0" [ngClass]='{"active":x==0}'>
+          <div *ngFor="let recipe of recipes | slice:x*3:(x+1)*3;let i = index;" class="col-md-4">
+            <div class="recipe-item text-center" style="width:100%;">
+              <div style=" height: 178px; overflow: hidden;">
+                <a routerLink="/details/{{recipe.id}}" class="noselect image-container" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                  <img *ngIf="recipe.photos && recipe.photos.length" [src]="getImageSrc(0, recipe)" alt="foto da receita" />
+                  <img *ngIf="!recipe.photos || !recipe.photos.length" src="../../assets/images/imgThumbnailPlaceholder.svg" alt="thumbnail-img"
+                  />
+                  <i *ngIf="isFavourite" class="fas fa-star fa-2x favourite-icon" aria-hidden="true" style="color:#dfc013"></i>
+                </a>
+              </div>
+              <br />
+              <h3 routerLink="/details/{{recipe.id}}" class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;"
+                style="height:15%;">
+                {{recipe.name}}
+              </h3>
+            </div>
           </div>
-          <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-            <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-              Ver Receitas
-            </h1>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTOES DAS CATEGORIAS -->
+    <div class="row">
+
+      <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn" *ngFor="let tag of tags;" routerLink="/recipes/{{tag.id}}">
+        <div class="recipe-item">
+          <div id="icons-dash" class="row">
+            <h3 class="col-md-12 col-sm-12 col-xs-12 text-center" [ngStyle]="{'color': tag.color}" unselectable="on" onselectstart="return false;"
+              onmousedown="return false;">
+              <i class="{{tag.icon}} fa-fw" aria-hidden="true"></i>
+            </h3>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <!-- GRAFICO -->
+      <div class="col-lg-9 col-md-9 col-sm-12 wow fadeIn">
+        <div class="recipe-item text-center">
+          <div class="row">
+            <canvas id="myChart"></canvas>
           </div>
         </div>
       </div>
     </div>
-    <!--
-    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+
+  </div>
+
+  <!-- SE USUARIO ESTA LOGADO MOSTRA COISAS DE ADMIN -->
+  <div *ngIf="isLoggedIn">
+    <!-- LINHA DOS BOTOES INICIAIS -->
+    <div class="row">
+      <div class="col-8">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+            <div class="recipe-item text-center">
+              <div class="row" routerLink="/advancedsearch">
+                <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+                  <h1 style="color: #7d6fce; vertical-align: middle;">
+                    <i class="fa fa-search-plus fa-fw " aria-hidden="true"></i>
+                  </h1>
+                </div>
+                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                  <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                    Busca Avançada
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+            <div class="recipe-item text-center">
+              <div class="row" routerLink="/recipes/all">
+                <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+                  <h1 style="color: #487bce; vertical-align: middle;">
+                    <i class="fa fa-folder-open fa-fw " aria-hidden="true"></i>
+                  </h1>
+                </div>
+                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                  <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                    Ver Receitas
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
+            <div class="recipe-item text-center">
+              <div class="row" routerLink="/recipes/all">
+                <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+                  <h1 style="color: #48a4ce; vertical-align: middle;">
+                    <i class="fa fa-info-circle fa-fw " aria-hidden="true"></i>
+                  </h1>
+                </div>
+                <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+                  <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                    Sobre o Site
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARROSSEL COM AS RECEITAS -->
+        <section class="carousel slide" data-ride="carousel" id="postsCarousel1">
+          <div class="container">
+            <div class="row">
+              <a class="btn btn-outline-secondary prev" title="go back" (click)="prev()">
+                <i class="fa fa-lg fa-chevron-left"></i>
+              </a>
+              <a class="btn btn-outline-secondary next" title="more" (click)="next()">
+                <i class="fa fa-lg fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          <div *ngIf="recipes && recipes.length" class="recipeDisplayCarousel p-t-0 m-t-2 carousel-inner">
+            <div *ngFor='let in of recipeCarouselCounter(recipes.length) ;let x = index' class="row row-equal item m-t-0" [ngClass]='{"active":x==0}'>
+              <div *ngFor="let recipe of recipes | slice:x*3:(x+1)*3;let i = index;" class="col-md-4">
+                <div class="recipe-item text-center" style="width:100%;">
+                  <div style=" height: 178px; overflow: hidden;">
+                    <a routerLink="/details/{{recipe.id}}" class="noselect image-container" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                      <img *ngIf="recipe.photos && recipe.photos.length" [src]="getImageSrc(0, recipe)" alt="foto da receita" />
+                      <img *ngIf="!recipe.photos || !recipe.photos.length" src="../../assets/images/imgThumbnailPlaceholder.svg" alt="thumbnail-img"
+                      />
+                      <i *ngIf="isFavourite" class="fas fa-star fa-2x favourite-icon" aria-hidden="true" style="color:#dfc013"></i>
+                    </a>
+                  </div>
+                  <br />
+                  <h3 routerLink="/details/{{recipe.id}}" class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;"
+                    style="height:15%;">
+                    {{recipe.name}}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- PARTE DO USUARIO LOGADO -->
+      <div class="col-lg-4 col-md-4 col-sm-12 wow fadeIn">
+
         <div class="recipe-item text-center">
           <div class="row" routerLink="/recipes/favs">
             <div class="col-md-3 col-sm-3 col-xs-3 text-right">
@@ -45,78 +219,14 @@
               </h1>
             </div>
             <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-              <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-                Ver Favoritos
-              </h1>
-            </div>
-          </div>
-        </div>
-      </div>-->
-    <!--
-    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row" (click)='goToNewRecipePage()' >
-          <div class="col-md-3 col-sm-3 col-xs-3 text-right">
-            <h1 style="color: rgb(28, 207, 67); vertical-align: middle;">
-              <i class="fa fa-plus-circle fa-fw " aria-hidden="true"></i>
-            </h1>
-          </div>
-          <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-            <h1 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-              Adicionar Receita
-            </h1>
-          </div>
-        </div>
-      </div>
-    </div>-->
-
-  </div>
-
-  <div class="row">
-
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn" *ngFor="let tag of tags;" routerLink="/recipes/{{tag.id}}">
-      <div class="recipe-item">
-        <div id="icons-dash" class="row">
-          <h3 class="col-md-12 col-sm-12 col-xs-12 text-center" [ngStyle]="{'color': tag.color}" unselectable="on" onselectstart="return false;"
-            onmousedown="return false;">
-            <i class="{{tag.icon}} fa-fw" aria-hidden="true"></i>
-          </h3>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">
-
-    <div class="col-lg-9 col-md-9 col-sm-12 wow fadeIn">
-      <div class="recipe-item text-center">
-        <div class="row">
-          <canvas id="myChart"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-md-3 col-sm-12 wow fadeIn">
-
-
-      
-      <div class="recipe-item text-center">
-          <div class="row" routerLink="/recipes/favs">
-            <div class="col-md-3 col-sm-3 col-xs-3 text-right">
-              <h1 style="color: #dfc013; vertical-align: middle;">
-                <i class="fa fa-star fa-fw " aria-hidden="true"></i>
-              </h1>
-            </div>
-            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;" >
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
                 Ver Favoritos
               </h3>
             </div>
           </div>
         </div>
 
-      <div class="recipe-item text-center">
+        <div class="recipe-item text-center">
           <div class="row" routerLink="/recipes/owned">
             <div class="col-md-3 col-sm-3 col-xs-3 text-right">
               <h1 style="color: #417be7; vertical-align: middle;">
@@ -124,16 +234,14 @@
               </h1>
             </div>
             <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;" >
-                  Minhas Receitas
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                Minhas Receitas
               </h3>
             </div>
           </div>
         </div>
 
-
-
-      <div class="recipe-item text-center">
+        <div class="recipe-item text-center">
           <div class="row" routerLink="/admin">
             <div class="col-md-3 col-sm-3 col-xs-3 text-right">
               <h1 style="color: #5a45d3; vertical-align: middle;">
@@ -141,34 +249,60 @@
               </h1>
             </div>
             <div class="col-md-9 col-sm-9 col-xs-9 text-left">
-              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;" >
-                  Painel de Administração
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                Painel de Administração
               </h3>
             </div>
           </div>
         </div>
 
-      <div class="recipe-item text-center" (click)='goToNewRecipePage()' unselectable="on" onselectstart="return false;" onmousedown="return false;">
-
-        <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h1 style="color: rgb(28, 207, 67); vertical-align: middle;">
-              <i class="fa fa-plus-circle fa-2x " aria-hidden="true"></i>
-            </h1>
+        <div class="recipe-item text-center" (click)='goToNewRecipePage()'>
+          <div class="row">
+            <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+              <h1 style="color: rgb(28, 207, 67); vertical-align: middle;">
+                <i class="fas fa-plus-circle fa-fw " aria-hidden="true"></i>
+              </h1>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-9 text-left">
+              <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                Adicionar Receita
+              </h3>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+    <!-- BOTOES DAS CATEGORIAS -->
+    <div class="row">
 
-        <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h3 class="noselect" unselectable="on" onselectstart="return false;" onmousedown="return false;">
-              Adicionar Receita
+      <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 wow fadeIn" *ngFor="let tag of tags;" routerLink="/recipes/{{tag.id}}">
+        <div class="recipe-item">
+          <div id="icons-dash" class="row">
+            <h3 class="col-md-12 col-sm-12 col-xs-12 text-center" [ngStyle]="{'color': tag.color}" unselectable="on" onselectstart="return false;"
+              onmousedown="return false;">
+              <i class="{{tag.icon}} fa-fw" aria-hidden="true"></i>
             </h3>
           </div>
         </div>
+      </div>
 
+    </div>
+
+    <div class="row">
+      <!-- GRAFICO -->
+      <div class="col-lg-9 col-md-9 col-sm-12 wow fadeIn">
+        <div class="recipe-item text-center">
+          <div class="row">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
       </div>
     </div>
 
+
+
   </div>
+
+
 
 </section>
