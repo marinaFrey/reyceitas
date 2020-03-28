@@ -330,8 +330,8 @@ export class RecipeDetailsComponent implements OnInit {
           this.recipe.photos = [];
         }
         this.recipe.photos.push(filename);
-        formData.append('files[]', file)
-        formData.append('filenames[]', filename)
+        formData.append('files[]', file);
+        formData.append('filenames[]', filename);
       }
       fetch(url, {
         method: 'POST',
