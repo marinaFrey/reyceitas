@@ -1,10 +1,30 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+// header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+// header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Max-Age: 1000');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+
 require 'connect.php';
+require 'login.php';
 
 function list_all_groups() 
 {
+    // No listing groups if you are not root.
+    if(!is_logged_already_as("root")) {
+        http_response_code(403);
+        die();
+    }
+
+    if(!is_logged_as_a_valid_user()) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
     $sql = "SELECT * FROM groups;";
     $ret = $db->query($sql);
@@ -23,6 +43,13 @@ function list_all_groups()
 }
 function rm_group($group_id)
 {
+
+    // No removing groups if you are not root
+    if(!is_logged_already_as("root")) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
     $sql = "DELETE FROM groups WHERE group_id = :group_id;"; 
     $stmt= $db->prepare($sql);
@@ -36,6 +63,13 @@ function rm_group($group_id)
 }
 function add_group($groupJson)
 {
+
+    // No adding groups if you are not root
+    if(!is_logged_already_as("root")) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
 
     $group = json_decode($groupJson);
@@ -55,6 +89,13 @@ function add_group($groupJson)
 }
 function edit_group($groupJson)
 {
+
+    // No editing groups if you are not root
+    if(!is_logged_already_as("root")) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
     $group = json_decode($groupJson);
     $sql = "UPDATE groups SET name = :name WHERE group_id = :group_id;";

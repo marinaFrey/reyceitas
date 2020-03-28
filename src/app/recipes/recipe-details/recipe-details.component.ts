@@ -320,6 +320,7 @@ export class RecipeDetailsComponent implements OnInit {
       const files = (<HTMLInputElement>document.getElementById('fileUploader')).files;
       //const url = 'https://receitas.fortesrey.net/backend/upload_file.php'
       const url = "http://localhost:8000/upload_file.php";
+
       const formData = new FormData()
       for (let i = 0; i < files.length; i++) {
         var file = files[i]
@@ -335,6 +336,7 @@ export class RecipeDetailsComponent implements OnInit {
       fetch(url, {
         method: 'POST',
         body: formData,
+        credentials : 'include',
       }).then(response => {
         console.log(response)
       })

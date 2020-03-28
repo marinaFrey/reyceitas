@@ -1,8 +1,25 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Origin: *");
+
+header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+// header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Max-Age: 1000');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+
+
 require 'connect.php';
+require 'login.php';
 
 function list_all_users() {
+
+    // Only root can list all users.
+    // if(!is_logged_already_as("root")) {
+    //     http_response_code(403);
+    //     die();
+    // }
+
     $db = connect();
     $sql = "SELECT * FROM users";
     $mapIdToData [] = array();
@@ -13,7 +30,8 @@ function list_all_users() {
     {
         $resArrVals[$i]['id']=$row['user_id'];
         $resArrVals[$i]['username']=$row['username'];
-        $resArrVals[$i]['password']=$row['password'];
+        // No way we are giving the client any password information.
+        $resArrVals[$i]['password']='';//$row['password'];
         $resArrVals[$i]['email']=$row['email'];
         $resArrVals[$i]['fullname']=$row['full_name'];
         $resArrVals[$i]['authenticationLevel']=$row['authentication_level'];
@@ -36,12 +54,53 @@ function get_user_by_id($id) {
     $ret = $stmt->execute();
     $ret = $stmt->fetchAll();
 
-    foreach($ret as $row)
-    {
-    echo json_encode($row['username']);
+    // Who am I logged in as?
+    $usr_info = get_current_user_info();
+    // I have to be someone.
+    if($usr_info == NULL) {
+        http_response_code(403);
+        die();
     }
+    $usr = $usr_info->aud;
+
+    // Root can get anyone.
+    if($usr == "root") 
+    {
+        foreach($ret as $row) {
+            // Not even to root we are giving the client any password information.
+            $row['password']='';
+            echo json_encode($row['username']);
+        }
+    } else
+    {
+        // Others can see only themselves.
+        foreach($ret as $row)
+        {
+            // Only give me my own information.
+            if(!is_logged_already_as($row['username'])) {
+                http_response_code(403);
+                die();
+            }
+
+            // No way we are giving the client any password information.
+            $row['password']='';
+            echo json_encode($row['username']);
+        }
+    }
+
+    
 }
 function get_user($username) {
+
+    $usr_info = get_current_user_info();
+    // I have to be logged in as either root as that user.
+    if($usr_info == NULL || ($usr_info->aud != "root" && $usr_info->aud != $username) ) {
+        http_response_code(403);
+        die();
+    }
+
+
+
     $db = connect();
     $sql = "SELECT * FROM users where username = :usr_nm" ;
     $stmt = $db->prepare($sql);
@@ -55,7 +114,8 @@ function get_user($username) {
     {
         $resArrVals[$i]['id']=$row['user_id'];
         $resArrVals[$i]['username']=$row['username'];
-        $resArrVals[$i]['password']=$row['password'];
+        // No way we are giving the client any password information.
+        $resArrVals[$i]['password']='';//$row['password'];
         $resArrVals[$i]['email']=$row['email'];
         $resArrVals[$i]['fullname']=$row['full_name'];
         $resArrVals[$i]['authenticationLevel']=$row['authentication_level'];

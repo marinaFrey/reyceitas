@@ -1,7 +1,16 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+// header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+// header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Max-Age: 1000');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+
 require 'connect.php';
+require 'login.php';
 
 function get_user_groups($user_id)
 {
@@ -25,6 +34,14 @@ function get_user_groups($user_id)
 }
 function set_user_groups($user_id, $groupsJson)
 {
+
+    // Only root can edit groups.
+    $usr_info = get_current_user_info();
+    if($usr_info == NULL || $usr_info->aud != "root") {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
     $sql = "DELETE FROM user_groups WHERE user_id = :usr_id";
     $stmt= $db->prepare($sql);

@@ -8,8 +8,9 @@ import { ChartFormat, RecipeVisibility } from './recipe';
 import { Observable, of } from 'rxjs';
 import {Subject} from 'rxjs/Subject';
 import { MessageService } from './message.service';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { UserService } from './user.service';
 
 
 @Injectable({
@@ -29,8 +30,12 @@ export class RecipeService {
   distURL = "https://receitas.fortesrey.net/backend/";
   testingURL = "http://localhost:8000/";
 
+
+
   constructor(private messageService: MessageService,
-    private httpCli: HttpClient) { }
+    private httpCli: HttpClient, private userService : UserService) {
+
+    }
 
   login(user: User): void {
     this.userIdSession = user.id;
@@ -41,22 +46,31 @@ export class RecipeService {
     this.userGroups = user.groups;
     this.isLoggedIn = true;
     console.log(user.authenticationLevel);
-    console.log("logged in")
+    console.log("logged in");
   }
+
   logout(): void {
     this.isLoggedIn = false;
-    console.log("logged out")
+    console.log("logged out");
+    this.userService.logout();
   }
   getRecipes(): Observable<Recipe[]> {
     this.messageService.add('RecipeService: fetched recipes');
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
 
     if(this.isLoggedIn)
     {
         var recps = this.httpCli.get<Recipe[]>(
-          this.testingURL + `get_recipe_permissions.php?username=${this.usernameSession}`);
+          this.testingURL + `get_recipe_permissions.php?username=${this.usernameSession}`, httpOptions);
     }else{
         var recps = this.httpCli.get<Recipe[]>(
-          this.testingURL + `get_recipe_permissions.php`);
+          this.testingURL + `get_recipe_permissions.php`, httpOptions);
     }
     return recps;
     // return of(RECIPES);
@@ -67,8 +81,17 @@ export class RecipeService {
     this.messageService.add('RecipeService: saved new recipe');
     let param: any = { 'recipe': JSON.stringify(recipe) };
     let params = new HttpParams();
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      params: param,
+      withCredentials : true
+    };
+
     var recps = this.httpCli.get<Recipe[]>(
-      this.testingURL + "save_recipe.php", { params: param });
+      this.testingURL + "save_recipe.php", httpOptions);
     var t = recps.subscribe((data) => {
       console.log("saved recipe", data);
       return data;
@@ -83,8 +106,17 @@ export class RecipeService {
     this.messageService.add('RecipeService: edited recipe');
     let param: any = { 'recipe': JSON.stringify(recipe) };
     let params = new HttpParams();
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      params: param,
+      withCredentials : true
+    };
+
     var recps = this.httpCli.get<Recipe[]>(
-      this.testingURL + "edit_recipe.php", { params: param });
+      this.testingURL + "edit_recipe.php", httpOptions);
     var t = recps.subscribe((data) => {
       console.log("edited recipe", data);
     }, (error) => {
@@ -98,8 +130,16 @@ export class RecipeService {
     this.messageService.add('RecipeService: deleted recipe');
     let param: any = { 'id': recipe.id.toString() };
     let params = new HttpParams();
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      params: param,
+      withCredentials : true
+    };
     var recps = this.httpCli.get<Recipe[]>(
-      this.testingURL + "delete_recipe.php", { params: param });
+      this.testingURL + "delete_recipe.php", httpOptions);
     var t = recps.subscribe((data) => {
       console.log("deleted recipe");
 
@@ -111,13 +151,21 @@ export class RecipeService {
 
   getGroupsByRecipe(recipeName): Observable<RecipeVisibility[]> {
     this.messageService.add('RecipeService: fetched recipes');
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
 
     var recps = this.httpCli.get<RecipeVisibility[]>(
-      this.testingURL + `get_recipe_permissions.php?recipe_name=${recipeName}`);
+      this.testingURL + `get_recipe_permissions.php?recipe_name=${recipeName}`, httpOptions);
     return recps;
   }
 
   getGroups() {
+    // TODO: ????
     this.messageService.add('RecipeService: fetched groups');
 
     var tags = this.httpCli.get<Tag[]>(
@@ -132,91 +180,145 @@ export class RecipeService {
     var tags = this.httpCli.get<Tag[]>(
       this.testingURL + "list_tags.php");
 
-
-
-    // this.httpCli.get(
-    // this.testingURL+"list_tags.php").subscribe((res)=>{
-    // window.alert("aa");
-    // window.alert(JSON.stringify(res));
-    // });
-    // window.alert("bb");
-
-    // window.alert( JSON.stringify(tags) );
-
     return tags;
-    // return aaa;
-    // this.messageService.add("");
-    // return of(a);
-    // return of(TAGS);
-
-
   }
   rmGroup(groupId)
   {
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     this.httpCli.get<string[]>(
-      this.testingURL + `groups.php?rm_group_id=${groupId}`).subscribe();
+      this.testingURL + `groups.php?rm_group_id=${groupId}`, httpOptions).subscribe();
   }
   editGroup(group)
   {
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     var groupJson = JSON.stringify(group).replace(/#/g,'%23');
     console.log(groupJson)
     this.httpCli.get<string[]>(
-        this.testingURL + `groups.php?edit_group=${groupJson}`).subscribe();
+        this.testingURL + `groups.php?edit_group=${groupJson}`, httpOptions).subscribe();
   }
   addGroup(group)
   {
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     var groupJson = JSON.stringify(group).replace(/#/g,'%23');
     console.log(groupJson);
     var new_group = this.httpCli.get<number>(
-      this.testingURL + `groups.php?add_group=${groupJson}`)
+      this.testingURL + `groups.php?add_group=${groupJson}`, httpOptions)
     return new_group;
   }
   rmTag(tagId)
   {
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     this.httpCli.get<string[]>(
-      this.testingURL + `tags.php?rm_tag_id=${tagId}`).subscribe();
+      this.testingURL + `tags.php?rm_tag_id=${tagId}`, httpOptions).subscribe();
   }
   editTag(tag)
   {
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     var tagJson = JSON.stringify(tag).replace(/#/g,'%23');
     console.log(tagJson)
     this.httpCli.get<string[]>(
-        this.testingURL + `tags.php?edit_tag=${tagJson}`).subscribe();
+        this.testingURL + `tags.php?edit_tag=${tagJson}`, httpOptions).subscribe();
   }
   addTag(tag)
   {
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     var tagJson = JSON.stringify(tag).replace(/#/g,'%23');
     console.log(tagJson);
     this.httpCli.get<string[]>(
-      this.testingURL + `tags.php?add_tag=${tagJson}`).subscribe();
+      this.testingURL + `tags.php?add_tag=${tagJson}`, httpOptions).subscribe();
   }
 
   getOwnedRecipes(): Observable<string[]>
   {
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     var favs = this.httpCli.get<string[]>(
-      this.testingURL + `get_recipe_permissions.php?owned_recipes_per_user_id=${this.userIdSession}`);
+      this.testingURL + `get_recipe_permissions.php?owned_recipes_per_user_id=${this.userIdSession}`, httpOptions);
     return favs;
   }
   getFavourites(): Observable<string[]>
   {
     this.messageService.add('RecipeService: fetched favourites');
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
 
     var favs = this.httpCli.get<string[]>(
-      this.testingURL + `favourites.php?username=${this.usernameSession}`);
+      this.testingURL + `favourites.php?username=${this.usernameSession}`, httpOptions);
 
     return favs;
   }
   addFavourite(userId,recipeId)
   {
     this.messageService.add('RecipeService: add favourite');
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
+
     this.httpCli.get<number>(
-        this.testingURL + `favourites.php?user_id=${userId}&add_favourite=${recipeId}`).subscribe();
+        this.testingURL + `favourites.php?user_id=${userId}&add_favourite=${recipeId}`, httpOptions).subscribe();
   }
   rmFavourite(userId,recipeId)
   {
     this.messageService.add('RecipeService: rm favourite');
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     this.httpCli.get<string[]>(
-        this.testingURL + `favourites.php?user_id=${userId}&rm_favourite=${recipeId}`).subscribe()
+        this.testingURL + `favourites.php?user_id=${userId}&rm_favourite=${recipeId}`, httpOptions).subscribe()
   }
   isFavourite(recipeId,username): Observable<boolean>
   {
@@ -234,32 +336,60 @@ export class RecipeService {
   }
   setUserGroups(userId, userGroups)
   {
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
     this.httpCli.get(
-        this.testingURL + `user_groups.php?set_groups_user=${userId}&groups=${userGroups}`).subscribe();
+        this.testingURL + `user_groups.php?set_groups_user=${userId}&groups=${userGroups}`, httpOptions).subscribe();
   }
   
 
 
   getUsernameById(id): Observable<string> {
     this.messageService.add('RecipeService: fetched users');
-
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
+    
     var username = this.httpCli.get<string>(
-      this.testingURL + `get_users.php?id=${id}`);
+      this.testingURL + `get_users.php?id=${id}`, httpOptions);
     console.log(username)
     return username;
   }
   getUsers(): Observable<User[]> {
     this.messageService.add('RecipeService: fetched users');
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
 
     var users = this.httpCli.get<User[]>(
-      this.testingURL + "get_users.php");
+      this.testingURL + "get_users.php", httpOptions);
     return users;
   }
   searchUsers(username: string): Observable<User[]> {
     this.messageService.add('RecipeService: fetched users');
+    const httpOptions =  { 
+      headers: new HttpHeaders({
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }),
+      withCredentials : true
+    };
 
     var users = this.httpCli.get<User[]>(
-      this.testingURL + `get_users.php?username=${username}`);
+      this.testingURL + `get_users.php?username=${username}`, httpOptions);
     return users;
   }
 
@@ -287,22 +417,6 @@ export class RecipeService {
 
     return 0;
     }*/
-  editUser(user: User): Observable<number> {
-    this.messageService.add('RecipeService: edit user');
-    let param: any = { 'user_edit': JSON.stringify(user) };
-    let params = new HttpParams();
-    var user_id;
-    var result = this.httpCli.get<number>(this.testingURL + "save_user.php", { params: param });
-    return result;
-  }
-  newUser(user: User): Observable<number> {
-    this.messageService.add('RecipeService: new user');
-    let param: any = { 'user': JSON.stringify(user) };
-    let params = new HttpParams();
-    var user_id;
-    var result = this.httpCli.get<number>(this.testingURL + "save_user.php", { params: param });
-    return result;
-  }
 
   organizeChartData(): Observable<ChartFormat> {
     var chartData =
@@ -503,10 +617,11 @@ export class RecipeService {
   }
 
   isUserAllowedToCreateRecipe() {
-    if (this.getUserLevel() >= 1)
-      return true;
-    else
-      return false;
+    // if (this.getUserLevel() >= 1)
+    //   return true;
+    // else
+    //   return false;
+    return true;
   }
 
   

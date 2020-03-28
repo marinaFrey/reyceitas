@@ -1,7 +1,16 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+// header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+// header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Max-Age: 1000');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+
 require 'connect.php';
+require 'login.php';
 
 function list_all_tags() 
 {
@@ -26,6 +35,12 @@ function list_all_tags()
 }
 function rm_tag($tag_id)
 {
+    // No removing tags if you are not root
+    if(!is_logged_already_as("root")) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
     echo $tag_id;
     $sql = "DELETE FROM tags WHERE tag_id = :tag_id;"; 
@@ -40,6 +55,13 @@ function rm_tag($tag_id)
 }
 function add_tag($tagJson)
 {
+
+    // No adding tags if you are not root
+    if(!is_logged_already_as("root")) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
 
     $tag = json_decode($tagJson);
@@ -58,6 +80,13 @@ function add_tag($tagJson)
 }
 function edit_tag($tagJson)
 {
+
+    // No edditing tags if you are not root
+    if(!is_logged_already_as("root")) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
     $tag = json_decode($tagJson);
     $sql = "UPDATE tags SET name = :name, icon = :icon, color = :color WHERE tag_id = :tag_id;";
