@@ -193,8 +193,6 @@ export class AdminPanelComponent implements OnInit {
 
       }
     });
-
-
   }
 
   selectAllGroupsParticipationCheckboxes(allId) {
