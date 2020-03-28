@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../recipe.service';
+import { UserService } from '../user.service';
 import { User, Group, Tag } from '../recipe';
 //import '@simonwep/pickr/dist/pickr.min.css';
 //import Pickr from '@simonwep/pickr/dist/pickr.min';
@@ -25,7 +26,7 @@ export class AdminPanelComponent implements OnInit {
   isEditingTag: Array<boolean>;
 
 
-  constructor(private recipeService: RecipeService) { }
+  constructor(private recipeService: RecipeService, private userService : UserService) { }
 
   ngOnInit() {
     // checar se usuario eh admin
@@ -248,8 +249,8 @@ export class AdminPanelComponent implements OnInit {
     this.users[index] = JSON.parse(JSON.stringify(this.usersTemp[index]));
     console.log("Saving User: ")
     console.log(this.users[index])
-    this.recipeService.editUser(this.users[index]);
-                    this.recipeService.editUser(this.users[index])
+    this.userService.editUser(this.users[index]);
+                    this.userService.editUser(this.users[index])
                         .subscribe(user_id => {
                             this.users[index].id = user_id;
                             if (this.users[index].id != -1) {
