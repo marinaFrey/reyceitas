@@ -10,10 +10,17 @@ header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
 require 'connect.php';
-require 'login.php';
+require 'login2.php';
 
 function get_user_groups($user_id)
 {
+
+    // At least be logged in.
+    if(!is_logged_as_a_valid_user()) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
     $sql = "SELECT group_id FROM user_groups WHERE user_id = :user_id;"; 
     $stmt= $db->prepare($sql);
@@ -64,6 +71,11 @@ function set_user_groups($user_id, $groupsJson)
     }
 
 }
+
+
+
+
+
 if (isset($_GET['get_groups_user'])) {
     get_user_groups($_GET['get_groups_user']);
 } elseif (isset($_GET['set_groups_user']) && isset($_GET['groups'])) {

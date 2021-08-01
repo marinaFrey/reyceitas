@@ -1,0 +1,7 @@
+{
+    "name": "luatech/reyceitas",
+    "description": "recipe website",   
+    "require": {
+        "firebase/php-jwt": "^5.4"
+    }
+}

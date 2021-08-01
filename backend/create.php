@@ -152,6 +152,9 @@ function populate_with_dummy_info() {
     $sql .= 'INSERT INTO users (username, full_name, password, authentication_level) VALUES ("root", "root", "';
     $sql .= password_hash('1234',  PASSWORD_BCRYPT) . '", "2");';
     
+    $sql .= 'INSERT INTO users (username, full_name, password, authentication_level) VALUES ("john", "doe", "';
+    $sql .= password_hash('aaa',  PASSWORD_BCRYPT) . '", "1");';
+
     // Add all the other group information.
     $sql .= <<<EOF
     INSERT INTO recipes
@@ -246,11 +249,11 @@ EOF;
     }
 }
 
-// connect();
- create_tables();
- populateTags();
- populate_with_dummy_info();
- populateUserGroups();
+connect();
+create_tables();
+populateTags();
+populate_with_dummy_info();
+populateUserGroups();
 
 
 ?>

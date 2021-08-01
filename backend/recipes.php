@@ -1,7 +1,7 @@
 <?php
 
 require 'connect.php';
-require 'login.php';
+require 'login2.php';
 
 function list_all_recipe_permissions($do_echo=TRUE) 
 {
@@ -41,11 +41,10 @@ function list_all_recipe_permissions($do_echo=TRUE)
 
 function get_public_recipes()
 {
-    error_log("GET public");
-
+    // error_log("GET public");
     $db = connect();
     $sql = "SELECT * FROM recipes";
-    $sql.= " WHERE global_authentication_level != 0";
+    $sql.= " WHERE global_authentication_level <= 1";
     $stmt= $db->prepare($sql);
     $ret = $stmt->execute();
     $ret = $stmt->fetchAll();
@@ -56,9 +55,8 @@ function get_public_recipes()
     $i = 0;
     foreach($ret as $row)
     {
-        error_log($i);
-        error_log($row['name']);
-
+        // error_log($i);
+        // error_log($row['name']);
         $resArrVals[$i]['id']=$row['recipe_id'];
         $resArrVals[$i]['name']=$row['name'];
         $resArrVals[$i]['duration']=$row['duration'];
@@ -92,10 +90,57 @@ function get_public_recipes()
         
     } else 
     {
-        error_log("no prublic");
+        error_log("no public");
         echo "[]";
     }
 }
+
+function get_recipe($recip_id) {
+    $usr_info = get_current_user_info();
+    if($usr_info == NULL) {
+        error_log("Not a valid user");
+        http_response_code(401);
+        die();
+    }
+    // That has permissions.
+    if($usr_info->aud != "root" && get_permission_per_user_recipe($usr_info->data->id, $recip_id) <= 0) {
+        error_log("No permission to delete.");
+        http_response_code(403);
+        die();
+    }
+
+    $db = connect();
+    $sql = "SELECT * FROM recipes WHERE recipe_id = :r_id ;";
+    $stmt = $db->prepare($sql);
+    $r_id = intval($recip_id);
+    $stmt->bindValue(':r_id', $r_id, PDO::PARAM_INT);
+    $ret = $stmt->execute();
+    $ret = $stmt->fetchAll();
+
+    $i = 0;
+    foreach($ret as $row)
+    {
+        // error_log($i);
+        // error_log($row['name']);
+        $resArrVals[$i]['id']=$row['recipe_id'];
+        $resArrVals[$i]['name']=$row['name'];
+        $resArrVals[$i]['duration']=$row['duration'];
+        $resArrVals[$i]['difficulty']=$row['difficulty'];
+        $resArrVals[$i]['servings']=$row['n_served'];
+        $resArrVals[$i]['description']=$row['description'];
+        $resArrVals[$i]['ingredients']= array();
+        $resArrVals[$i]['preparation']= array();
+        $resArrVals[$i]['tags']= array();
+        $resArrVals[$i]['photos']= array();
+        $resArrVals[$i]['userId']= $row['owner'];
+        $resArrVals[$i]['groupsAuthenticationLevel']= array();
+        $resArrVals[$i]['globalAuthenticationLevel']=$row['global_authentication_level'];
+        $mapIdToData[$resArrVals[$i]['id']] = $i;
+        $i++;
+    }
+    echo json_encode($resArrVals);
+}
+
 
 function get_owned_recipes_per_user($user_id, $do_echo=TRUE) 
 {
@@ -246,8 +291,12 @@ function get_group_per_recipes($recipe_name)
         echo json_encode($resArrVals);
     }
 }
-function get_permission_per_user_recipe($recp_id,$usr_id)
+function get_permission_per_user_recipe($usr_id, $recp_id)
 {
+    error_log("RECI ID");
+    error_log($recp_id);
+    error_log("USR ID");
+    error_log($usr_id);
 
     $db = connect();
     $sql = "SELECT *, r.name AS recipe_name, rp.authentication_level AS group_authentication_level FROM recipe_permissions AS rp";
@@ -276,13 +325,16 @@ function get_permission_per_user_recipe($recp_id,$usr_id)
     $stmt->bindValue(':recp_id', $recp_id, PDO::PARAM_INT);
     $ret= $stmt->execute();
     $ret = $stmt->fetchAll();
-    if($ret[0]['global_authentication_level'] > $permission)
-    {
-        $permission = $ret[0]['global_authentication_level'];
-    }
-    if($ret[0]['owner'] == $usr_id)
-    {
-        $permission = 2; 
+
+    if(count($ret) > 0) {
+        if($ret[0]['global_authentication_level'] > $permission)
+        {
+            $permission = $ret[0]['global_authentication_level'];
+        }
+        if($ret[0]['owner'] == $usr_id)
+        {
+            $permission = 2; 
+        }
     }
     //echo $permission;
     return $permission;
@@ -327,7 +379,7 @@ function delete_recipe($recip_id)
         die();
     }
     // That has permissions.
-    if(get_permission_per_user_recipe($usr_info->aud, $recip_id) <= 0) {
+    if($usr_info->aud != "root" && get_permission_per_user_recipe($usr_info->data->id, $recip_id) <= 0) {
         error_log("No permission to delete.");
         http_response_code(403);
         die();
@@ -351,13 +403,15 @@ function save_recipe($recipe)
     $user = get_current_user_info();
 
     // Make sure the user 
-    if ($user->authentication_level >= 1)
+    $auth = get_current_authentication_level();
+    if ($auth == NULL || $auth < 1)
     {
         http_response_code(403);
         die();
     }
 
-    //echo json_encode($recipe->name);
+    // No id spoofing.
+    $recipe->userId = $user->data->id;
     
     $sql = <<<EOF
         INSERT INTO recipes (owner, name, difficulty, n_served, duration, description, global_authentication_level)
@@ -470,22 +524,18 @@ EOF;
 
 function edit_recipe($recipe)
 {
-    // Is the user logged in?
     $usr_info = get_current_user_info();
     if($usr_info == NULL) {
+        error_log("Not a valid user");
         http_response_code(401);
         die();
     }
-
-    // Validate if the user can edit.
-
-        // error_log("EDIT BEING ");
-        // error_log( json_encode($usr_info));
-
-        if($usr_info->aud != "root" && get_permission_per_user_recipe($usr_info->scope->id, $recipe->id) <= 0) {
-            http_response_code(403);
-            die();
-        }
+    // That has permissions.
+    if($usr_info->aud != "root" && get_permission_per_user_recipe($usr_info->data->id, $recipe->id) <= 0) {
+        error_log("No permission to edit.");
+        http_response_code(403);
+        die();
+    }
 
         // Do the update.
         $db = connect();

@@ -3,7 +3,7 @@
 // header("Access-Control-Allow-Headers: *");
 // header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
-header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+// header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 // header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-Max-Age: 1000');
@@ -11,11 +11,11 @@ header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
 require 'connect.php';
-require 'login.php';
+require 'login2.php';
 
-if (isset($_GET['user']))
+if (isset($_POST['user']))
 {
-    $obj = json_decode($_GET['user']);
+    $obj = json_decode($_POST['user']);
     $sql = <<<EOF
     INSERT INTO users (username, full_name, email, password, authentication_level)
         VALUES (:usr_nm, :full_nm, :mail, :pwd, 0);
@@ -53,9 +53,9 @@ EOF;
     return $last_id; 
 }
 
-if (isset($_GET['user_edit']))
+if (isset($_POST['user_edit']))
 {
-    $obj = json_decode($_GET['user_edit']);
+    $obj = json_decode($_POST['user_edit']);
 
     // Make sure I am the user I am trying to edit.
     if(!is_logged_already_as($obj->username)) {
@@ -72,7 +72,9 @@ EOF;
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':full_nm', $obj->fullname, PDO::PARAM_STR);
     $stmt->bindValue(':mail', $obj->email, PDO::PARAM_STR);
-    $stmt->bindValue(':pwd', $obj->password, PDO::PARAM_STR);
+
+    $hash = password_hash($obj->password,  PASSWORD_BCRYPT);
+    $stmt->bindValue(':pwd', $hash, PDO::PARAM_STR);
     $stmt->bindValue(':usr_nm', $obj->username, PDO::PARAM_STR);
 
     $ret = $stmt->execute();

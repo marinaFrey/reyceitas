@@ -81,6 +81,7 @@ function get_users_per_group($group_name)
         echo json_encode($resArrVals);
     }
 }
+
 if (isset($_GET['username'])) {
     get_groups_per_user($_GET['username']);
 } elseif (isset($_GET['group_name'])) {

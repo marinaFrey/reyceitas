@@ -300,10 +300,18 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   getImageSrc(index) {
-    return "../../../../backend/uploads/" + this.recipe.photos[index];
+    console.log("SOURCE");
+    console.log(index);
+    console.log(this.recipe.photos);
+    console.log(this.recipe.photos[index]);
+
+    // return "../../../../backend/uploads/" + this.recipe.photos[index];
+    return "/Users/vitor/git/reyceitas1/backend/uploads/" + this.recipe.photos[index];
   }
 
   setImageAsFirst(index) {
+    console.log("SET AS FIRST");
+    console.log(index);
     var newPhotoList = [];
     newPhotoList.push(this.recipe.photos[index]);
     for (var i = 0; i < this.recipe.photos.length; i++) {
@@ -326,10 +334,16 @@ export class RecipeDetailsComponent implements OnInit {
         var file = files[i]
         var fileHashedName = md5((file.lastModified + Date.now() + file.size).toString())
         var filename = fileHashedName + this.recipe.photos.length + '.' + file.name.split('.').pop();
+
+        console.log("UP /");
+        console.log(fileHashedName);
+        console.log(filename);
+        console.log("UP /");
+
         if (!this.recipe.photos) {
           this.recipe.photos = [];
         }
-        this.recipe.photos.push(filename);
+        
         formData.append('files[]', file);
         formData.append('filenames[]', filename);
       }
@@ -338,8 +352,43 @@ export class RecipeDetailsComponent implements OnInit {
         body: formData,
         credentials : 'include',
       }).then(response => {
-        console.log(response)
-      })
+        // console.log("OK place");
+        // console.log(response);
+        // console.log(response.status);
+        
+        switch(response.status) {
+          // OK.
+          case 200:
+            console.log("OK!");
+            this.recipe.photos.push(filename);
+            console.log(response);
+            console.log(this.recipe.photos);
+          break;
+          
+          // Unauthorized.
+          case 403:
+            console.log(response);
+            break;
+
+          // Wrong extension, not 'jpg', 'jpeg', 'png' or 'gif'
+          case 415:
+            console.log(response);
+            break;
+          
+          // Too big. 
+          case 413:
+            console.log(response);
+            break;
+
+          // Unexpected.
+          default:
+            console.log(response);
+            break;
+
+        };
+
+
+      });
     }
 
   }

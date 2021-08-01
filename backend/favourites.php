@@ -10,6 +10,7 @@
     header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
 require 'connect.php';
+require 'login2.php';
 
 function list_all_user_favourites() 
 {
@@ -33,6 +34,7 @@ function list_all_user_favourites()
         echo json_encode($resArrVals);
     }
 }
+
 function get_favourites_per_user($username) 
 {
     $db = connect();
@@ -56,12 +58,23 @@ function get_favourites_per_user($username)
     }
     if($i>0)
     {
-        echo json_encode($resArrVals);
+        return $resArrVals;
+    } else {
+        return array();
     }
+    
 }
 function save_user_favourites($user_id, $favourites)
 {
-    //favourites.php?user_id=1&favourites=[101]
+
+    // Check that the user is logged.
+    $username = get_username_of($user_id);
+    if(!is_logged_already_as($username)) {
+        http_response_code(403);
+        die();
+    }
+    error_log($username);
+
     $db = connect();
     $sql = "DELETE FROM user_favourites WHERE user_id = :usr_id";
     $stmt= $db->prepare($sql);
@@ -86,7 +99,13 @@ function save_user_favourites($user_id, $favourites)
 }
 function rm_user_favourite($user_id, $favourite)
 {
-    //favourites.php?user_id=1&favourite=101
+    // Check that the user is logged.
+    $username = get_username_of($user_id);
+    if(!is_logged_already_as($username)) {
+        http_response_code(403);
+        die();
+    }
+
     $db = connect();
 
     $sql = "DELETE FROM user_favourites WHERE user_id = :usr_id AND recipe_id = :recp_id;";
@@ -103,7 +122,23 @@ function rm_user_favourite($user_id, $favourite)
 }
 function add_user_favourite($user_id, $favourite)
 {
-    //favourites.php?user_id=1&favourite=101
+    // Check that the user is logged.
+    $username = get_username_of($user_id);
+    if(!is_logged_already_as($username)) {
+        http_response_code(403);
+        die();
+    }
+
+    // Make sure the user does not have it already. Later we can cahnge the DB to
+    // accomodate this better.
+    $current = get_favourites_per_user($username);
+    foreach($current as $fav) {
+        if($fav == $favourite) {
+            http_response_code(409);
+            die();
+        }
+    }
+
     $db = connect();
 
     $sql = "INSERT INTO user_favourites (user_id, recipe_id) VALUES (:usr_id, :recp_id);";
@@ -131,7 +166,8 @@ if (isset($_GET['user_id']) && isset($_GET['favourites'])) {
 } elseif (isset($_GET['user_id']) && isset($_GET['rm_favourite'])) {
     rm_user_favourite($_GET['user_id'],$_GET['rm_favourite']);
 } elseif (isset($_GET['username'])) {
-    get_favourites_per_user($_GET['username']);
+    $res = get_favourites_per_user($_GET['username']);
+    echo json_encode($res);
 } else {
     list_all_user_favourites();
 }

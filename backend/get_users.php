@@ -1,7 +1,9 @@
 <?php
 // header("Access-Control-Allow-Origin: *");
 
-header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+// header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+// header("Access-Control-Allow-Origin: http://localhost:8000/login2.php");
+
 // header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-Max-Age: 1000');
@@ -10,15 +12,15 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 
 
 require 'connect.php';
-require 'login.php';
+require 'login2.php';
 
 function list_all_users() {
 
     // Only root can list all users.
-    // if(!is_logged_already_as("root")) {
-    //     http_response_code(403);
-    //     die();
-    // }
+    if(!is_logged_already_as("root")) {
+        http_response_code(403);
+        die();
+    }
 
     $db = connect();
     $sql = "SELECT * FROM users";

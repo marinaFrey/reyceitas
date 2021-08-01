@@ -28,8 +28,9 @@ require 'login.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // You have to be logged with a valid user to upload files.
-    if(!is_logged_as_a_valid_user()) {
+    // You have to be logged with a validated user to upload.
+    $auth = get_current_authentication_level();
+    if($auth == NULL || $auth < 1) {
         error_log("NOT LOGGED, NO UPLOAD");
         http_response_code(403);
         die();
@@ -54,10 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!in_array($file_ext, $extensions)) {
                 $errors[] = 'Extension not allowed: ' . $file_name . ' ' . $file_type;
+                http_response_code(415);
+                die();
             }
 
             if ($file_size > 2097152) {
                 $errors[] = 'File size exceeds limit: ' . $file_name . ' ' . $file_type;
+                http_response_code(413);
+                die();
             }
 
             if (empty($errors)) {
@@ -65,7 +70,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        if ($errors) print_r($errors);
+        if ($errors) {
+            print_r($errors);
+        } else {
+            print_r($file);
+        }
+
+
+
     }
 }
 ?>

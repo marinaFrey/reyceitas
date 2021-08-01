@@ -234,7 +234,7 @@ EOF;
 // create_tables();
 // populateTags();
 // populate_with_dummy_info();
- //populateUserGroups();
+// populateUserGroups();
 
 
 ?>
