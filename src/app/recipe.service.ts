@@ -28,7 +28,7 @@ export class RecipeService {
   userLevel: number;
   userGroups: Array<number>;
   distURL = "https://receitas.fortesrey.net/backend/";
-  testingURL = "http://localhost:8000/";
+  testingURL = "http://192.168.2.107:8000/";
 
 
 
