@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "^8.2.14",
     "@angular/router": "^6.1.10",
     "@simonwep/pickr": "^0.4.11",
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.3",
     "angular-font-awesome": "^3.1.2",
     "bootstrap": "^3.4.1",
     "chart.js": "^2.8.0",
